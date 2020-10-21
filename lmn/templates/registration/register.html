@@ -1,0 +1,19 @@
+{% extends 'lmn/base.html' %}
+
+{% block content %}
+
+<H2>Register</H2>
+
+{% if message %}
+  <P>{{ message }}</p>
+{% endif %}
+
+<form method='post' action="">
+  {% csrf_token %}
+  <table id="registration-form">
+    {{ form.as_table }}
+  </table>
+  <button type='submit'>Register</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+<!-- basic info about a venue -->
+
+{% extends 'lmn/base.html' %}
+
+{% block content %}
+
+<h2 id="venue-detail-title">Venue Detail</h2>
+
+<p id="venue-name">{{ venue.name }}</p>
+<p><span id="venue-city">{{ venue.city }}</span>, <span id="venue-state">{{ venue.state }}</span></p>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'lmn/base.html' %}
+
+{% block content %}
+
+
+<h2 id="artists-at-venue-title">Artists that have played at {{ venue.name }}</h2>
+
+{% for show in shows %}
+
+<div class="show" id="show_{{ show.pk }}">
+  <p>{{ show.artist.name}} on {{ show.show_date }}.
+    <a href="{% url 'notes_for_show' show_pk=show.pk %}">See notes for this show, and add your own</a>
+  </p>
+</div>
+
+{% empty %}
+
+  <p id="no-results">We have no records of shows at this venue</p>
+
+{% endfor %}
+
+
+
+{% endblock %}

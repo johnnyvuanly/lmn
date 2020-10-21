@@ -1,0 +1,42 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+
+<h2>Venue List</h2>
+
+<div>
+
+  <h2>Venue Search</h2>
+
+  <form action="{% url 'venue_list' %}">
+    {{ form }}
+    <input type='submit' value='Search'/>
+  </form>
+
+  <div>
+    {% if search_term %}
+      <h3 id="venue_list_title">Venues matching '{{ search_term }}'  
+        <a href="{% url 'venue_list' %}" id='clear_search'>clear</a>
+      </h3>
+    {% else %}
+      <h3 id="venue_list_title">All venues</h3>
+    {% endif %}
+  </div>
+
+  <div>
+
+    {% for venue in venues %}
+
+    <div id="venue-{{ venue.pk }}">
+      <p><a href="{% url 'venue_detail' venue_pk=venue.pk %}">{{ venue.name }}</a> {{ venue.city }}, {{ venue.state }}</p>
+      <p>See artists, notes, and add your own <a href='{% url "artists_at_venue" venue_pk=venue.pk %}'>{{ venue.name }} notes</a></p>
+    </div>
+
+    {% empty %}
+      <p>No venues found</p>
+    {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

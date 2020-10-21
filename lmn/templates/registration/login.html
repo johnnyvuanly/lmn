@@ -1,0 +1,16 @@
+{% extends 'lmn/base.html' %}
+
+{% block content %}
+
+  <h2>Log in</h2>
+
+  <form method='POST' action="">{% csrf_token %}
+  <table id='login-form'>
+    {{ form.as_table }}
+  </table>
+    <button type="submit">Login</button>
+  </form>
+
+<P><a href="{% url 'register' %}">Or create an account</a></p>
+
+{% endblock %}

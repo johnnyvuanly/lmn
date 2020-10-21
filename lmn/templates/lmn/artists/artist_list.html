@@ -1,0 +1,40 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+
+<h2>Artist List</h2>
+
+<P>Artist Search</p>
+  <form action="{% url 'artist_list' %}">
+    {{ form }}
+    <input type='submit' value='Search'>
+  </form>
+
+
+{% if search_term %}
+  <h2 id='artist-list-title'>Artists matching '{{ search_term }}' 
+    <a href="{% url 'artist_list' %}" id='clear_search'>(clear)</a>
+  </h2>
+{% else %}
+  <h2 id='artist-list-title'>All artists</h2>
+{% endif %}
+
+
+{% for artist in artists %}
+
+  <div class="artist" id="artist_{{ artist.pk }}">
+    <p>
+      <a href="{% url 'artist_detail' artist_pk=artist.pk %}">{{ artist.name }}</a>
+    </p>
+    
+    <p>See venues played, notes, and add your own 
+      <a href="{% url 'venues_for_artist' artist_pk=artist.pk %}">{{ artist.name }} notes</a>
+    </p>  
+  </div>
+
+{% empty %}
+  
+<p>No artists found</p>
+
+{% endfor %}
+
+{% endblock %}

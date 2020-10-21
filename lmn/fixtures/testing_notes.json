@@ -1,0 +1,29 @@
+[
+    {"model" : "lmn.note", "pk" : 1 , "fields" :
+      { "show" : "1",
+        "user" : "1",
+        "title" : "ok",
+        "text" : "kinda ok",
+        "posted_date" : "2017-02-12"
+      }
+    },
+
+    {"model" : "lmn.note", "pk" : 2 , "fields" :
+      { "show" : "1",
+        "user" : "2",
+        "title" : "awesome",
+        "text" : "yay!",
+        "posted_date" : "2017-02-13"
+      }
+    },
+
+    {"model" : "lmn.note", "pk" : 3 , "fields" :
+      { "show" : "2",
+        "user" : "2",
+        "title" : "super",
+        "text" : "woo hoo!",
+        "posted_date" : "2017-02-14"
+      }
+    }
+
+]

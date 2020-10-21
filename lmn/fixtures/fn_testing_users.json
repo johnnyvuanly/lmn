@@ -1,0 +1,38 @@
+[
+    {"model" : "auth.user", "pk" : 1 , "fields" :
+      { "username" : "alice",
+        "first_name" : "alice",
+        "last_name" : "last",
+        "email" : "a@a.com",
+        "password" : "pbkdf2_sha256$30000$kQdWPwdzZfE3$IXwsyRPDGxrbRp7tb2wdRHnyDT0eTcZG2XWPnAbQcS4="
+      }
+    },
+
+    {"model" : "auth.user", "pk" : 2 , "fields" :
+      { "username" : "bob",
+        "first_name" : "bob",
+        "last_name" : "last",
+        "email" : "b@b.com",
+        "password" : "pbkdf2_sha256$30000$kQdWPwdzZfE3$IXwsyRPDGxrbRp7tb2wdRHnyDT0eTcZG2XWPnAbQcS4="
+      }
+    },
+
+    {"model" : "auth.user", "pk" : 3 , "fields" :
+      { "username" : "cat",
+        "first_name" : "me",
+        "last_name" : "mine",
+        "email" : "email@mine.com",
+        "password" : "pbkdf2_sha256$30000$kQdWPwdzZfE3$IXwsyRPDGxrbRp7tb2wdRHnyDT0eTcZG2XWPnAbQcS4="
+      }
+    },
+
+    {"model" : "auth.user", "pk" : 4 , "fields" :
+      { "username" : "dani",
+        "first_name" : "dani",
+        "last_name" : "mine",
+        "email" : "d@d.com",
+        "password" : "pbkdf2_sha256$30000$kQdWPwdzZfE3$IXwsyRPDGxrbRp7tb2wdRHnyDT0eTcZG2XWPnAbQcS4="
+      }
+    }
+
+]

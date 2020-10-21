@@ -1,0 +1,25 @@
+body {
+  font-family: monospace;
+  background: #394343;
+  color: antiquewhite;
+}
+
+a {
+  color: rgb(70, 193, 197);
+}
+
+#welcome-user-msg, #login-or-sign-up {
+  position: absolute;
+  right: 0px;
+  padding-right: 10px;
+}
+
+#login-form tr, #registration-form tr {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+#registration-form th {
+  width: 150px;
+  vertical-align: top;
+}
