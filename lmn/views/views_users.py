@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 from ..models import Venue, Artist, Note, Show
 from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
@@ -27,13 +28,15 @@ def register(request):
         if form.is_valid():
             user = form.save()
             user = authenticate(username=request.POST['username'], password=request.POST['password1'])
-            login(request, user)
-            return redirect('homepage')
+            if user:
+                login(request, user)
+                return redirect('user_profile', user_pk=request.user.pk)
+            else:
+                messages.add_message(request, messages.ERROR, 'Unable to log in new user')
+        else:
+            messages.add_message(request, messages.INFO, 'Please check the data you entered')
+            # include the invalid form, which will have error messages added to it. The error messages will be displayed by the template.
+            return render(request, 'registration/register.html', {'form': form} )
 
-        else :
-            message = 'Please check the data you entered'
-            return render(request, 'registration/register.html', { 'form': form , 'message': message } )
-
-    else:
-        form = UserRegistrationForm()
-        return render(request, 'registration/register.html', { 'form': form } )
+    form = UserRegistrationForm()
+    return render(request, 'registration/register.html', {'form': form} )

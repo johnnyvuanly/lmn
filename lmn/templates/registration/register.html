@@ -2,18 +2,51 @@
 
 {% block content %}
 
-<H2>Register</H2>
+<h2>Register</h2>
 
-{% if message %}
-  <P>{{ message }}</p>
+<div class="message">  
+  {% if message %}
+    <p>{{ message }}</p>
+  {% endif %}
+</div>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
 {% endif %}
 
-<form method='post' action="">
+<form method="POST" action="">
   {% csrf_token %}
   <table id="registration-form">
-    {{ form.as_table }}
+
+    <!-- Displaying the form fields individually for more control over how the help_text is displayed -->
+    
+    {% for field in form %}
+    <tr>
+      <td>{{ field.label}}</td>
+      <td>{{ field }}</td>
+
+      {% if field.errors %} 
+      <td> 
+        {% for error in field.errors %}
+          <li class="error">
+            {{ error }}
+          </li>
+        {% endfor %}
+  
+        {% if field.help_text %}
+          <p>{{ field.help_text }}</p>
+        {% endif %}
+      </td>
+      {% endif %}
+    
+    </tr>
+    {% endfor %}
   </table>
-  <button type='submit'>Register</button>
+  <button type="submit">Register</button>
 </form>
 
 {% endblock %}
