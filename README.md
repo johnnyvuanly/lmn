@@ -32,7 +32,6 @@ will be able to use these to log into admin console at
 
 ### Run tests
 
-To run tests  (some currently fail - see Issues)
 
 ```
 python manage.py test lmn.tests
