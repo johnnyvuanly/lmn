@@ -23,7 +23,7 @@ class Artist(models.Model):
     name = models.CharField(max_length=200, blank=False)
 
     def __str__(self):
-        return f'Artist: {self.name}'
+        return f'Name: {self.name}'
 
 
 """ A venue, that hosts shows. """
@@ -33,7 +33,7 @@ class Venue(models.Model):
     state = models.CharField(max_length=2, blank=False) 
 
     def __str__(self):
-        return f'Venue name: {self.name} in {self.city}, {self.state}'
+        return f'Name: {self.name} Location: {self.city}, {self.state}'
 
 
 """ A show - one artist playing at one venue at a particular date. """
@@ -43,7 +43,7 @@ class Show(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Show with artist {self.artist} at {self.venue} on {self.show_date}'
+        return f'Artist: {self.artist} At: {self.venue} On: {self.show_date}'
 
 
 """ One user's opinion of one show. """
@@ -55,5 +55,5 @@ class Note(models.Model):
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
 
     def __str__(self):
-        return f'Note for user {self.user} for show ID {self.show} with title {self.title} text {self.text} posted on {self.posted_date}'
+        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}'
 
