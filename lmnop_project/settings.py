@@ -137,6 +137,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-# Where to send user after successful login, and logic if no other page is provided.
+# Where to send user after successful login, and logout, if no other page is provided.
 LOGIN_REDIRECT_URL = 'my_user_profile'
 LOGOUT_REDIRECT_URL = 'homepage'
