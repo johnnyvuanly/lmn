@@ -7,13 +7,12 @@
 
 1. Create and activate a virtual environment. Use Python3 as the interpreter. Suggest locating the venv/ directory outside of the code directory.
 
-2. pip install -r requirements.txt
-
-3. python manage.py makemigrations lmn
-
-4. python manage.py migrate
-
-5. python manage.py runserver
+```
+pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
 
 Site at
 
@@ -50,15 +49,13 @@ python manage.py test lmn.tests.test_views.TestUserAuthentication.test_user_regi
 
 ### Functional Tests with Selenium
 
-Install (upgrade to the latest version if you already have it) Firefox browser. It works best for automated functional testing with Selenium.
+Make sure you have the latest version of Chrome or Firefox, and the most recent chromedriver or geckodriver, and latest Selenium.
 
-Make sure you have the latest version of Chrome, and the most recent chromedriver, and latest Selenium.
-
-geckodriver needs to be in path or you need to tell Selenium where it is. Pick an approach: http://stackoverflow.com/questions/40208051/selenium-using-python-geckodriver-executable-needs-to-be-in-path
+chromedriver/geckodriver needs to be in path or you need to tell Selenium where it is. Pick an approach: http://stackoverflow.com/questions/40208051/selenium-using-python-geckodriver-executable-needs-to-be-in-path
 
 If your DB is hosted at Elephant, your tests might time out, and you might need to use longer waits http://selenium-python.readthedocs.io/waits.html
 
-Start your server with `python manage.py runserver` and then
+Run tests with
 
 ```
 python manage.py test lmn.tests.functional_tests
@@ -77,7 +74,6 @@ From directory with manage.py in it,
 
 ```
 coverage run --source='.' manage.py test lmn.tests
-
 coverage report
 ```
 
