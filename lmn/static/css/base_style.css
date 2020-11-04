@@ -1,6 +1,6 @@
 body {
   font-family: monospace;
-  background: #394343;
+  background: #444d4d;
   color: antiquewhite;
 }
 
@@ -14,12 +14,7 @@ a {
   padding-right: 10px;
 }
 
-#login-form tr, #registration-form tr {
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
-
-#registration-form th {
-  width: 150px;
-  vertical-align: top;
+.error {
+  color: #e60c42;
+  font-weight: bold;
 }
