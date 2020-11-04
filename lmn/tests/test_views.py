@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 
 from django.urls import reverse
 from django.contrib import auth
+from django.contrib.auth import authenticate
 
 from lmn.models import Venue, Artist, Note, Show
 from django.contrib.auth.models import User
@@ -411,7 +412,6 @@ class TestUserProfile(TestCase):
         # A string "username's notes" is visible
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':1}))
         self.assertContains(response, 'alice\'s notes')
-        print(response.content)
         
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
         self.assertContains(response, 'bob\'s notes')
@@ -491,7 +491,7 @@ class TestUserAuthentication(TestCase):
     def test_user_registration_redirects_to_correct_page(self):
         # TODO If user is browsing site, then registers, once they have registered, they should
         # be redirected to the last page they were at, not the homepage.
-        response = self.client.post(reverse('register'), {'username':'sam12345', 'email':'sam@sam.com', 'password1':'feRpj4w4pso3az@1!2', 'password2':'feRpj4w4pso3az', 'first_name':'sam', 'last_name' : 'sam'}, follow=True)
-
-        self.assertRedirects(response, reverse('homepage'))   # FIXME Fix code to redirect to last page user was on before registration.
-        self.assertContains(response, 'sam12345')  # Homepage has user's name on it
+        response = self.client.post(reverse('register'), {'username':'sam12345', 'email':'sam@sam.com', 'password1':'feRpj4w4pso3az@1!2', 'password2':'feRpj4w4pso3az@1!2', 'first_name':'sam', 'last_name' : 'sam'}, follow=True)
+        new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
+        self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
+        self.assertContains(response, 'sam12345')  # page has user's name on it
