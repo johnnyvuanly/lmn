@@ -1,4 +1,5 @@
 {% extends 'lmn/base.html' %}
+{% load static %}
 {% block content %}
 
 
@@ -8,5 +9,13 @@
 
 <p id="note-title"><b>{{ note.title}}</b></p>
 <p id="note-text">{{ note.text }}</b>
+
+<form action="{% url 'delete_notes' note.pk %}" method="POST">
+   {% csrf_token %}
+   <button type="submit" class="delete">Delete</button> 
+
+</form>
+
+<script src="{% static 'js/confirm_delete.js '%}"></script>
 
 {% endblock %}

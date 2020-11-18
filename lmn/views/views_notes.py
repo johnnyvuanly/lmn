@@ -6,6 +6,7 @@ from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistra
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseForbidden
 
 
 
@@ -44,3 +45,14 @@ def notes_for_show(request, show_pk):
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
+
+
+@login_required
+def delete_notes(request, show_pk):
+    note = get_object_or_404(Note, pk=show_pk) 
+    if note.user == request.user:
+        note.delete()
+        return redirect('venue_list')
+    else:
+        return HttpResponseForbidden()
+
