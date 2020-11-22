@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 
+
 # Every model gets a primary key field by default.
 
 # Users, venues, shows, artists, notes
@@ -55,6 +56,7 @@ class Note(models.Model):
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
     notes = models.TextField(blank=True, null=True)
     #photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
+
 
     def __str__(self):
         notes_str = self.notes[100:] if self.notes else 'no notes'
