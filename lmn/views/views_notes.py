@@ -29,30 +29,52 @@ def new_note(request, show_pk):
 
     return render(request, 'lmn/notes/new_note.html' , { 'form': form , 'show': show })
 
-
+@login_required
 def latest_notes(request):
     notes = Note.objects.all().order_by('-posted_date')
     return render(request, 'lmn/notes/note_list.html', { 'notes': notes })
 
-
+@login_required
 def notes_for_show(request, show_pk): 
     # Notes for show, most recent first
-    notes = Note.objects.filter(show=show_pk).order_by('-posted_date')
+    notes = Note.objects.filter(user=request.user).filter(show=show_pk).order_by('-posted_date')
     show = Show.objects.get(pk=show_pk)  
     return render(request, 'lmn/notes/note_list.html', { 'show': show, 'notes': notes })
 
-
+@login_required
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
 
-
+    
 @login_required
 def delete_notes(request, show_pk):
+
+    """If this is a note user request, the user clicked the Delete button
+    in the form. Delete note to the 
+    database, and redirect to this same page.
+
+    If note is not valid, display an url response forbidden. 
+    """
     note = get_object_or_404(Note, pk=show_pk) 
     if note.user == request.user:
-        note.delete()
+        note.delete() # Delete to the database
         return redirect('venue_list')
     else:
         return HttpResponseForbidden()
 
+@login_required
+def edit_notes(request, show_pk):
+
+    """If this is a note user request, the user clicked the Edit button
+    in the form. Edit note to the 
+    database, and redirect to this same page.
+
+    If note is not valid, display an url response forbidden. 
+    """
+    note = get_object_or_404(Note, pk=show_pk) # Return error code and primary key if note not found
+    if note.user == request.user: # Update note if user matched request
+        note.edit() # Edit notes in the database
+        return redirect('venue_list')# Making another request with a root of venue
+    else:
+        return HttpResponseForbidden()
