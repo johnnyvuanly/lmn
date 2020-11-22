@@ -44,3 +44,35 @@ def notes_for_show(request, show_pk):
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
+
+
+# Updates existing note based off instance, checks for matching user/note pk before allowing updates.
+@login_required
+def update_note(request, show_pk):
+    show = Note.objects.get(pk=show_pk)
+    form = NewNoteForm(instance=show)
+    note = form.save(commit=False)
+    if note.user == request.user:
+        if request.method == 'POST':
+            form = NewNoteForm(request.POST,instance=show)
+            if form.is_valid():
+                note = form.save(commit=False)
+                note.user = request.user
+                note.form = form
+                note.save()
+                return redirect('note_detail', note_pk=note.pk)
+    else:
+        return HttpResponseForbidden
+
+    return render(request, 'lmn/notes/update_note.html' , { 'form': form , 'show': show })
+
+# Deletes note based off note_pk, checks for matching user/note pk before allowing deletion.
+@login_required
+def delete_note(request, note_pk): 
+    # Notes for show
+    note = get_object_or_404(Note, pk=note_pk)
+    if note.user == request.user:
+        note.delete()
+        return redirect('latest_notes')
+    else:
+        return HttpResponseForbidden

@@ -1,0 +1,15 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+
+<h2>Update note</h2>
+
+<form method="POST" action="{% url 'update_note' show_pk=show.pk %}">
+  
+  <div>
+    {% csrf_token %}
+    {{ form.as_p }}
+  </div>
+  <input type='submit' value='Update'>
+</form>
+
+{% endblock %}
