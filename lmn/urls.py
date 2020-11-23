@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from . import views
-from .views import views_main, views_artists, views_venues, views_notes, views_users
+from .views import views_main, views_artists, views_venues, views_notes, views_users, views_shows
 
 
 # app_name = 'lmn'
@@ -36,4 +36,6 @@ urlpatterns = [
     path('accounts/logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
     path('register/', views_users.register, name='register'),
 
+    # Show related
+    path('shows/add/', views_shows.add_show, name='add_show')
 ]

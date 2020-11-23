@@ -1,0 +1,12 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+
+    <h2>Add Show</h2>
+
+    <form method="POST" action="{% url 'add_show' %}">
+        {% csrf_token %}
+        {{ new_show_form.as_p }}
+        <button id='add-new-show' type="submit">Add</button>
+    </form>
+
+{% endblock %}
