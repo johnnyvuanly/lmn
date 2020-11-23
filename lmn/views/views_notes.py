@@ -48,7 +48,7 @@ def note_detail(request, note_pk):
 
     
 @login_required
-def delete_notes(request, show_pk):
+def delete_notes(request, note_pk):
 
     """If this is a note user request, the user clicked the Delete button
     in the form. Delete note to the 
@@ -56,7 +56,7 @@ def delete_notes(request, show_pk):
 
     If note is not valid, display an url response forbidden. 
     """
-    note = get_object_or_404(Note, pk=show_pk) 
+    note = get_object_or_404(Note, pk=note_pk) 
     if note.user == request.user:
         note.delete() # Delete to the database
         return redirect('venue_list')
@@ -64,7 +64,7 @@ def delete_notes(request, show_pk):
         return HttpResponseForbidden()
 
 @login_required
-def edit_notes(request, show_pk):
+def edit_notes(request, note_pk):
 
     """If this is a note user request, the user clicked the Edit button
     in the form. Edit note to the 
@@ -72,7 +72,7 @@ def edit_notes(request, show_pk):
 
     If note is not valid, display an url response forbidden. 
     """
-    note = get_object_or_404(Note, pk=show_pk) # Return error code and primary key if note not found
+    note = get_object_or_404(Note, pk=note_pk) # Return error code and primary key if note not found
     if note.user == request.user: # Update note if user matched request
         note.edit() # Edit notes in the database
         return redirect('venue_list')# Making another request with a root of venue
