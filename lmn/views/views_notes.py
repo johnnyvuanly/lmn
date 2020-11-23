@@ -14,7 +14,7 @@ def new_note(request, show_pk):
 
     show = get_object_or_404(Show, pk=show_pk)
 
-    if request.method == 'POST' :
+    if request.method == 'POST':
         form = NewNoteForm(request.POST)
         if form.is_valid():
             note = form.save(commit=False)
@@ -23,7 +23,7 @@ def new_note(request, show_pk):
             note.save()
             return redirect('note_detail', note_pk=note.pk)
 
-    else :
+    else:
         form = NewNoteForm()
 
     return render(request, 'lmn/notes/new_note.html' , { 'form': form , 'show': show })
