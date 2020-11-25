@@ -6,6 +6,9 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User 
 from django.db import IntegrityError
+from django.utils import timezone
+import pytz
+timezone.now()
 
 from ..models import Show
 
@@ -35,19 +38,16 @@ class TestUser(TestCase):
 
 class TestShow(TestCase):
 
-    def setUp(self):
-        self.user = User.objects.get(pk=1)
-        self.client.force_login(self.user)
-        
+    fixtures = ['testing_artists', 'testing_venues']
+   
     def test_create_new_show(self):
-        fixtures = ['testing_artists', 'testing_venues']
-
-        response = self.client.post(reverse('add_show'), { 'show_date': '12/21/21', 'show_time': '19:00:00', 'artist': 'REM',  'venue': 'First Avenue'}, follow=True)
+        
+        response = self.client.post(reverse('add_show'), { 'show_date': '2021-08-05', 'show_time': '19:00:00', 'artist': 'REM',  'venue': 'First Avenue'}, follow=True)
 
         self.assertTemplateUsed(response, 'lmn/show_add.html')
 
         response_shows = response.context['shows']
 
-        show_in_database = Show.objects.get(showdate='12/21/21', show_time='19:00:00')
+        show_in_database = Show.objects.get(showdate='2021-08-05', show_time='19:00:00')
 
         self.assertEqual(response_shows, show_in_database)
