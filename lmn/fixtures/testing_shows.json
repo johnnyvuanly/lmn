@@ -1,28 +1,21 @@
 [
-  {"model" : "lmn.show", "pk" : 2 , "fields" :
+  {"model" : "lmn.show", "pk" : 1 , "fields" :
     { "show_date" : "2017-01-02",
-      "show_time": "18:00:00",
+      "show_time": "00:00:00",
       "artist" : 1,
       "venue" : 2
     }
   },
-  {"model" : "lmn.show", "pk" : 1 , "fields" :
-    { "show_date" : "2016-11-04",
-      "show_time" : "20:30:00",
+  {"model" : "lmn.show", "pk" : 2 , "fields" :
+    { "show_date" : "2017-02-02",
+      "show_time": "00:00:00",
       "artist" : 1,
-      "venue" : 1
+      "venue" : 2
     }
   },
   {"model" : "lmn.show", "pk" : 3 , "fields" :
-    { "show_date" : "2017-02-02",
-      "show_time": "21:15:00",
-      "artist" : 2,
-      "venue" : 2
-    }
-  },
-  {"model" : "lmn.show", "pk" : 4 , "fields" :
     { "show_date" : "2017-01-21",
-      "show_time": "19:00:00",
+      "show_time": "00:00:00",
       "artist" : 2,
       "venue" : 1
     }
