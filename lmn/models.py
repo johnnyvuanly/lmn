@@ -2,7 +2,9 @@ from django.db import models
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 import datetime
+from datetime import timedelta
 
 # Every model gets a primary key field by default.
 
@@ -42,6 +44,18 @@ class Show(models.Model):
     show_time = models.TimeField(blank=False)
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        now = datetime.datetime.now().date()
+        a_year_from_now = now + timedelta( years=1 )
+        a_year_before_now = now - timedelta( years=1 ) 
+        if self.show_date > a_year_from_now:
+            raise ValidationError(f'Show date {self.show_date} is more than a year from now.')
+        if self.show_date < a_year_before_now:
+            raise ValidationError(f'Show date {self.show_date} is more than a year before today.') 
+        
+
+        super().save(*args, *kwargs)
 
     def __str__(self):
         return f'Artist: {self.artist} At Venue: {self.venue} On: {self.show_date} at {self.show_time}'

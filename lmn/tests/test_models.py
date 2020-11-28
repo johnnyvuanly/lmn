@@ -38,7 +38,7 @@ class TestUser(TestCase):
 
 class TestShow(TestCase):
 
-    fixtures = ['testing_artists', 'testing_venues']
+    fixtures = ['testing_users', 'testing_artists', 'testing_venues']
    
     def test_create_new_show(self):
         pass
