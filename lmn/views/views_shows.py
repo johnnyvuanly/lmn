@@ -19,12 +19,12 @@ def add_show(request):
             try:
                 show = new_show_form.save(commit=False)
                 show.user = request.user
-                if not is_unique(show):
-                    raise ValidationError('You already added that show.')       
+                if not is_unique(request, show):
+                    raise ValidationError('Show is not unique')       
                 show.save()
                 return redirect('homepage')
             except ValidationError:
-                messages.warning(request, 'Error with year. Show must be within a year before or after today.')
+                messages.warning(request, 'You already added that show.')
             
         messages.warning(request, 'Please check data entered.')
         return render(request, 'lmn/show_add.html', {'new_show_form': new_show_form})
@@ -32,8 +32,10 @@ def add_show(request):
     new_show_form = NewShowForm()
     return render(request, 'lmn/show_add.html', {'new_show_form': new_show_form})
 
-def is_unique(show):
-    all_shows = Show.objects.all()
-    if show in all_shows():
-        return False
-    return True
+def is_unique(request, show):
+    try:
+        if Show.objects.filter(show_date=show.show_date, show_time=show.show_time, artist=show.artist, venue=show.venue).exists():
+            return False
+        return True
+    except Exception as e:
+        messages.warning(request, e)
