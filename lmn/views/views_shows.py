@@ -15,11 +15,11 @@ def add_show(request):
     if request.method == 'POST':
         #create new show
         new_show_form = NewShowForm(request.POST)
-        if new_show_form.is_valid():
+        if new_show_form.is_valid(): # check for empty/erroneous fields
             try:
                 show = new_show_form.save(commit=False)
-                show.user = request.user
-                if not is_unique(request, show):
+                show.user = request.user # set user
+                if not is_unique(request, show): #check for duplicates
                     raise ValidationError('Show is not unique')       
                 show.save()
                 return redirect('homepage')
@@ -37,5 +37,5 @@ def is_unique(request, show):
         if Show.objects.filter(show_date=show.show_date, show_time=show.show_time, artist=show.artist, venue=show.venue).exists():
             return False
         return True
-    except Exception as e:
-        messages.warning(request, e)
+    except Exception:
+        messages.warning(request, 'Database error. Contact support.')

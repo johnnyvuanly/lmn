@@ -2,13 +2,12 @@ import tempfile
 import filecmp
 import os
 
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User 
 from django.db import IntegrityError
-from django.utils import timezone
-import pytz
-timezone.now()
+
+import datetime
 
 from ..models import Show
 
@@ -35,11 +34,3 @@ class TestUser(TestCase):
         with self.assertRaises(IntegrityError):
             user2.save()
 
-
-class TestShow(TestCase):
-
-    fixtures = ['testing_users', 'testing_artists', 'testing_venues']
-   
-    def test_create_new_show(self):
-        pass
-        
