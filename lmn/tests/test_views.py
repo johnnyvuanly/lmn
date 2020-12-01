@@ -134,12 +134,12 @@ class TestArtistViews(TestCase):
         self.assertEqual(show1.artist.name, 'REM')
         self.assertEqual(show1.venue.name, 'The Turf Club')
 
-        expected_date = datetime.datetime(2017, 2, 2, 0, 0, tzinfo=timezone.utc)
+        expected_date = datetime.date(2017, 2, 2)
         self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
 
         self.assertEqual(show2.artist.name, 'REM')
         self.assertEqual(show2.venue.name, 'The Turf Club')
-        expected_date = datetime.datetime(2017, 1, 2, 0, 0, tzinfo=timezone.utc)
+        expected_date = datetime.date(2017, 1, 2)
         self.assertEqual(0, (show2.show_date - expected_date).total_seconds())
 
         # Artist 2 (ACDC) has played at venue 1 (First Ave)
@@ -152,7 +152,7 @@ class TestArtistViews(TestCase):
 
         self.assertEqual(show1.artist.name, 'ACDC')
         self.assertEqual(show1.venue.name, 'First Avenue')
-        expected_date = datetime.datetime(2017, 1, 21, 0, 0, tzinfo=timezone.utc)
+        expected_date = datetime.date(2017, 1, 21)
         self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
 
         # Artist 3 , no shows
@@ -253,12 +253,12 @@ class TestVenues(TestCase):
             self.assertEqual(show1.artist.name, 'REM')
             self.assertEqual(show1.venue.name, 'The Turf Club')
 
-            expected_date = datetime.datetime(2017, 2, 2, 0, 0, tzinfo=timezone.utc)
+            expected_date = datetime.date(2017, 2, 2)
             self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
 
             self.assertEqual(show2.artist.name, 'REM')
             self.assertEqual(show2.venue.name, 'The Turf Club')
-            expected_date = datetime.datetime(2017, 1, 2, 0, 0, tzinfo=timezone.utc)
+            expected_date = datetime.date(2017, 1, 2)
             self.assertEqual(0, (show2.show_date - expected_date).total_seconds())
 
             # Artist 2 (ACDC) has played at venue 1 (First Ave)
@@ -271,7 +271,7 @@ class TestVenues(TestCase):
 
             self.assertEqual(show1.artist.name, 'ACDC')
             self.assertEqual(show1.venue.name, 'First Avenue')
-            expected_date = datetime.datetime(2017, 1, 21, 0, 0, tzinfo=timezone.utc)
+            expected_date = datetime.date(2017, 1, 21)
             self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
 
             # Venue 3 has not had any shows
@@ -495,3 +495,66 @@ class TestUserAuthentication(TestCase):
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
+
+class TestShow(TestCase):
+
+    fixtures = ['testing_users', 'testing_artists', 'testing_venues']
+   
+    def setUp(self):
+        user = User.objects.first()
+        self.client.force_login(user)
+
+    def test_create_new_show(self):
+        #test to check new shows are added to database
+        new_show_url = reverse('add_show')
+
+        show_date = datetime.date(2020, 11, 11)
+        show_time = datetime.time(19, 0, 0)
+        response = self.client.post(new_show_url, {'artist':1, 'venue':1, 'show_date':show_date, 'show_time':show_time}, follow=True)
+        
+        new_show_query = Show.objects.filter(show_date=show_date, show_time=show_time)
+        self.assertEqual(new_show_query.count(), 1)
+
+    def test_create_show_missing_data(self):
+        #shows without all data are not added
+        initial_show_count = Show.objects.count()
+
+        new_show_url = reverse('add_show')
+
+        artist = 2
+        venue = 2
+        show_date = datetime.date(2021, 3, 2)
+        show_time = datetime.time(20, 30, 0)
+
+        #missing venue
+        response = self.client.post(new_show_url, {'artist':artist, 'show_date':show_date, 'show_time':show_time})
+        new_show_query = Show.objects.filter(show_date=show_date, show_time=show_time)
+        self.assertEqual(new_show_query.count(), initial_show_count)
+
+        #missing artist
+        response = self.client.post(new_show_url, {'venue':venue, 'show_date':show_date, 'show_time':show_time})
+        new_show_query = Show.objects.filter(show_date=show_date, show_time=show_time)
+        self.assertEqual(new_show_query.count(), initial_show_count)
+
+        #missing date
+        response = self.client.post(new_show_url, {'artist':artist, 'venue':venue, 'show_time':show_time})
+        new_show_query = Show.objects.filter(show_date=show_date, show_time=show_time)
+        self.assertEqual(new_show_query.count(), initial_show_count)
+
+        #missing time
+        response = self.client.post(new_show_url, {'artist':artist, 'show_date':show_date})
+        new_show_query = Show.objects.filter(show_date=show_date, show_time=show_time)
+        self.assertEqual(new_show_query.count(), initial_show_count)
+
+    def test_add_duplicate_show(self):
+        #duplicate entries are not added, result in error messages
+        new_show_url = reverse('add_show')
+
+        show_date = datetime.date(2020, 11, 11)
+        show_time = datetime.time(19, 0, 0)
+        first_post = self.client.post(new_show_url, {'artist':1, 'venue':1, 'show_date':show_date, 'show_time':show_time}, follow=True)
+        duplicate = self.client.post(new_show_url, {'artist':1, 'venue':1, 'show_date':show_date, 'show_time':show_time}, follow=True)
+
+        messages = list(duplicate.context['messages'])
+
+        self.assertEqual(2, len(messages))
