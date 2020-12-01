@@ -5,12 +5,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ValidationError, MultiWidget
 
+
 class DateInput(forms.DateInput):
     input_type='date'
-
-class TimeInput(forms.TimeInput):
-    input_type='time'
-
 
 class VenueSearchForm(forms.Form):
     search_name = forms.CharField(label='Venue Name', max_length=200)

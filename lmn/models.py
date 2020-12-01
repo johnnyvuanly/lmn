@@ -1,10 +1,9 @@
 from django.db import models
 
+from django.db import models
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from .forms import DateInput
+from django.core.files.storage import default_storage
 import datetime
-from datetime import timedelta
 
 # Every model gets a primary key field by default.
 
@@ -53,8 +52,26 @@ class Note(models.Model):
     user = models.ForeignKey('auth.User', blank=False, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, blank=False)
     text = models.TextField(max_length=1000, blank=False)
-    posted_date = models.DateTimeField(auto_now_add=True, blank=False)
+    posted_date = models.DateTimeField(blank=False)
     photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        existing_photo = Note.objects.filter(pk=self.pk).first() # Class Note has no objects member error - Email to Clara
+        if existing_photo and existing_photo.photo:
+            if existing_photo != self.photo:
+                self.delete_photo(existing_photo.photo)
+
+        super().save(self, *args, **kwargs)
+
+    def delete_photo(self, photo):
+        if default_storage.exists(photo.name):
+            default_storage.delete(photo.name)
+
+    def delete(self, *args, **kwargs):
+        if self.photo:
+                self.delete_photo(self.photo)
+
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         photo_str = self.photo.url if self.photo else 'No photo.'
