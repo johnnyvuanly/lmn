@@ -1,8 +1,10 @@
 from django.db import models
 
-from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from .forms import DateInput
 import datetime
+from datetime import timedelta
 
 # Every model gets a primary key field by default.
 
@@ -16,7 +18,6 @@ User._meta.get_field('email')._unique = True
 User._meta.get_field('email')._blank = False
 User._meta.get_field('last_name')._blank = False
 User._meta.get_field('first_name')._blank = False
-
 
 """ A music artist """
 class Artist(models.Model):
@@ -53,7 +54,9 @@ class Note(models.Model):
     title = models.CharField(max_length=200, blank=False)
     text = models.TextField(max_length=1000, blank=False)
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
+    photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
 
     def __str__(self):
-        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}'
+        photo_str = self.photo.url if self.photo else 'No photo.'
+        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}/nPhoto: {photo_str}'
 

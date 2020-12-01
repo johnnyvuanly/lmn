@@ -1,12 +1,51 @@
 {% extends 'lmn/base.html' %}
+{% load static %}
 {% block content %}
 
-
-<h2 id="note-page-title">{{ note.show.artist.name }} at {{ note.show.venue.name }} by 
+<h3 id="note-page-title">{{ note.show.artist.name }} at {{ note.show.venue.name }} by 
     <a href="{% url 'user_profile' user_pk=note.user.pk %}">{{ user.username }}</a>
-</h2>
+</h3>
 
-<p id="note-title"><b>{{ note.title}}</b></p>
-<p id="note-text">{{ note.text }}</b>
+<h2>Note</h2>
+<p id="note-title"><b>{{ note.title|default:"" }}</b></p>
+<p id="note-text">{{ note.text|default:"No note." }}</p>
+
+<h2>Posted Date</h2>
+<p id="note-posted-date">{{ note.posted_date|default:"No date." }}</p>
+
+<h2>Photo</h2>
+{% if note.photo %}
+    <img src="{{ note.photo.url }}">
+{% else %}
+    <p>No photo.</p>
+{% endif %} 
+
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+</div>
+
+<h2>Add/Edit Note</h2>
+
+<form method="POST" action="{% url 'new_note' show_pk=show.pk %}" enctype="multipart/form-data">
+    
+    <div>
+        {% csrf_token %}
+        {{ form.as_p }}
+    </div>
+
+    <button type='submit' class='new-note'>Add/Edit</button>
+</form>
+
+<form method="POST" action="{% url 'delete_note' show_pk=show.pk %}" enctype="multipart/form-data">
+    <div>
+        {% csrf_token %}
+    </div>
+    <button type='submit' class='delete-note'>Delete</button>
+</form>
+
+<script src="{% static 'js/delete_note.js' %}"></script>
 
 {% endblock %}
