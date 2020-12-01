@@ -10,6 +10,10 @@ from django.contrib.auth.models import User
 import re, datetime
 from datetime import timezone
 
+import tempfile # Imported for Image Tests
+from PIL import Image # Imported for Image Tests
+import os
+
 # TODO verify correct templates are rendered.
 
 class TestEmptyViews(TestCase):
@@ -452,6 +456,118 @@ class TestNotes(TestCase):
         self.assertEqual(first.pk, 2)
         self.assertEqual(second.pk, 1)
 
+# Begin Image Tests
+
+# wishlist image tests used as template
+# Note/object issue preventing run and test - Pending consult with Clara
+
+class TestImageUpload(TestCase):
+    fixtures = ['testing_users', 'testing_artists', 'testing_shows', 'testing_venues', 'testing_notes']
+
+    def setUp(self):
+        user = User.objects.get(pk=1)
+        self.client.force_login(user)
+        self.MEDIA_ROOT = tempfile.mkdtemp()
+        
+
+    def tearDown(self):
+        print('todo delete temp directory, temp image')
+
+
+    def create_temp_image_file(self):
+        handle, tmp_img_file = tempfile.mkstemp(suffix='.jpg')
+        img = Image.new('RGB', (10, 10) )
+        img.save(tmp_img_file, format='JPEG')
+        return tmp_img_file
+
+
+    def test_upload_new_image_for_self_note(self):
+        
+        img_file_path = self.create_temp_image_file()
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(img_file_path, 'rb') as img_file:
+                resp = self.client.post(reverse('note_detail', kwargs={'note_pk': 1} ), {'photo': img_file }, follow=True)
+                
+                self.assertEqual(200, resp.status_code)
+
+                note_1 = Note.objects.get(pk=1)
+                img_file_name = os.path.basename(img_file_path)
+                expected_uploaded_file_path = os.path.join(self.MEDIA_ROOT, 'user_images', img_file_name)
+
+                self.assertTrue(os.path.exists(expected_uploaded_file_path))
+                self.assertIsNotNone(note_1.photo)
+                self.assertTrue(filecmp.cmp( img_file_path,  expected_uploaded_file_path ))
+
+
+    def test_change_image_for_self_note_expect_existing_deleted(self):
+        
+        first_img_file_path = self.create_temp_image_file()
+        second_img_file_path = self.create_temp_image_file()
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(first_img_file_path, 'rb') as first_img_file:
+
+                resp = self.client.post(reverse('note_detail', kwargs={'note_pk': 1} ), {'photo': first_img_file }, follow=True)
+
+                note_1 = Note.objects.get(pk=1)
+
+                first_uploaded_image = note_1.photo.name
+
+                with open(second_img_file_path, 'rb') as second_img_file:
+                    resp = self.client.post(reverse('note_detail', kwargs={'note_pk':1}), {'photo': second_img_file}, follow=True)
+
+                    # first file should not exist 
+                    # second file should exist 
+
+                    note_1 = Note.objects.get(pk=1)
+
+                    second_uploaded_image = note_1.photo.name
+
+                    first_path = os.path.join(self.MEDIA_ROOT, first_uploaded_image)
+                    second_path = os.path.join(self.MEDIA_ROOT, second_uploaded_image)
+
+                    self.assertFalse(os.path.exists(first_path))
+                    self.assertTrue(os.path.exists(second_path))
+
+
+    def test_upload_image_for_someone_else_note(self):
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+
+            img_file = self.create_temp_image_file()
+            with open(img_file, 'rb') as image:
+                resp = self.client.post(reverse('note_detail', kwargs={'note_pk': 5} ), {'photo': image }, follow=True)
+                self.assertEqual(403, resp.status_code)
+
+                note_5 = Note.objects.get(pk=5)
+                self.assertFalse(note_5.photo)
+
+
+    def test_delete_note_with_image_image_deleted(self):
+        
+        img_file_path = self.create_temp_image_file()
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(img_file_path, 'rb') as img_file:
+                resp = self.client.post(reverse('note_detail', kwargs={'note_pk': 1} ), {'photo': img_file }, follow=True)
+                
+                self.assertEqual(200, resp.status_code)
+
+                note_1 = Note.objects.get(pk=1)
+                img_file_name = os.path.basename(img_file_path)
+                
+                uploaded_file_path = os.path.join(self.MEDIA_ROOT, 'user_images', img_file_name)
+
+                note_1 = Note.objects.get(pk=1)
+                note_1.delete()
+
+                self.assertFalse(os.path.exists(uploaded_file_path))
+
+# End Image Tests
 
     def test_correct_templates_uses_for_notes(self):
         response = self.client.get(reverse('latest_notes'))
