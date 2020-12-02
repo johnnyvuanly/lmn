@@ -37,5 +37,8 @@ urlpatterns = [
     path('register/', views_users.register, name='register'),
 
     # Show related
-    path('shows/add/', views_shows.add_show, name='add_show')
+    path('shows/add/', views_shows.add_show, name='add_show'),
+
+    # API related
+    path('event_data', admin_views.get_data, name='admin_get_data')
 ]
