@@ -78,11 +78,12 @@ def edit_notes(request, note_pk):
         return HttpResponseForbidden
     
     if request.method == 'POST':
-        form = NewNoteForm(request.POST, request.FILES, instance=note_pk)
+        form = NewNoteForm(request.POST, instance=note_pk)
 
-    return render(request, 'lmn/notes/note_detail.html ,  { 'form': form, 'note' : note })
+    return render(request, 'lmn/notes/note_detail.html' ,  { 'form': form, 'note' : note })
     #if note.user == request.user: # Update note if user matched request
         #note.edit() # Edit notes in the database
        # return redirect('venue_list')# Making another request with a root of venue
     #else:
         #return HttpResponseForbidden()
+        

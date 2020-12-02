@@ -54,12 +54,9 @@ class Note(models.Model):
     title = models.CharField(max_length=200, blank=False)
     text = models.TextField(max_length=1000, blank=False)
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
-    notes = models.TextField(blank=True, null=True)
-    #photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
-
-
+    #notes = models.TextField(blank=True, null=True)
+    
     def __str__(self):
-        notes_str = self.notes[100:] if self.notes else 'no notes'
-        #photo_str = self.photo.url if self.photo else 'no photo'
-        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}. Notes: {notes_str}. ' #Photo {photo_str}
+        #notes_str = self.notes[100:] if self.notes else 'no notes'
+        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}.'#Photo {photo_str}
 
