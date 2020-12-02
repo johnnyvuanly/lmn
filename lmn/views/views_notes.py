@@ -15,7 +15,8 @@ def new_note(request, show_pk):
     show = get_object_or_404(Show, pk=show_pk)
 
     if request.method == 'POST' :
-        form = NewNoteForm(request.POST, request.FILES, instance=show_pk)
+        # form = NewNoteForm(request.POST, request.FILES, instance=show_pk)
+        form = NewNoteForm(request.POST)
         if form.is_valid():
             note = form.save(commit=False)
             note.user = request.user
@@ -33,11 +34,12 @@ def delete_note(request, show_pk):
 
     note = get_object_or_404(Note, pk=show_pk)
 
-    if note.user !=request.user:
-        return HttpResponseForbidden
+    # if note.user !=request.user:
+    #     return HttpResponseForbidden
 
     if request.method == 'POST' :
-        form = NewNoteForm(request.POST, request.FILES, instance=show_pk)
+        # form = NewNoteForm(request.POST, request.FILES, instance=show_pk)
+        form = NewNoteForm(request.POST)
         if form.is_valid():
             note = form.delete(commit=False)
             note.user = request.user
@@ -77,10 +79,11 @@ def note_detail(request, note_pk):
 
     note = get_object_or_404(Note, pk=note_pk)
 
-    if note.user !=request.user:
-        return HttpResponseForbidden
-    
+    # if note.user !=request.user:
+    #     return HttpResponseForbidden
+
     if request.method == 'POST':
-        form = NewNoteForm(request.POST, request.FILES, instance=note_pk)
+        # form = NewNoteForm(request.POST, request.FILES, instance=note_pk)
+        form = NewNoteForm(request.POST, request.FILES)
         if form.is_valid():
             return render(request, 'lmn/notes/note_detail.html' , { 'note' : note })
