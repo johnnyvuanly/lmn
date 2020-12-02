@@ -25,7 +25,7 @@ def get_data(request):
         artist = data['_embedded']['events'][x]['_embedded']['attractions'][0]['name']
         # SHOW DATA
         #
-        show_dateTime = data['_embedded']['events'][x]['dates']['start']['dateTime']
+        # show_dateTime = data['_embedded']['events'][x]['dates']['start']['dateTime']
            
         ### date and time separated for new model
        
