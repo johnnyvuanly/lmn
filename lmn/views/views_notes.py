@@ -66,15 +66,16 @@ def delete_notes(request, note_pk):
 @login_required
 def edit_notes(request, note_pk):
 
-    """If this is a note user request, the user clicked the Edit button
-    in the form. Edit note to the 
-    database, and redirect to this same page.
+    """User requests to edit notes by clicking on Edit button.
+    User with valid primary key can edit notes in database
+    and redirect to starting page. 
 
-    If note is not valid, display an url response forbidden. 
+    Whereas, invalid primary key will show forbidden information.
     """
     note = get_object_or_404(Note, pk=note_pk) # Return error code and primary key if note not found
+    
     if note.user == request.user: # Update note if user matched request
-        note.edit() # Edit notes in the database
+        #note.edit() # Edit notes in the database
         return redirect('venue_list')# Making another request with a root of venue
     else:
         return HttpResponseForbidden()
