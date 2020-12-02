@@ -26,17 +26,19 @@
         {{ message }}
     {% endfor %}
 </div>
+{% endif %} 
 
-<h2>Add/Edit Note</h2>
+<!-- Links or Buttons - Not all this below - Discuss with Alicia -->
+<!-- <h2>Add/Edit Note</h2>
 
-<form method="POST" action="{% url 'new_note' note_pk=note.pk %}" enctype="multipart/form-data"> <!-- should be 'notes_for_show ?' -->
+<form method="POST" action="{% url 'new_note' note_pk=note.pk %}" enctype="multipart/form-data">
     
     <div>
         {% csrf_token %}
         {{ form.as_p }}
     </div>
 
-    <button type='submit' class='new-note'>Add/Edit</button> <!-- should be 'notes_for_show ?' -->
+    <button type='submit' class='new-note'>Add/Edit</button>
 </form>
 
 <form method="POST" action="{% url 'delete_note' note_pk=note.pk %}" enctype="multipart/form-data">
@@ -46,6 +48,8 @@
     <button type='submit' class='delete-note'>Delete</button>
 </form>
 
-<script src="{% static 'js/delete_note.js' %}"></script>
+<script src="{% static 'js/delete_note.js' %}"></script> -->
+
+<!-- Links or Buttons - Not all this above - Discuss with Alicia -->
 
 {% endblock %}

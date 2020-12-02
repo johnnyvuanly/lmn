@@ -43,7 +43,7 @@ def delete_note(request, show_pk):
         if form.is_valid():
             note = form.delete(commit=False)
             note.user = request.user
-            note.show = show
+            note.show = show # ?
             note.delete()
             messages.info(request, 'Successfully Deleted')
             return redirect('note_detail', note_pk=note.pk)
@@ -79,11 +79,13 @@ def note_detail(request, note_pk):
 
     note = get_object_or_404(Note, pk=note_pk)
 
-    # if note.user !=request.user:
-    #     return HttpResponseForbidden
+    if note.user !=request.user:
+        return HttpResponseForbidden
 
     if request.method == 'POST':
         # form = NewNoteForm(request.POST, request.FILES, instance=note_pk)
-        form = NewNoteForm(request.POST, request.FILES)
+        form = NewNoteForm(request.POST, request.FILES) # Maybe alter/edit?
         if form.is_valid():
             return render(request, 'lmn/notes/note_detail.html' , { 'note' : note })
+
+    return render(request, 'lmn/notes/note_detail.html' , { 'note' : note })
