@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseForbidden
+from django.contrib import messages
 
 
 
@@ -74,16 +75,30 @@ def edit_notes(request, note_pk):
     """
     note = get_object_or_404(Note, pk=note_pk) # Return error code and primary key if note not found
     
-    if note.user !=request.user:
-        return HttpResponseForbidden
+    # Does this note belong to the current user?
+    if note.user != request.user:
+        return HttpResponseForbidden()
     
+    # is this a GET request (showdata + form), or a POST request (update Note object)?
+    # if POST request, validate form data and update.
     if request.method == 'POST':
-        form = NewNoteForm(request.POST, instance=note_pk)
-
-    return render(request, 'lmn/notes/note_detail.html' ,  { 'form': form, 'note' : note })
-    #if note.user == request.user: # Update note if user matched request
-        #note.edit() # Edit notes in the database
-       # return redirect('venue_list')# Making another request with a root of venue
-    #else:
-        #return HttpResponseForbidden()
+        form = NewNoteForm(request.POST, instance=note)
         
+        if form.is_valid(): # confirm form
+            form.save() 
+            messages.info(request, 'Note information update!')
+        else:
+            messages.error(request, form.errors)
+        
+        return redirect('edit_details', note_pk=note_pk)
+    
+    else:
+    # If GET request, show Note information and form.
+    # If Note is edited, show form; if note is not edited, no form
+        if note.edited:
+            note_form = NewNoteForm(instance=note)# get new form
+            return render(request, 'lmn/notes/note_edit.html' , { 'form': form, 'note': note})
+        
+        else:
+            return render(request, 'lmn/notes/note_edit.html' ,  { 'form': form, 'note' : note })
+    
