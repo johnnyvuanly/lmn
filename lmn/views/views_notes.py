@@ -96,9 +96,9 @@ def edit_notes(request, note_pk):
     # If GET request, show Note information and form.
     # If Note is edited, show form; if note is not edited, no form
         if note.edited:
-            note_form = NewNoteForm(instance=note)# get new form
+            form = NewNoteForm(instance=note)# get new form
             return render(request, 'lmn/notes/note_edit.html' , { 'form': form, 'note': note})
         
         else:
-            return render(request, 'lmn/notes/note_edit.html' ,  { 'form': form, 'note' : note })
+            return render(request, 'lmn/notes/note_edit.html' ,  { 'form': form})
     
