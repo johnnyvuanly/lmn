@@ -90,12 +90,12 @@ def edit_notes(request, note_pk):
         else:
             messages.error(request, form.errors)
         
-        return redirect('edit_details', note_pk=note_pk)
+        return redirect('note_detail', note_pk=note_pk)
     
     else:
     # If GET request, show Note information and form.
     # If Note is edited, show form; if note is not edited, no form
-        if note.edited:
+        if note:
             form = NewNoteForm(instance=note)# get new form
             return render(request, 'lmn/notes/note_edit.html' , { 'form': form, 'note': note})
         
