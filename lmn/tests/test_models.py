@@ -10,7 +10,7 @@ import os
 from django.urls import reverse
 from django.test import override_settings
 
-from .models import Note
+from ..models import Note
 
 from PIL import Image
 
