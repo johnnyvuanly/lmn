@@ -44,6 +44,7 @@ def my_user_profile(request):
 
     form = UserDetailsForm()
     return render('lmn/users/edit_profile.html', {'logged_in_user': logged_in_user, 'user_details': user_details, 'detail_form': form})
+    
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
