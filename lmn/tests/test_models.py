@@ -103,5 +103,23 @@ class TestImageUpload(TestCase):
                     self.assertFalse(os.path.exists(first_path))
                     self.assertTrue(os.path.exists(second_path))
 
+    def test_delete_note_with_image_delete(self):
+        
+        img_path = self.create_temp_image()
 
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(img_path, 'rb') as img_file:
+                resp = self.client.post(reverse('note_detail', kwargs={'note_pk': 1} ), {'photo': img_file }, follow=True)
+                
+                self.assertEqual(200, resp.status_code)
 
+                note_1 = Note.objects.get(note_pk=1)
+                img_name = os.path.basename(img_path)
+                
+                uploaded_img_path = os.path.join(self.MEDIA_ROOT, 'user_images', img_name)
+
+                note_1 = Note.objects.get(note_pk=1)
+                note_1.delete()
+
+                self.assertFalse(os.path.exists(uploaded_img_path))
