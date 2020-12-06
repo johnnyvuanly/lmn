@@ -1,0 +1,16 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+
+<h2>Edit Profile</h2>
+
+    {% for message in messages %}
+        <li>{{ message }}</li>
+    {% endfor %}
+
+    <form method="POST" action="{% url 'my_user_profile' %}">
+        {% csrf_token %}
+        {{ detail_form.as_p }}
+        <button id='edit-profile' type="submit">Save</button>
+    </form>
+
+{% endblock %}
