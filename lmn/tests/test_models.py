@@ -2,6 +2,18 @@ from django.test import TestCase
 
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+
+import tempfile
+import filecmp
+import os 
+
+from django.urls import reverse
+from django.test import override_settings
+
+from .models import Note
+
+from PIL import Image
+
 # Create your tests here.
 
 
