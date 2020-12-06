@@ -72,4 +72,36 @@ class TestImageUpload(TestCase):
                 self.assertIsNotNone(note_1.photo)
                 self.assertTrue(filecmp.cmp( img_path,  expected_uploaded_path ))
 
+    def test_change_image_delete_old(self):
+        
+        first_img_path = self.create_temp_image()
+        second_img_path = self.create_temp_image()
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(first_img_path, 'rb') as first_img:
+
+                resp = self.client.post(reverse('note_detail', kwargs={'note_pk': 1} ), {'photo': first_img }, follow=True)
+
+                note_1 = Note.objects.get(note_pk=1)
+
+                first_uploaded_image = note_1.photo.name
+
+                with open(second_img_path, 'rb') as second_img:
+                    resp = self.client.post(reverse('note_detail', kwargs={'note_pk':1}), {'photo': second_img}, follow=True)
+
+                    # first image file should be deleted 
+                    # second image file should replace first image file
+
+                    note_1 = Note.objects.get(note_pk=1)
+
+                    second_uploaded_image = note_1.photo.name
+
+                    first_path = os.path.join(self.MEDIA_ROOT, first_uploaded_image)
+                    second_path = os.path.join(self.MEDIA_ROOT, second_uploaded_image)
+
+                    self.assertFalse(os.path.exists(first_path))
+                    self.assertTrue(os.path.exists(second_path))
+
+
 
