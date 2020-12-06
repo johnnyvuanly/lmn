@@ -12,6 +12,10 @@ user is a variable provided to the template and is the current logged-in user
 
 -->
 
+{% for message in messages %}
+  <li>{{message}}</li>
+{% endfor %}
+
 {% if can_edit %}
 <form action="{% url 'my_user_profile' %}">
   <button id="edit_profile_button" type="submit">Edit Profile</button>
@@ -39,6 +43,8 @@ user is a variable provided to the template and is the current logged-in user
 <p>{{user_details.bio}}</p>
 {% endif %}
 
+
+<br>
 
 {% if user_details.display_name %}
 <h2 id='username_notes'>{{ user_details.display_name }}'s notes</h2>

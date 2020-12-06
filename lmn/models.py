@@ -59,10 +59,13 @@ class Note(models.Model):
 
 """ Details on user """
 class UserDetails(models.Model):
-    user = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
-    display_name = models.CharField(max_length=15, blank=True)
-    location = models.CharField(max_length=30, blank=True)
-    favorite_genres = models.TextField(max_length=150, blank=True)
-    bio = models.TextField(max_length=300, blank=True)
+    user = models.OneToOneField('auth.User', blank=False, on_delete=models.CASCADE)
+    display_name = models.CharField(max_length=15, null=True)
+    location = models.CharField(max_length=30, null=True)
+    favorite_genres = models.TextField(max_length=150, null=True)
+    bio = models.TextField(max_length=300, null=True)
+
+    def __str__(self):
+        return f'User: {self.user}; Display name: {self.display_name}; Location: {self.location}; Favorite genres: {self.favorite_genres}; Bio: {self.bio}'
     
 
