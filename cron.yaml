@@ -1,0 +1,4 @@
+cron:
+- description: "Populate db with ticketmaster data"
+  url: /event_data
+  schedule: every 1 day

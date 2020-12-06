@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
-from . import views
+from . import views, admin_views
 from .views import views_main, views_artists, views_venues, views_notes, views_users, views_shows
 
 
@@ -37,5 +37,8 @@ urlpatterns = [
     path('register/', views_users.register, name='register'),
 
     # Show related
-    path('shows/add/', views_shows.add_show, name='add_show')
+    path('shows/add/', views_shows.add_show, name='add_show'),
+
+    # API related
+    path('event_data', admin_views.get_data, name='admin_get_data')
 ]
