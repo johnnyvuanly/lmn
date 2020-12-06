@@ -30,32 +30,6 @@ def new_note(request, show_pk):
     return render(request, 'lmn/notes/new_note.html' , { 'form': form , 'show': show })
 
 @login_required
-def delete_note(request, show_pk):
-
-    note = get_object_or_404(Note, pk=show_pk)
-
-    # if note.user !=request.user:
-    #     return HttpResponseForbidden
-
-    if request.method == 'POST' :
-        # form = NewNoteForm(request.POST, request.FILES, instance=show_pk)
-        form = NewNoteForm(request.POST)
-        if form.is_valid():
-            note = form.delete(commit=False)
-            note.user = request.user
-            note.show = show # ?
-            note.delete()
-            messages.info(request, 'Successfully Deleted')
-            return redirect('note_detail', note_pk=note.pk)
-        else:
-            return HttpResponseForbidden()
-
-    else :
-        form = NewNoteForm()
-
-    return render(request, 'lmn/notes/note_detail.html' , { 'form': form , 'show': show })
-
-@login_required
 def latest_notes(request):
 
     notes = Note.objects.all().order_by('-posted_date')
@@ -64,10 +38,7 @@ def latest_notes(request):
 @login_required
 def notes_for_show(request, show_pk):
 
-    note = get_object_or_404(Note, pk=show_pk)
-
-    if note.user !=request.user:
-        return HttpResponseForbidden
+    show = get_object_or_404(Note, pk=show_pk)
 
     # Notes for show, most recent first
     notes = Note.objects.filter(show=show_pk).order_by('-posted_date')
@@ -78,14 +49,5 @@ def notes_for_show(request, show_pk):
 def note_detail(request, note_pk):
 
     note = get_object_or_404(Note, pk=note_pk)
+    return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
 
-    if note.user !=request.user:
-        return HttpResponseForbidden
-
-    if request.method == 'POST':
-        # form = NewNoteForm(request.POST, request.FILES, instance=note_pk)
-        form = NewNoteForm(request.POST, request.FILES) # Maybe alter/edit?
-        if form.is_valid():
-            return render(request, 'lmn/notes/note_detail.html' , { 'note' : note })
-
-    return render(request, 'lmn/notes/note_detail.html' , { 'note' : note })
