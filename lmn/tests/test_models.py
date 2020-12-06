@@ -103,6 +103,7 @@ class TestImageUpload(TestCase):
                     self.assertFalse(os.path.exists(first_path))
                     self.assertTrue(os.path.exists(second_path))
 
+    # Will likely have to integrate with Alicia's delete note function
     def test_delete_note_with_image_delete(self):
         
         img_path = self.create_temp_image()
