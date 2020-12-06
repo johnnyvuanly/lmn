@@ -43,7 +43,12 @@ class TestImageUpload(TestCase):
         user = User.objects.get(note_pk=1)
         self.client.force_login(user)
         self.MEDIA_ROOT = tempfile.mkdtemp()
-        
 
     def tearDown(self):
         print('Deletes temporary directory and temporary image.')
+
+    def create_temp_image(self):
+        handle, tmp_img = tempfile.mkstemp(suffix='.jpg')
+        img = Image.new('RGB', (10, 10) )
+        img.save(tmp_img, format='JPEG')
+        return tmp_img
