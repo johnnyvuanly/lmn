@@ -57,3 +57,12 @@ class Note(models.Model):
     def __str__(self):
         return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}'
 
+""" Details on user """
+class UserDetails(models.Model):
+    user = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
+    display_name = models.CharField(max_length=15, blank=True)
+    location = models.CharField(max_length=30, blank=True)
+    favorite_genres = models.TextField(max_length=150, blank=True)
+    bio = models.TextField(max_length=300, blank=True)
+    
+

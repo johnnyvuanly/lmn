@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from ..models import Venue, Artist, Note, Show
-from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
+from ..models import Venue, Artist, Note, Show, UserDetails
+from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, UserDetailsForm
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -11,17 +11,39 @@ from django.contrib.auth import authenticate, login, logout
 
 def user_profile(request, user_pk):
     # Get user profile for any user on the site
+    can_edit = False
     user = User.objects.get(pk=user_pk)
+    if user == request.user:
+        can_edit = True
+    
+    user_details = UserDetails.objects.get(user=user)
     usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
-    return render(request, 'lmn/users/user_profile.html', { 'user_profile': user , 'notes': usernotes })
-
-
+    return render(request, 'lmn/users/user_profile.html', { 'user_profile': user , 'notes': usernotes, 'user_details': user_details, 'can_edit': can_edit})
+    
+    
 @login_required
 def my_user_profile(request):
-    # TODO - editable version for logged-in user to edit their own profile
-    return redirect('user_profile', user_pk=request.user.pk)
+    # Editable user profile
+    logged_in_user = request.user
 
+    user_details = UserDetails.objects.get(user=logged_in_user)
+    if request.method == 'POST':
+        form = UserDetailsForm(request.POST)
+        user_details.bio.trim()
+        user_details.display_name.trim()
+        user_details.favorite_genres.trim()
+        user_details.location.trim()
 
+        if form.is_valid():
+            try:
+                user_details.save()
+            except:
+                messages.warning(request, 'Field cannot exceed maximum length.')
+        else:
+            messages.warning(request, 'Please check the data you entered.')
+
+    form = UserDetailsForm()
+    return render('lmn/users/edit_profile.html', {'logged_in_user': logged_in_user, 'user_details': user_details, 'detail_form': form})
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
