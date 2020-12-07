@@ -34,7 +34,7 @@ def my_user_profile(request):
     logged_in_user = request.user
     
     try:
-        user_details = get_object_or_404(UserDetails, user=logged_in_user)
+        user_details = UserDetails(user=logged_in_user)
     except ObjectDoesNotExist:
         user_details = UserDetails(user=logged_in_user, display_name='', location='', favorite_genres='', bio='')
     
