@@ -77,7 +77,3 @@ class Note(models.Model):
     def delete_photo(self, photo):
         if default_storage.exists(photo.name):
             default_storage.delete(photo.name)
-
-    # def __str__(self):
-    #     photo_str = self.photo.url if self.photo else 'No photo.'
-    #     return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}/nPhoto: {photo_str}'
