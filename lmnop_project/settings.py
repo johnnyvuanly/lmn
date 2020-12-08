@@ -102,12 +102,13 @@ DATABASES = {
 }
 
 if not os.getenv('GAE_INSTANCE'):
-    DATABASES = {
-        'default' :{
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
-        }
-    }
+    DATABASES ['default']['HOST'] = '127.0.0.1'
+#     DATABASES = {
+#         'default' :{
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+#         }
+
 
 
 # Password validation
@@ -152,7 +153,7 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-GS_STATIC_FILE_BUCKET = 'lmnop-296518.appspot.com '
+GS_STATIC_FILE_BUCKET = 'lmnop-296518.appspot.com'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'www', 'static')
 
