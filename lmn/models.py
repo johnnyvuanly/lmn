@@ -66,17 +66,17 @@ class Note(models.Model):
             if existing_photo != self.photo:
                 self.delete_photo(existing_photo.photo)
 
-        super().save(self, *args, **kwargs)
-
-    def delete_photo(self, photo):
-        if default_storage.exists(photo.name):
-            default_storage.delete(photo.name)
+        super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         if self.photo:
             self.delete_photo(self.photo)
 
         super().delete(*args, **kwargs)
+
+    def delete_photo(self, photo):
+        if default_storage.exists(photo.name):
+            default_storage.delete(photo.name)
 
     # def __str__(self):
     #     photo_str = self.photo.url if self.photo else 'No photo.'
