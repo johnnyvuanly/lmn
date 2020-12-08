@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if show %}
-<h3 id="note-page-title">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ show.show_date }}</h3>
+<h3 id="note-page-title">{{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h3>
 {% else %}
 
 <h2>Latest Notes</h2>
@@ -28,10 +28,10 @@
     </p>
 
     {% if note.photo %}
-        <img src="{{ note.photo.url }}">
+      <img src="{{ note.photo.url }}">
     {% else %}
-        <p>No photo.</p>
-    {% endif %} 
+      <p>No photo.</p>
+    {% endif %}
 
   </div>  
 
@@ -39,7 +39,7 @@
 
 {% empty %}
 
-  <p>No notes.</p>
+<p>No notes.</p>
 
 {% endfor %}
 

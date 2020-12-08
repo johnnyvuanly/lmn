@@ -1,9 +1,10 @@
 from django.db import models
 
-from django.db import models
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
 import datetime
+
+from PIL import Image
 
 # Every model gets a primary key field by default.
 
@@ -55,8 +56,12 @@ class Note(models.Model):
     posted_date = models.DateTimeField(blank=False)
     photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
 
+    def __str__(self):
+        photo_str = self.photo.url if self.photo else 'No photo.'
+        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}/nPhoto: {photo_str}'
+
     def save(self, *args, **kwargs):
-        existing_photo = Note.objects.filter(pk=self.pk).first() # Class Note has no objects member error - Email to Clara
+        existing_photo = Note.objects.filter(pk=self.pk).first()
         if existing_photo and existing_photo.photo:
             if existing_photo != self.photo:
                 self.delete_photo(existing_photo.photo)
@@ -69,11 +74,10 @@ class Note(models.Model):
 
     def delete(self, *args, **kwargs):
         if self.photo:
-                self.delete_photo(self.photo)
+            self.delete_photo(self.photo)
 
         super().delete(*args, **kwargs)
 
-    def __str__(self):
-        photo_str = self.photo.url if self.photo else 'No photo.'
-        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}/nPhoto: {photo_str}'
-
+    # def __str__(self):
+    #     photo_str = self.photo.url if self.photo else 'No photo.'
+    #     return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}/nPhoto: {photo_str}'
