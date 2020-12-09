@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'o+do-*x%zn!43h+unn!46(xp$e6&)=y63v#lj3ywjuy8cihz9f'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True # Changed back to True after False change
+DEBUG = False
 
-ALLOWED_HOSTS = [] # Changed back to [] (blank/nothng) after '*' change
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -75,26 +75,15 @@ WSGI_APPLICATION = 'lmnop_project.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-
-    # Uncomment this when you are ready to use Postgres.
-
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': '',
-    #     'USER' : '',
-    #     'PASSWORD' : os.environ[''],
-    #     'HOST' : '',
-    #     'PORT' : '5432',
-    # },
-
-    # And when you use Postgres, comment out or remove this DB config. 
-    # Using environment variables to detect where this app is running, and automatically use 
-    # an appropriate DB configuration, is a good idea.
-    
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
+    'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'artists',
+            'USER' : 'datauser',
+            # 'PASSWORD' : os.getenv['DATAUSER_PW'],
+            'PASSWORD' : 'TripleRocks68',
+            'HOST' : '/cloudsql/lmnop-296518:us-central1:lmnop-db',
+            'PORT' : '5432',
+        },
 }
 
 if not os.getenv('GAE_INSTANCE'):

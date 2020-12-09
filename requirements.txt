@@ -6,10 +6,12 @@ idna==2.10
 Pillow==8.0.1
 pytz==2020.1
 sqlparse==0.4.1
-Pillow==8.0.1
 pylint==2.6.0
-urllib3==1.25.8
 requests==2.25.0
-sqlparse==0.4.1
 urllib3==1.26.2
-
+gunicorn==20.0.4
+google-cloud-storage==1.26.0
+django-storages==1.9.1
+psycopg2-binary==2.8.4
+# mac users: "pip install psycopg2-binary"
+# windows users: "pip install psycopg2"
