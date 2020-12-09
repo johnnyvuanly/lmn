@@ -29,6 +29,12 @@ will be able to use these to log into admin console at
 
 127.0.0.1:8000/admin
 
+### Populate DB with ticket master data
+
+Make sure you've grabbed the API key for TICKETMASTER_KEY in slack
+Once server is running navigate to /event_data and it will redirect you to the home page and data will have been entered into the database
+
+cron.yaml for cloud deployment
 
 ### Run tests
 
