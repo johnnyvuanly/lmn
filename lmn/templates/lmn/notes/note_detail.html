@@ -30,4 +30,18 @@
 
 <!-- <script src="{% static 'js/confirm_delete.js' %}"></script> # To Appear Below Alicia's Delete Button -->
 
+<form action="{% url 'delete_notes' note.pk %}" method="POST">
+   {% csrf_token %}
+   <button type="submit" class="delete">Delete</button> 
+
+</form>
+
+<script src="{% static 'js/confirm_delete.js '%}"></script>
+
+
+<form action="{% url 'edit_notes' note.pk %}">
+    
+    <button type="submit" class="edit">Edit</button>
+</form>
+
 {% endblock %}
