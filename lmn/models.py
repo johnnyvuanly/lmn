@@ -2,7 +2,10 @@ from django.db import models
 
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
+from django.core.exceptions import ValidationError
+
 import datetime
+from datetime import timedelta
 
 from PIL import Image
 
@@ -39,12 +42,13 @@ class Venue(models.Model):
 
 """ A show - one artist playing at one venue at a particular date. """
 class Show(models.Model):
-    show_date = models.DateTimeField(blank=False)
+    show_date = models.DateField(blank=False)
+    show_time = models.TimeField(blank=False)
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Artist: {self.artist} At: {self.venue} On: {self.show_date}'
+        return f'Artist: {self.artist} At Venue: {self.venue} On: {self.show_date} at {self.show_time}'
 
 
 """ One user's opinion of one show. """

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Note
+from .models import Note, Show
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -25,6 +25,20 @@ class NewNoteForm(forms.ModelForm):
             'posted_date' : DateInput()
         }
 
+class DateInput(forms.DateInput):
+    input_type='date'
+
+class TimeInput(forms.TimeInput):
+    input_type='time'
+
+class NewShowForm(forms.ModelForm):
+    class Meta:
+        model = Show
+        fields = ('show_date', 'show_time', 'artist', 'venue')
+        widgets = {
+            'show_date': DateInput(),
+            'show_time': TimeInput()
+        }
 
 class UserRegistrationForm(UserCreationForm):
 

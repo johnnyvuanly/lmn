@@ -1,8 +1,18 @@
-from django.test import TestCase
+import tempfile
+import filecmp
+import os
 
-from django.contrib.auth.models import User
+from django.test import TestCase, Client
+from django.urls import reverse
+from django.contrib.auth.models import User 
 from django.db import IntegrityError
 
+
+import datetime
+
+from ..models import Show
+
+# Create your tests here.
 import tempfile
 import filecmp
 import os 
