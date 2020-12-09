@@ -1,12 +1,33 @@
 {% extends 'lmn/base.html' %}
+{% load static %}
 {% block content %}
-
 
 <h2 id="note-page-title">{{ note.show.artist.name }} at {{ note.show.venue.name }} by 
     <a href="{% url 'user_profile' user_pk=note.user.pk %}">{{ user.username }}</a>
 </h2>
 
-<p id="note-title"><b>{{ note.title}}</b></p>
-<p id="note-text">{{ note.text }}</b>
+<h2>Note</h2>
+<p id="note-title"><b>{{ note.title }}</b></p>
+<p id="note-text">{{ note.text }}</p>
+
+<h2>Posted Date</h2>
+<p id="note-posted-date">{{ note.posted_date }}</p>
+
+<h2>Photo</h2>
+{% if note.photo %}
+<img src="{{ note.photo.url }}">
+{% else %}
+<p>No photo.</p>
+{% endif %}
+
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+</div>
+{% endif %} 
+
+<!-- <script src="{% static 'js/confirm_delete.js' %}"></script> # To Appear Below Alicia's Delete Button -->
 
 {% endblock %}

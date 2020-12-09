@@ -1,35 +1,45 @@
 {% extends 'lmn/base.html' %}
+{% load static %}
 {% block content %}
 
-
 {% if show %}
-  <h2 id="show-title">Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
+<h3 id="note-page-title">{{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h3>
 {% else %}
-  <h2>Latest Notes</h2>
-{% endif %}
 
+<h2>Latest Notes</h2>
+{% endif %}
 
 {% for note in notes %}
 
-  <div id="note_{{ note.pk }}">
-    <h3 class="note-title">{{ note.title }}</h3>
+<p class="show-info">
+  <a href="{% url 'notes_for_show' show_pk=note.show.pk %}">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</a>
+</p>
 
-    <p class="show-info">
-      <a href="{% url 'notes_for_show' show_pk=note.show.pk %}">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</a>
-    </p>
+<div id="note_{{ note.pk }}">
+
+  <p class="note-title"><b>
+    <a href="{% url 'note_detail' note_pk=note.pk %}">{{ note.title }}</a>
+  </p></b>
+
+  <p class='note-text'>{{note.text|truncatechars:100}}</p>
 
     <p class="note-info">Posted on {{ note.posted_date }} by 
       <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
     </p>
 
-    <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
+    {% if note.photo %}
+      <img src="{{ note.photo.url }}">
+    {% else %}
+      <p>No photo.</p>
+    {% endif %}
+
   </div>  
 
   <hr>
 
 {% empty %}
 
-  <p>No notes.</p>
+<p>No notes.</p>
 
 {% endfor %}
 
@@ -38,7 +48,7 @@ display link to add new note for that show. -->
 
 {% if show %}
 
-  <a href="{% url 'new_note' show_pk=show.pk %}">Add your own notes</a>
+  <a href="{% url 'new_note' show_pk=show.pk %}">Click here to add your own show notes!</a>
 
 {% endif %}
 
