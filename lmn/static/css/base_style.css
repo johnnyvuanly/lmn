@@ -21,3 +21,8 @@ a {
   margin: 2px;
   /* font-weight: bold; */
 }
+
+img{
+  width:100%;
+  max-width:600px;
+}

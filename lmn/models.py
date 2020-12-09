@@ -1,8 +1,13 @@
 from django.db import models
 
-from django.db import models
 from django.contrib.auth.models import User
+from django.core.files.storage import default_storage
+from django.core.exceptions import ValidationError
+
 import datetime
+from datetime import timedelta
+
+from PIL import Image
 
 
 # Every model gets a primary key field by default.
@@ -17,7 +22,6 @@ User._meta.get_field('email')._unique = True
 User._meta.get_field('email')._blank = False
 User._meta.get_field('last_name')._blank = False
 User._meta.get_field('first_name')._blank = False
-
 
 """ A music artist """
 class Artist(models.Model):
@@ -39,12 +43,13 @@ class Venue(models.Model):
 
 """ A show - one artist playing at one venue at a particular date. """
 class Show(models.Model):
-    show_date = models.DateTimeField(blank=False)
+    show_date = models.DateField(blank=False)
+    show_time = models.TimeField(blank=False)
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Artist: {self.artist} At: {self.venue} On: {self.show_date}'
+        return f'Artist: {self.artist} At Venue: {self.venue} On: {self.show_date} at {self.show_time}'
 
 
 """ One user's opinion of one show. """
@@ -53,10 +58,28 @@ class Note(models.Model):
     user = models.ForeignKey('auth.User', blank=False, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, blank=False)
     text = models.TextField(max_length=1000, blank=False)
+
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
-    #notes = models.TextField(blank=True, null=True)
+    photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
     
     def __str__(self):
-        #notes_str = self.notes[100:] if self.notes else 'no notes'
-        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}.'#Photo {photo_str}
+        photo_str = self.photo.url if self.photo else 'No photo.'
+        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}/nPhoto: {photo_str}'
 
+    def save(self, *args, **kwargs):
+        existing_photo = Note.objects.filter(pk=self.pk).first()
+        if existing_photo and existing_photo.photo:
+            if existing_photo != self.photo:
+                self.delete_photo(existing_photo.photo)
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.photo:
+            self.delete_photo(self.photo)
+
+        super().delete(*args, **kwargs)
+
+    def delete_photo(self, photo):
+        if default_storage.exists(photo.name):
+            default_storage.delete(photo.name)
