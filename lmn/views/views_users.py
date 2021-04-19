@@ -31,6 +31,9 @@ def register(request):
             if user:
                 login(request, user)
                 return redirect('user_profile', user_pk=request.user.pk)
+            elif user:
+                logout(request, user)
+                return redirect('registration/logout.html')
             else:
                 messages.add_message(request, messages.ERROR, 'Unable to log in new user')
         else:
@@ -38,5 +41,15 @@ def register(request):
             # include the invalid form, which will have error messages added to it. The error messages will be displayed by the template.
             return render(request, 'registration/register.html', {'form': form} )
 
+    
+
+
     form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'form': form} )
+
+def goodbye_message(request):
+        return render(request, 'registration/goodbye.html')
+
+
+
+
