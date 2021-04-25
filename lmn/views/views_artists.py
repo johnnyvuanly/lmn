@@ -9,6 +9,8 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.utils import timezone
 
+from django.core.paginator import Paginator
+
 
 def venues_for_artist(request, artist_pk):   # pk = artist_pk
 
@@ -28,7 +30,15 @@ def artist_list(request):
     else:
         artists = Artist.objects.all().order_by('name')
 
-    return render(request, 'lmn/artists/artist_list.html', { 'artists': artists, 'form': form, 'search_term': search_name })
+    artists = Artist.objects.all() # get all artist from database
+
+    artist_paginator = Paginator(artists, 2) # 1 per page as of right now
+
+    page_num = request.GET.get('page') # Get page number from URL
+
+    page = artist_paginator.get_page(page_num)
+
+    return render(request, 'lmn/artists/artist_list.html', { 'form': form, 'search_term': search_name, 'page': page })
 
 
 def artist_detail(request, artist_pk):

@@ -18,8 +18,9 @@
   <h2 id='artist-list-title'>All artists</h2>
 {% endif %}
 
+<h2>Page Number: {{ page.number }}</h2>
 
-{% for artist in artists %}
+{% for artist in page.object_list %}
 
   <div class="artist" id="artist_{{ artist.pk }}">
     <p>
@@ -36,5 +37,16 @@
 <p>No artists found</p>
 
 {% endfor %}
+
+<div>
+  {% if page.has_previous %}
+  <!-- URL tag with the name of view. After is a url query string arguement -->
+  <a href="{% url 'artist_list' %}?page={{ page.previous_page_number }}">Previous Page</a>
+  {% endif %}
+
+  {% if page.has_next %}
+  <a href="{% url 'artist_list' %}?page={{ page.next_page_number }}">Next Page</a>
+  {% endif %}
+</div>
 
 {% endblock %}
