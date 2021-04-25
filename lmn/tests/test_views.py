@@ -496,7 +496,16 @@ class TestUserAuthentication(TestCase):
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
 
-class TestGoodbyePageMessage(TestCase):
+class TestGoodbyePage(TestCase):
+
+    def test_logout_redirects_to_goodbye_page(self):
+        # Log in
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('login'))
+        # Log out
+        self.client.logout()
+        # Check redirect
+        self.assertRedirects(response, reverse('goodbye'))
 
     def test_goodbye_message_displays_when_user_logs_out(self):
         # First make a request to the goodbye page
