@@ -1,4 +1,5 @@
 {% extends 'lmn/base.html' %}
+{% load static %}
 {% block content %}
 
 
@@ -23,6 +24,13 @@
     </p>
 
     <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
+
+    <h3>Photo</h3>
+    {% if note.photo %}
+        <img src="{{ note.photo.url }}">
+    {% else %}
+        <P>No photo uploaded</p>
+    {% endif %}  
   </div>  
 
   <hr>
@@ -39,6 +47,24 @@ display link to add new note for that show. -->
 {% if show %}
 
   <a href="{% url 'new_note' show_pk=show.pk %}">Add your own notes</a>
+
+{% endif %}
+
+{% if note.user.pk == user.pk %}
+
+
+
+    <form action="{% url 'edit_note' note_pk=note_pk%}" method="POST">
+      {% csrf_token %}
+      <button type="submit">Edit Note</button>
+    </form>
+
+    <form action="{% url 'delete_note' note.pk %}" method="POST">
+        {% csrf_token %}
+        <button type=submit class="delete">DELETE</button>
+    </form>
+
+    <script src="{% static 'js/confirm_delete.js' %}"></script>
 
 {% endif %}
 
