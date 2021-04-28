@@ -8,8 +8,9 @@
   <h2>Latest Notes</h2>
 {% endif %}
 
+<h2>Page Number: {{ page.number }}</h2>
 
-{% for note in notes %}
+{% for note in page.object_list %}
 
   <div id="note_{{ note.pk }}">
     <h3 class="note-title">{{ note.title }}</h3>
@@ -32,6 +33,16 @@
   <p>No notes.</p>
 
 {% endfor %}
+
+<div>
+  {% if page.has_previous %}
+  <a href="{% url 'latest_notes' %}?page={{ page.previous_page_number }}">Previous Page</a>
+  {% endif %}
+
+  {% if page.has_next %}
+  <a href="{% url 'latest_notes' %}?page={{ page.next_page_number }}">Next Page</a>
+  {% endif %}
+</div>
 
 <!-- If this is a list of notes for one show,
 display link to add new note for that show. -->

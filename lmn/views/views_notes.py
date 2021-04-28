@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
-
+from django.core.paginator import Paginator
 
 @login_required
 def new_note(request, show_pk):
@@ -31,7 +31,13 @@ def new_note(request, show_pk):
 
 def latest_notes(request):
     notes = Note.objects.all().order_by('-posted_date')[:20]   # the 20 most recent notes
-    return render(request, 'lmn/notes/note_list.html', { 'notes': notes })
+
+    notes = Note.objects.all()
+    note_paginator = Paginator(notes, 1) # Right now 1 per page
+    page_num = request.GET.get('page')
+    page = note_paginator.get_page(page_num)
+
+    return render(request, 'lmn/notes/note_list.html', { 'page': page })
 
 
 def notes_for_show(request, show_pk): 
