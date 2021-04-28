@@ -22,19 +22,38 @@
     {% endif %}
   </div>
 
+  <h2>Page Number: {{ page.number }}</h2>
+
   <div>
 
-    {% for venue in venues %}
+    {% for venue in page.object_list %}
 
-    <div id="venue-{{ venue.pk }}">
-      <p><a href="{% url 'venue_detail' venue_pk=venue.pk %}">{{ venue.name }}</a> {{ venue.city }}, {{ venue.state }}</p>
-      <p>See artists, notes, and add your own <a href='{% url "artists_at_venue" venue_pk=venue.pk %}'>{{ venue.name }} notes</a></p>
+    <div class="venue" id="venue-{{ venue.pk }}">
+      <p>
+        <a href="{% url 'venue_detail' venue_pk=venue.pk %}">{{ venue.name }}</a> {{ venue.city }}, {{ venue.state }}
+      </p>
+
+      <p>See artists, notes, and add your own 
+        <a href='{% url "artists_at_venue" venue_pk=venue.pk %}'>{{ venue.name }} notes</a>
+      </p>
     </div>
 
     {% empty %}
+
       <p>No venues found</p>
+
     {% endfor %}
 
+    </div>
+
+    <div>
+      {% if page.has_previous %}
+      <a href="{% url 'venue_list' %}?page={{ page.previous_page_number }}">Previous Page</a>
+      {% endif %}
+
+      {% if page.has_next %}
+      <a href="{% url 'venue_list' %}?page={{ page.next_page_number }}">Next Page</a>
+      {% endif %}
     </div>
 
 </div>

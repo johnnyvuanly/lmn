@@ -25,6 +25,7 @@ def venues_for_artist(request, artist_pk):   # pk = artist_pk
 def artist_list(request):
     form = ArtistSearchForm()
     search_name = request.GET.get('search_name')
+
     if search_name:
         artists = Artist.objects.filter(name__icontains=search_name).order_by('name')
     else:
@@ -32,7 +33,7 @@ def artist_list(request):
 
     artists = Artist.objects.all() # get all artist from database
 
-    artist_paginator = Paginator(artists, 2) # 1 per page as of right now
+    artist_paginator = Paginator(artists, 2) # 2 per page as of right now
 
     page_num = request.GET.get('page') # Get page number from URL
 
