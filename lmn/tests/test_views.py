@@ -498,6 +498,8 @@ class TestUserAuthentication(TestCase):
 
 class TestGoodbyePage(TestCase):
 
+    fixtures = [ 'testing_users']
+
     def test_logout_redirects_to_goodbye_page(self):
         # Log in
         self.client.force_login(User.objects.first())
