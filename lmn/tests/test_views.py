@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 import re, datetime
 from datetime import timezone
 
+from django.core.paginator import Paginator
+
 # TODO verify correct templates are rendered.
 
 class TestEmptyViews(TestCase):
@@ -499,3 +501,10 @@ class TestUserAuthentication(TestCase):
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
 
+class TestPagination(TestCase):
+
+    """ Test ideas come from https://github.com/encode/django-rest-framework/blob/master/tests/test_pagination.py """
+
+    def test_artist_page_one_status_code(self):
+        response = self.client.get('/artists/list/')
+        self.assertEquals(response.status_code, 200)
