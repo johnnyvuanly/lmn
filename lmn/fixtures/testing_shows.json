@@ -1,20 +1,29 @@
 [
-  {"model" : "lmn.show", "pk" : 1 , "fields" :
-    { "show_date" : "2017-01-02",
-      "artist" : 1,
-      "venue" : 2
+  {
+    "model": "lmn.show",
+    "pk": 1,
+    "fields":{
+      "show_date": "2017-01-02T17:30:00-00:00",
+      "artist":1,
+      "venue":2
     }
   },
-  {"model" : "lmn.show", "pk" : 2 , "fields" :
-    { "show_date" : "2017-02-02",
-      "artist" : 1,
-      "venue" : 2
+  {
+    "model": "lmn.show",
+    "pk":2,
+    "fields":{
+      "show_date": "2017-02-02T19:30:00-00:00",
+      "artist":1,
+      "venue":2
     }
   },
-  {"model" : "lmn.show", "pk" : 3 , "fields" :
-    { "show_date" : "2017-01-21",
-      "artist" : 2,
-      "venue" : 1
+  {
+    "model": "lmn.show",
+    "pk":3,
+    "fields":{
+      "show_date": "2017-01-21T21:45:00-00:00",
+      "artist":2,
+      "venue":1
     }
   }
 ]

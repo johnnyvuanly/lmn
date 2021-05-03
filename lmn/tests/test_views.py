@@ -144,26 +144,29 @@ class TestArtistViews(TestCase):
         self.assertEqual(show1.artist.name, 'REM')
         self.assertEqual(show1.venue.name, 'The Turf Club')
 
-        expected_date = datetime.datetime(2017, 2, 2, 0, 0, tzinfo=timezone.utc)
-        self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
+        # From the fixture, show 2's "show_date": "2017-02-02T19:30:00-06:00"
+        expected_date = datetime.datetime(2017, 2, 2, 19, 30, 0, tzinfo=timezone.utc)
+        self.assertEqual(show1.show_date, expected_date)
 
+        # from the fixture, show 1's "show_date": "2017-01-02T17:30:00-00:00",
         self.assertEqual(show2.artist.name, 'REM')
         self.assertEqual(show2.venue.name, 'The Turf Club')
-        expected_date = datetime.datetime(2017, 1, 2, 0, 0, tzinfo=timezone.utc)
-        self.assertEqual(0, (show2.show_date - expected_date).total_seconds())
+        expected_date = datetime.datetime(2017, 1, 2, 17, 30, 0, tzinfo=timezone.utc)
+        self.assertEqual(show2.show_date, expected_date)
 
         # Artist 2 (ACDC) has played at venue 1 (First Ave)
 
-        url = reverse('venues_for_artist', kwargs={'artist_pk':2})
+        url = reverse('venues_for_artist', kwargs={'artist_pk': 2})
         response = self.client.get(url)
         shows = list(response.context['shows'].all())
         show1 = shows[0]
         self.assertEqual(1, len(shows))
 
+        # This show has "show_date": "2017-01-21T21:45:00-00:00",
         self.assertEqual(show1.artist.name, 'ACDC')
         self.assertEqual(show1.venue.name, 'First Avenue')
-        expected_date = datetime.datetime(2017, 1, 21, 0, 0, tzinfo=timezone.utc)
-        self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
+        expected_date = datetime.datetime(2017, 1, 21, 21, 45, 0, tzinfo=timezone.utc)
+        self.assertEqual(show1.show_date, expected_date)
 
         # Artist 3 , no shows
 
@@ -263,17 +266,17 @@ class TestVenues(TestCase):
             self.assertEqual(show1.artist.name, 'REM')
             self.assertEqual(show1.venue.name, 'The Turf Club')
 
-            expected_date = datetime.datetime(2017, 2, 2, 0, 0, tzinfo=timezone.utc)
-            self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
+            expected_date = datetime.datetime(2017, 2, 2, 19, 30, 0, tzinfo=timezone.utc)
+            self.assertEqual(show1.show_date, expected_date)
 
             self.assertEqual(show2.artist.name, 'REM')
             self.assertEqual(show2.venue.name, 'The Turf Club')
-            expected_date = datetime.datetime(2017, 1, 2, 0, 0, tzinfo=timezone.utc)
-            self.assertEqual(0, (show2.show_date - expected_date).total_seconds())
+            expected_date = datetime.datetime(2017, 1, 2, 17, 30, 0, tzinfo=timezone.utc)
+            self.assertEqual(show2.show_date, expected_date)
 
             # Artist 2 (ACDC) has played at venue 1 (First Ave)
 
-            url = reverse('artists_at_venue', kwargs={'venue_pk':1})
+            url = reverse('artists_at_venue', kwargs={'venue_pk': 1})
             response = self.client.get(url)
             shows = list(response.context['shows'].all())
             show1 = shows[0]
@@ -281,8 +284,8 @@ class TestVenues(TestCase):
 
             self.assertEqual(show1.artist.name, 'ACDC')
             self.assertEqual(show1.venue.name, 'First Avenue')
-            expected_date = datetime.datetime(2017, 1, 21, 0, 0, tzinfo=timezone.utc)
-            self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
+            expected_date = datetime.datetime(2017, 1, 21, 21, 45, 0, tzinfo=timezone.utc)
+            self.assertEqual(show1.show_date, expected_date)
 
             # Venue 3 has not had any shows
 
@@ -524,6 +527,7 @@ class TestDeletePlace(TestCase):
         self.assertEqual(200, response.status_code)
         place_5 = Note.objects.get(pk=2)
         self.assertIsNotNone(place_5)
+    
 
 class TestImageUpload(TestCase):
     fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
@@ -631,3 +635,29 @@ class TestImageUpload(TestCase):
                 place_1.delete()
 
                 self.assertFalse(os.path.exists(uploaded_file_path))
+class TestGoodbyePage(TestCase):
+
+#Johnnys tests working correctly
+    fixtures = [ 'testing_users']
+
+    def test_logout_redirects_to_goodbye_page(self):
+        # Log in
+        self.client.force_login(User.objects.first())
+        # Make a request to the logout page, testing the link of a logout button
+        response = self.client.get(reverse('logout'))
+        # Check redirect
+        self.assertRedirects(response, reverse('goodbye'))
+
+    def test_goodbye_message_displays_when_user_logs_out(self):
+        # First make a request to the goodbye page
+        url = reverse('goodbye') 
+        response = self.client.get(url)
+        self.assertContains(response, 'Successfully signed out!!')
+
+    def test_redirects_to_goodbye_page_if_user_is_not_logged_in(self):
+        # Make a request to the logout page, testing the link of a logout button
+        response = self.client.get(reverse('logout'))
+        # Check redirect
+        self.assertRedirects(response, reverse('goodbye'))
+
+    
