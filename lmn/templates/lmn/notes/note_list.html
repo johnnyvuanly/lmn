@@ -50,22 +50,4 @@ display link to add new note for that show. -->
 
 {% endif %}
 
-{% if note.user.pk == user.pk %}
-
-
-
-    <form action="{% url 'edit_note' note_pk=note_pk%}" method="POST">
-      {% csrf_token %}
-      <button type="submit">Edit Note</button>
-    </form>
-
-    <form action="{% url 'delete_note' note.pk %}" method="POST">
-        {% csrf_token %}
-        <button type=submit class="delete">DELETE</button>
-    </form>
-
-    <script src="{% static 'js/confirm_delete.js' %}"></script>
-
-{% endif %}
-
 {% endblock %}
