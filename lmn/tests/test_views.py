@@ -508,3 +508,4 @@ class TestPagination(TestCase):
     def test_artist_page_one_status_code(self):
         response = self.client.get('/artists/list/')
         self.assertEquals(response.status_code, 200)
+        
