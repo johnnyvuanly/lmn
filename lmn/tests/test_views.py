@@ -509,3 +509,28 @@ class TestPagination(TestCase):
         response = self.client.get('/artists/list/')
         self.assertEquals(response.status_code, 200)
         
+class TestGoodbyePage(TestCase):
+
+    fixtures = [ 'testing_users']
+
+    def test_logout_redirects_to_goodbye_page(self):
+        # Log in
+        self.client.force_login(User.objects.first())
+        # Make a request to the logout page, testing the link of a logout button
+        response = self.client.get(reverse('logout'))
+        # Check redirect
+        self.assertRedirects(response, reverse('goodbye'))
+
+    def test_goodbye_message_displays_when_user_logs_out(self):
+        # First make a request to the goodbye page
+        url = reverse('goodbye') 
+        response = self.client.get(url)
+        self.assertContains(response, 'Successfully signed out!!')
+
+    def test_redirects_to_goodbye_page_if_user_is_not_logged_in(self):
+        # Make a request to the logout page, testing the link of a logout button
+        response = self.client.get(reverse('logout'))
+        # Check redirect
+        self.assertRedirects(response, reverse('goodbye'))
+
+    
