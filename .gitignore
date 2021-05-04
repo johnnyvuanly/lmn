@@ -11,3 +11,6 @@ __pycache__
 # ignore virtual enviroments 
 venv
 env
+.gcloudignore
+app.yaml
+cloud_sql_proxy_x64.exe
