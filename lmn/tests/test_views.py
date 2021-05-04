@@ -505,6 +505,8 @@ class TestPagination(TestCase):
 
     """ Test ideas come from https://github.com/encode/django-rest-framework/blob/master/tests/test_pagination.py """
 
+    fixtures = ['testing_artists', 'testing_notes', 'testing_venues', 'testing_shows', 'testing_users']
+
     def test_artist_page_one_status_code(self):
         response = self.client.get('/artists/list/')
         self.assertEquals(response.status_code, 200)
