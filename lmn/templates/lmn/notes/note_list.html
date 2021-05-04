@@ -8,9 +8,9 @@
   <h2>Latest Notes</h2>
 {% endif %}
 
-<h2>Page Number: {{ page.number }}</h2>
+<h2>Page Number: {{ notes.number }}</h2>
 
-{% for note in page.object_list %}
+{% for note in notes.object_list %}
 
   <div id="note_{{ note.pk }}">
     <h3 class="note-title">{{ note.title }}</h3>
@@ -35,12 +35,12 @@
 {% endfor %}
 
 <div>
-  {% if page.has_previous %}
-  <a href="{% url 'latest_notes' %}?page={{ page.previous_page_number }}">Previous Page</a>
+  {% if notes.has_previous %}
+  <a href="{% url 'latest_notes' %}?page={{ notes.previous_page_number }}">Previous Page</a>
   {% endif %}
 
-  {% if page.has_next %}
-  <a href="{% url 'latest_notes' %}?page={{ page.next_page_number }}">Next Page</a>
+  {% if notes.has_next %}
+  <a href="{% url 'latest_notes' %}?page={{ notes.next_page_number }}">Next Page</a>
   {% endif %}
 </div>
 

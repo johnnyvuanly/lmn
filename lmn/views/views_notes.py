@@ -32,12 +32,11 @@ def new_note(request, show_pk):
 def latest_notes(request):
     notes = Note.objects.all().order_by('-posted_date')[:20]   # the 20 most recent notes
 
-    notes = Note.objects.all()
     note_paginator = Paginator(notes, 1) # Right now 1 per page
     page_num = request.GET.get('page')
-    page = note_paginator.get_page(page_num)
+    page_of_notes = note_paginator.get_page(page_num)
 
-    return render(request, 'lmn/notes/note_list.html', { 'page': page })
+    return render(request, 'lmn/notes/note_list.html', { 'notes': page_of_notes })
 
 
 def notes_for_show(request, show_pk): 

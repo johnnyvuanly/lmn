@@ -18,17 +18,15 @@ def venue_list(request):
         #search for this venue, display results
         venues = Venue.objects.filter(name__icontains=search_name).order_by('name')
     else :
-        venues = Venue.objects.all().order_by('name')   # Todo paginate
+        venues = Venue.objects.all().order_by('name') # Get all the venues from database
 
-    venues = Venue.objects.all() # Get all the venues from database
+        venue_paginator = Paginator(venues, 2) # 2 Per page as of right now
 
-    venue_paginator = Paginator(venues, 2) # 2 Per page as of right now
+        page_num = request.GET.get('page') # Get the page number based on where you are in the list fromt the URL
 
-    page_num = request.GET.get('page') # Get the page number based on where you are in the list fromt the URL
+        page_of_venues = venue_paginator.get_page(page_num) 
 
-    page = venue_paginator.get_page(page_num) 
-
-    return render(request, 'lmn/venues/venue_list.html', { 'page': page, 'form': form, 'search_term': search_name })
+        return render(request, 'lmn/venues/venue_list.html', { 'venues': page_of_venues, 'form': form, 'search_term': search_name })
 
 
 def artists_at_venue(request, venue_pk):   # pk = venue_pk

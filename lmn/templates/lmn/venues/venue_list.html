@@ -22,11 +22,11 @@
     {% endif %}
   </div>
 
-  <h2>Page Number: {{ page.number }}</h2>
+  <h2>Page Number: {{ venues.number }}</h2>
 
   <div>
 
-    {% for venue in page.object_list %}
+    {% for venue in venues.object_list %}
 
     <div class="venue" id="venue-{{ venue.pk }}">
       <p>
@@ -47,12 +47,12 @@
     </div>
 
     <div>
-      {% if page.has_previous %}
-      <a href="{% url 'venue_list' %}?page={{ page.previous_page_number }}">Previous Page</a>
+      {% if venues.has_previous %}
+      <a href="{% url 'venue_list' %}?page={{ venues.previous_page_number }}">Previous Page</a>
       {% endif %}
 
-      {% if page.has_next %}
-      <a href="{% url 'venue_list' %}?page={{ page.next_page_number }}">Next Page</a>
+      {% if venues.has_next %}
+      <a href="{% url 'venue_list' %}?page={{ venues.next_page_number }}">Next Page</a>
       {% endif %}
     </div>
 
