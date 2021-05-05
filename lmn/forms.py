@@ -103,8 +103,10 @@ class TicketMasterForm(forms.Form):
             query = {'city': self.city, 'state': self.state, 'country': self.country, 'radius':self.search_radius, 'segment': self.segment_name, 'size': self.page_size}
             headers = {'apikey' : os.environ.get('TicketMasterKey')}
             response = requests.get(self.root_url, params=query, headers=headers)
+
             response.raise_for_status()
             data = response.json()
+            # TODO If pages > 1 Loop over pages
             if self.is_valid_json(data):
                 logging.info(f'Data recieved:\n{data}')
                 self.propogate_db(data)
@@ -115,10 +117,13 @@ class TicketMasterForm(forms.Form):
     
     # get details on each event
     def find_event_details(self):
+        # TODO Refresh specific event details using event id
         pass
 
     def propogate_db(self, data):
-        
+        # TODO Add Events
+        # TODO Add Venues
+        # TODO Add Artists    
         pass
 
     def is_valid_json(jsonData): 
