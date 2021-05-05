@@ -100,7 +100,7 @@ class TicketMasterForm(forms.Form):
 
     def find_events(self):
         try:
-            query = {'distanceUnit':'mi', 'timeType':'departure', 'wp.1': self.start_location, 'wp.2':self.end_location, 'dateTime': self.start_time, 'key': key}
+            query = {'city': self.city, 'state': self.state, 'country': self.country, 'radius':self.search_radius, 'segment': self.segment_name, 'size': self.page_size}
             headers = {'apikey' : os.environ.get('TicketMasterKey')}
             response = requests.get(self.root_url, params=query, headers=headers)
             response.raise_for_status()
@@ -118,6 +118,7 @@ class TicketMasterForm(forms.Form):
         pass
 
     def propogate_db(self, data):
+        
         pass
 
     def is_valid_json(jsonData): 
