@@ -82,7 +82,7 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lmnop-db',
+        'NAME': 'lmnop-postgres',
         'USER' : 'livemusicafficiendo',
         'PASSWORD' : os.environ['LMNOP_PW'],
         'HOST' : '/cloudsql/clear-booking-309320:us-central1:lmnop-db',
