@@ -144,3 +144,14 @@ class LoginFormTests(TestCase):
     # TODO username not case sensitive - bob and BOB and Bob are the same
    
     pass
+
+class TicketMasterFormTest(TestCase):
+
+    # TODO Test Connection
+    # TODO Test Json is valid
+    # TODO Test DB connection
+    # TODO Test Data is in DB
+    # TODO Test Page Loop
+    # TODO Test Unique ID Check
+
+    pass

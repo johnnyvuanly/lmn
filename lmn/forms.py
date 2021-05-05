@@ -1,5 +1,9 @@
 from django import forms
 from .models import Note
+import os
+import requests
+import json
+import logging
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -78,3 +82,51 @@ class UserRegistrationForm(UserCreationForm):
             user.save()
 
         return user
+
+
+# TicketMaster API Call
+class TicketMasterForm(forms.Form):
+
+    # Search Parameters
+    root_url = 'https://app.ticketmaster.com/discovery/v2/'
+    # event_url = f'/{event_id}' # add this to get details on a specific event
+    city = 'Minneapolis'
+    state = 'mn'
+    country = 'US'
+    search_radius = '50'
+    segment_name = 'music'
+    page_size = '99'
+    
+
+    def find_events(self):
+        try:
+            query = {'distanceUnit':'mi', 'timeType':'departure', 'wp.1': self.start_location, 'wp.2':self.end_location, 'dateTime': self.start_time, 'key': key}
+            headers = {'apikey' : os.environ.get('TicketMasterKey')}
+            response = requests.get(self.root_url, params=query, headers=headers)
+            response.raise_for_status()
+            data = response.json()
+            if self.is_valid_json(data):
+                logging.info(f'Data recieved:\n{data}')
+                self.propogate_db(data)
+        except Exception as e:
+           logging.exception(e)
+           logging.exception(response.text)
+           return None, e
+    
+    # get details on each event
+    def find_event_details(self):
+        pass
+
+    def propogate_db(self, data):
+        pass
+
+    def is_valid_json(jsonData): 
+	#Returns a value error if the json is invalid and returns false, otherwise returns true.
+        try:
+            if (type(jsonData) == dict):
+                return True
+            elif (type(jsonData) == str):
+                json.loads(jsonData)
+                return True
+        except ValueError as err:
+            return False
