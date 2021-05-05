@@ -57,3 +57,18 @@ class Note(models.Model):
     def __str__(self):
         return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}'
 
+
+""" Reward badges for how many post a user has """
+class Badge(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    reward_image = models.ImageField(default='', blank=True, null=True)
+
+    # Info from https://www.freecodecamp.org/news/python-property-decorator/
+    # Decorators like this is a function that adds new functionality to a function
+    # @property is a built in decorator for the property() function in Python. Used to give special functionality
+    # to certain methods to make them act as getters, setters, or deleters when defined in a class
+    @property 
+    def badge_image(self):
+        # code from https://stackoverflow.com/questions/50307049/adding-badges-to-user-for-doing-tasks-in-django
+        if self.user.
+
