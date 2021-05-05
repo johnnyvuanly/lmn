@@ -505,11 +505,38 @@ class TestPagination(TestCase):
 
     """ Test ideas come from https://github.com/encode/django-rest-framework/blob/master/tests/test_pagination.py """
 
+    # Load this data into the database for all of the tests in this class
     fixtures = ['testing_artists', 'testing_notes', 'testing_venues', 'testing_shows', 'testing_users']
+
+    def setUp(self):
+        user = User.objects.get(pk=1)
+        self.client.force_login(user)
 
     def test_artist_page_one_status_code(self):
         response = self.client.get('/artists/list/')
         self.assertEquals(response.status_code, 200)
+
+    def test_page_number_artists_pagination(self):
+        artist_1 = Artist.objects.get(pk=1)
+
+        response = self.client.get(reverse('artist_list'))
+
+        self.assertTemplateUsed(response, 'lmn/artists/artist_list.html', {'artists': page_of_artist })
+
+    def test_correct_page_number_in_url(self):
+        pass
+
+    def test_correct_amount_of_artist_displayed_per_page(self):
+        pass
+
+    def test_artist_query_to_the_database(self):
+        pass
+
+    def test_on_first_page_no_previous_page_link(self):
+        pass
+
+    def test_on_last_page_no_next_page_link(self):
+        pass
         
 class TestGoodbyePage(TestCase):
 
