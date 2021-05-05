@@ -103,7 +103,6 @@ class TicketMasterForm(forms.Form):
             query = {'city': self.city, 'state': self.state, 'country': self.country, 'radius':self.search_radius, 'segment': self.segment_name, 'size': self.page_size}
             headers = {'apikey' : os.environ.get('TicketMasterKey')}
             response = requests.get(self.root_url, params=query, headers=headers)
-
             response.raise_for_status()
             data = response.json()
             # TODO If pages > 1 Loop over pages
@@ -121,6 +120,7 @@ class TicketMasterForm(forms.Form):
         pass
 
     def propogate_db(self, data):
+        # TODO Check if unique id exists for all of these
         # TODO Add Events
         # TODO Add Venues
         # TODO Add Artists    
