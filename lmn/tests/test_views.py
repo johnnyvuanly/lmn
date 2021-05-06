@@ -15,7 +15,7 @@ import re, datetime
 from datetime import timezone
 
 from PIL import Image
-from django.test import override_settings
+
 
 
 # TODO verify correct templates are rendered.
@@ -507,7 +507,7 @@ class TestUserAuthentication(TestCase):
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
 
-class TestDeletePlace(TestCase):
+class TestDeleteNotes(TestCase):
     fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
     def setUp(self):
         user = User.objects.first()
@@ -622,11 +622,10 @@ class TestImageUpload(TestCase):
                 uploaded_file_path = os.path.join(self.MEDIA_ROOT, 'user_images', img_file_name)
 
                 # delete place 1 
-
                 place_1 = Note.objects.get(pk=1)
                 place_1.delete()
-
                 self.assertFalse(os.path.exists(uploaded_file_path))
+
 
 class TestGoodbyePage(TestCase):
 
