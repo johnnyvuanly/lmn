@@ -136,12 +136,18 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Media Url
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'www', 'media')
+
+GS_STATIC_FILE_BUCKET = 'clear-booking-309320.appspot.com'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'www', 'static')
+# STATIC_URL = '/static/'
+STATIC_URL = f'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
 
 # Where to send user after successful login, and logout, if no other page is provided.
 LOGIN_REDIRECT_URL = 'my_user_profile'
