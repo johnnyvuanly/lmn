@@ -1,8 +1,6 @@
 import tempfile
-import filecmp
 import os
 
-from os import terminal_size
 from django.http import response
 from django.test import TestCase, Client
 
@@ -516,15 +514,13 @@ class TestDeletePlace(TestCase):
         self.client.force_login(user)
     
     def test_delete_note(self):
-        #This test does work
         response = self.client.post(reverse('delete_note', args=(1,)), follow=True)
         place_2 = Note.objects.filter(pk=1).first()
         self.assertIsNone(place_2)
 
     def test_deleting_somebodys_note_that_is_not_yours_doesnt_work(self):
-        #This test does work
         response = self.client.post(reverse('delete_note', args=(2,)), follow=True)
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(403, response.status_code)
         place_5 = Note.objects.get(pk=2)
         self.assertIsNotNone(place_5)
     
@@ -547,7 +543,6 @@ class TestImageUpload(TestCase):
         return tmp_image_file
 
     def test_upload_new_image_for_own_note(self):
-        #This test is working
         
         img_file_path = self.create_temp_image_file()
 
@@ -566,8 +561,7 @@ class TestImageUpload(TestCase):
 
                 self.assertTrue(os.path.exists(first_path))
 
-    def test_change_image_for_own_note_expect_old_deleted(self):
-        #This test is working
+    def test_edit_image_for_own_note_expect_old_deleted(self):
         
         first_img_file_path = self.create_temp_image_file()
         second_img_file_path = self.create_temp_image_file()
@@ -598,8 +592,7 @@ class TestImageUpload(TestCase):
                     self.assertTrue(os.path.exists(second_path))
 
 
-    def test_upload_image_for_someone_else_note(self):
-        # This test is working
+    def test_edit_image_for_someone_else_note_doesnt_work(self):
 
         with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
   
@@ -613,7 +606,6 @@ class TestImageUpload(TestCase):
 
 
     def test_delete__note_with_image_image_deleted(self): 
-        #This Test is working
         
         img_file_path = self.create_temp_image_file()
 
@@ -635,9 +627,9 @@ class TestImageUpload(TestCase):
                 place_1.delete()
 
                 self.assertFalse(os.path.exists(uploaded_file_path))
+
 class TestGoodbyePage(TestCase):
 
-#Johnnys tests working correctly
     fixtures = [ 'testing_users']
 
     def test_logout_redirects_to_goodbye_page(self):

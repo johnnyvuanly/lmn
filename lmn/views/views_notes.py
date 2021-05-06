@@ -75,7 +75,9 @@ def delete_note(request, note_pk):
         note.delete()
         messages.info(request, 'Note Deleted Successfully')
     else:
+
         messages.info(request, 'Unable to delete')
+        return HttpResponseForbidden()
     return redirect('my_user_profile')
 
 
