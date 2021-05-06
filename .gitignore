@@ -11,7 +11,10 @@ __pycache__
 # ignore virtual enviroments 
 venv
 env
+
+#Google Cloud Files
 app.yaml
 .gcloudignore
 cloud_sql_proxy_x64.exe
 .env
+image-upload-credentials.json
