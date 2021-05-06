@@ -415,12 +415,12 @@ class TestUserProfile(TestCase):
         logged_in_user = User.objects.get(pk=2)
         self.client.force_login(logged_in_user)  # bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>.')
+        self.assertContains(response, 'You are logged in, <a href="/user/profile/">bob</a>.')
         
         # Same message on another user's profile. Should still see logged in message 
         # for currently logged in user, in this case, bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':3}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>.')
+        self.assertContains(response, 'You are logged in, <a href="/user/profile/">bob</a>.')
         
 
 class TestNotes(TestCase):
@@ -491,7 +491,7 @@ class TestUserAuthentication(TestCase):
         self.assertContains(response, 'sam12345')  # page has user's name on it
 
 class TestMyUserProfile(TestCase):
-    fixtures = ['testing_users', 'testing_users_profile']
+    fixtures = ['testing_users', 'testing_user_profile']
 
     def test_user_is_not_logged_in_should_get_sent_to_main_login_page(self):
         response = self.client.get(reverse('my_user_profile'))

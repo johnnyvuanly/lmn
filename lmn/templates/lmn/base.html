@@ -14,7 +14,7 @@
 <a href="{% url 'latest_notes' %}">Notes</a>
 
 {% if user.is_authenticated %}
-  <span id='welcome-user-msg'>You are logged in, <a href="{% url 'user_profile' user_pk=user.pk %}">{{ user.username }}</a>.  <a href="{% url 'logout' %}">Logout</a></span>
+  <span id='welcome-user-msg'>You are logged in, <a href="{% url 'my_user_profile'  %}">{{ user.username }}</a>.  <a href="{% url 'logout' %}">Logout</a></span>
 
 {% else %}
 

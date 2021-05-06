@@ -2,17 +2,14 @@
 {% block content %}
 
 <h2 id='username_profile'>{{ user_profile.username }}'s Profile</h2>
-<p>edit profile here</p>
-
-<form method="POST" action="{% url 'my_user_profile' %}">
-    <div>
-      {% csrf_token %}
-      {{ form.as_p }}
-    </div>
-    <input type='submit' value='Add Bio'>
-  </form>
 
 <h2 id='username_notes'>{{ user_profile.username }}'s Notes</h2>
+
+{% if user_profile.profile.bio %}
+<div>
+  <p>{{ user_profile.profile.bio }}</p>
+</div>
+{% endif %}
 {% for note in notes %}
 
 <div class='note' id="note_{{ note.pk }}">

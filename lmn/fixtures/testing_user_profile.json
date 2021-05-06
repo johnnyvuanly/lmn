@@ -1,0 +1,9 @@
+[ {
+    "model": "lmn.profile",
+    "pk": 1,
+    "fields": {
+        "bio": "This bio should be available on the page for user 1",
+        "user": 1
+    }
+}
+]
