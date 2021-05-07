@@ -521,7 +521,8 @@ class TestPagination(TestCase):
 
         response = self.client.get(reverse('artist_list'))
 
-        self.assertTemplateUsed(response, 'lmn/artists/artist_list.html', {'artists': page_of_artist })
+        self.assertTemplateUsed(response, 'lmn/artists/artist_list.html')
+        # response.context dictionary 
 
     def test_correct_page_number_in_url(self):
         pass

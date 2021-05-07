@@ -31,13 +31,13 @@ def artist_list(request):
     else:
         artists = Artist.objects.all().order_by('name')  # get all artist from database
 
-        artist_paginator = Paginator(artists, 2) # 2 per page as of right now
+    artist_paginator = Paginator(artists, 2) # 2 per page as of right now
 
-        page_num = request.GET.get('page') # Get page number from URL
+    page_num = request.GET.get('page') # Get page number from URL
 
-        page_of_artist = artist_paginator.get_page(page_num)
+    page_of_artist = artist_paginator.get_page(page_num)
 
-        return render(request, 'lmn/artists/artist_list.html', { 'form': form, 'search_term': search_name, 'artists': page_of_artist })
+    return render(request, 'lmn/artists/artist_list.html', { 'form': form, 'search_term': search_name, 'artists': page_of_artist })
     
 
 def artist_detail(request, artist_pk):
