@@ -665,7 +665,6 @@ class TestGoodbyePage(TestCase):
 class TestSocialMedia(TestCase):
     fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
 
-
     def setUp(self):
         user = User.objects.get(pk=1)
         self.client.force_login(user)
@@ -674,6 +673,38 @@ class TestSocialMedia(TestCase):
     def test_clicking_facebook_on_note_details_redirects_to_facebook(self):
         self.client.force_login(User.objects.first())
         response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
+
+    def test_click_twitter_on_note_details_redirects_to_twitter(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
+
+
+    def test_click_linkedin_on_note_details_redirects_to_linkedin(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
+
+    def test_click_pintrist_on_note_details_redirects_to_pintrist(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
+
+
+    def test_click_facebook_on_note_list_redirects_to_facebook(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('latest_notes'))
+
+    def test_click_twitter_on_note_list_redirects_to_twitter(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('latest_notes'))
+
+    def test_click_linkedin_on_note_list_redirects_to_linkedin(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('latest_notes'))
+
+    def test_click_pintrist_on_note_list_redirects_to_pintrist(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('latest_notes'))
+
+
 
 
     
