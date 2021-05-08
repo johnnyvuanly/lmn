@@ -479,6 +479,17 @@ class TestNotes(TestCase):
         response = self.client.get(reverse('new_note', kwargs={'show_pk':1}))
         self.assertTemplateUsed(response, 'lmn/notes/new_note.html')
 
+    def test_edit_note_for_own_note_expect_old_changed(self):
+
+        response = self.client.post(reverse('edit_note', kwargs={'note_pk': 1}), {'title': 'lame','text':'awesome'}, follow=True)
+        updated_note_1 = Note.objects.get(pk=1)
+        self.assertEqual(response.context['note'], updated_note_1)
+        self.assertContains(response, 'awesome')  # new text shown
+    
+    def test_modify_someone_else_notes_not_authorized(self):
+        response = self.client.post(reverse('edit_note', kwargs={'note_pk':3}), {'notes':'awesome'}, follow=True)
+        self.assertEqual(403, response.status_code)   # 403 Forbidden 
+
 
 
 class TestUserAuthentication(TestCase):
@@ -561,16 +572,6 @@ class TestImageUpload(TestCase):
 
                 self.assertTrue(os.path.exists(first_path))
     
-    def test_edit_note_for_own_note_expect_old_changed(self):
-
-        response = self.client.post(reverse('edit_note', kwargs={'note_pk': 1}), {'title': 'lame','text':'awesome'}, follow=True)
-        updated_note_1 = Note.objects.get(pk=1)
-        self.assertEqual(response.context['note'], updated_note_1)
-        self.assertContains(response, 'awesome')  # new text shown
-    
-    def test_modify_someone_else_notes_not_authorized(self):
-        response = self.client.post(reverse('edit_note', kwargs={'note_pk':3}), {'notes':'awesome'}, follow=True)
-        self.assertEqual(403, response.status_code)   # 403 Forbidden 
        
     def test_edit_image_for_own_note_expect_old_deleted(self):
         
