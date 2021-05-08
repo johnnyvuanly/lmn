@@ -4,3 +4,4 @@ pytz==2020.1
 sqlparse==0.4.1
 Pillow==8.1.2
 requests==2.25.1
+django-social-share==2.2.1

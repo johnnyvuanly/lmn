@@ -1,5 +1,6 @@
 {% extends 'lmn/base.html' %}
 {% load static %}
+{% load social_share %}
 {% block content %}
 
 
@@ -18,6 +19,7 @@
     {% endif %}
 
 
+
 <!-- Messages, updates, errors from form -->
     {% if messages %}
     <div class="messages">
@@ -29,17 +31,70 @@
 
 {% if note.user.pk == user.pk %}
 
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.btn-group .button {
+  background-color: #4CAF50; /* Green */
+  border: 1px solid green;
+  color: white;
+  padding: 10px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  display: block;
+}
 
-    <p>
-        <a class='edit' href="{% url 'edit_note' note_pk=note.pk %}">Edit Note</a>
-    </p>
+.btn-group .button:not(:last-child) {
+  border-bottom: none; /* Prevent double borders */
+}
+
+.btn-group .button:hover {
+  background-color: #3e8e41;
+}
+</style>
+</head>
+<body>
+
+    <div class="btn-group">
+        {% if note.photo %}
+            <button class="button">
+                {% post_to_twitter "{{ note.text }} {{ note.photo.url }}" object_or_url "Send To Twitter" %}
+            </button>
+        {% else %}
+            <button class="button">
+                {% post_to_twitter "{{ note.text }}" object_or_url "Send To Twitter" %}
+            </button>
+        {% endif %}
+
+        <button class="button">
+            {% post_to_facebook object_or_url "Send To Facebook" %}
+        </button>
+
+        <button class="button">
+            {% post_to_linkedin object_or_url "Send To LinkedIn" %}
+        </button>
+
+        <button class="button">
+            {% save_to_pinterest object_or_url %}
+        </button>
+
+    <button>
+        <a href="{% url 'edit_note' note_pk=note.pk %}" class="button">Edit Your Note </a>
+    </button>
 
     <form action="{% url 'delete_note' note.pk %}" method="POST">
         {% csrf_token %}
-        <button type=submit class="delete">Delete</button>
+        <button type=submit class="button">Delete</button>
     </form>
-
     <script src="{% static 'js/confirm_delete.js' %}"></script>
+    </div>
+
+</body>
+{% add_pinterest_script %} 
 
 {% endif %}
 

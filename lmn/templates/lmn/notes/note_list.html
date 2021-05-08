@@ -1,5 +1,6 @@
 {% extends 'lmn/base.html' %}
 {% load static %}
+{% load social_share %}
 {% block content %}
 
 
@@ -31,7 +32,67 @@
     {% else %}
         <P>No photo uploaded</p>
     {% endif %}  
-  </div>  
+  </div> 
+  <!DOCTYPE html>
+<html>
+<head>
+<style>
+.btn-group .button {
+  background-color: #4CAF50; /* Green */
+  border: 1px solid green;
+  color: white;
+  padding: 1px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  float: inline-start;
+}
+
+.btn-group .button:not(:last-child) {
+  border-right: none; /* Prevent double borders */
+}
+
+.btn-group .button:hover {
+  background-color: #3e8e41;
+}
+</style>
+</head>
+<body>
+
+    <div class="btn-group">
+<!-- If this is a list of notes for one show,
+display link to add new note for that show. -->
+
+{% if show %}
+  <a href="{% url 'new_note' show_pk=show.pk %}" class="button">Add Your Own Notes For The Show</a>
+{% endif %}
+        {% if note.photo %}
+            <button class="button">
+                {% post_to_twitter "{{ note.text }} {{ note.photo.url }}" object_or_url "Send To Twitter" %}
+            </button>
+        {% else %}
+            <button class="button">
+                {% post_to_twitter "{{ note.text }}" object_or_url "Send To Twitter" %}
+            </button>
+        {% endif %}
+
+        <button class="button">
+            {% post_to_facebook object_or_url "Send To Facebook" %}
+        </button>
+
+        <button class="button">
+            {% post_to_linkedin object_or_url "Send To LinkedIn" %}
+        </button>
+
+        <button class="button">
+            {% save_to_pinterest object_or_url %}
+        </button>
+
+
+</body>
+{% add_pinterest_script %} 
 
   <hr>
 
@@ -41,13 +102,5 @@
 
 {% endfor %}
 
-<!-- If this is a list of notes for one show,
-display link to add new note for that show. -->
-
-{% if show %}
-
-  <a href="{% url 'new_note' show_pk=show.pk %}">Add your own notes</a>
-
-{% endif %}
 
 {% endblock %}
