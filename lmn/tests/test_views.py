@@ -479,18 +479,6 @@ class TestNotes(TestCase):
         response = self.client.get(reverse('new_note', kwargs={'show_pk':1}))
         self.assertTemplateUsed(response, 'lmn/notes/new_note.html')
 
-    def test_edit_note_for_own_note_expect_old_changed(self):
-
-        response = self.client.post(reverse('edit_note', kwargs={'note_pk': 1}), {'title': 'lame','text':'awesome'}, follow=True)
-        updated_note_1 = Note.objects.get(pk=1)
-        self.assertEqual(response.context['note'], updated_note_1)
-        self.assertContains(response, 'awesome')  # new text shown
-    
-    def test_modify_someone_else_notes_not_authorized(self):
-        response = self.client.post(reverse('edit_note', kwargs={'note_pk':3}), {'notes':'awesome'}, follow=True)
-        self.assertEqual(403, response.status_code)   # 403 Forbidden 
-
-
 
 class TestUserAuthentication(TestCase):
 
@@ -571,6 +559,17 @@ class TestImageUpload(TestCase):
                 first_path = os.path.join(self.MEDIA_ROOT, first_uploaded_image)
 
                 self.assertTrue(os.path.exists(first_path))
+
+    def test_edit_note_for_own_note_expect_old_changed(self):
+
+        response = self.client.post(reverse('edit_note', kwargs={'note_pk': 1}), {'title': 'lame','text':'awesome'}, follow=True)
+        updated_note_1 = Note.objects.get(pk=1)
+        self.assertEqual(response.context['note'], updated_note_1)
+        self.assertContains(response, 'awesome')  # new text shown
+    
+    def test_modify_someone_else_notes_not_authorized(self):
+        response = self.client.post(reverse('edit_note', kwargs={'note_pk':3}), {'notes':'awesome'}, follow=True)
+        self.assertEqual(403, response.status_code)   # 403 Forbidden 
     
        
     def test_edit_image_for_own_note_expect_old_deleted(self):
@@ -662,5 +661,19 @@ class TestGoodbyePage(TestCase):
         response = self.client.get(reverse('logout'))
         # Check redirect
         self.assertRedirects(response, reverse('goodbye'))
+
+class TestSocialMedia(TestCase):
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
+
+
+    def setUp(self):
+        user = User.objects.get(pk=1)
+        self.client.force_login(user)
+        self.MEDIA_ROOT = tempfile.mkdtemp()
+
+    def test_clicking_facebook_on_note_details_redirects_to_facebook(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
+
 
     
