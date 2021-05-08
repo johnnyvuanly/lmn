@@ -3,13 +3,11 @@
 {% load social_share %}
 {% block content %}
 
-
 {% if show %}
   <h2 id="show-title">Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
 {% else %}
   <h2>Latest Notes</h2>
 {% endif %}
-
 
 {% for note in notes %}
 
@@ -89,18 +87,12 @@ display link to add new note for that show. -->
         <button class="button">
             {% save_to_pinterest object_or_url %}
         </button>
-
-
 </body>
 {% add_pinterest_script %} 
-
   <hr>
 
 {% empty %}
-
   <p>No notes.</p>
-
 {% endfor %}
-
 
 {% endblock %}
