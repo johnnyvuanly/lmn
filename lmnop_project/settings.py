@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -136,18 +135,30 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Media Url
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'www', 'media')
-
-GS_STATIC_FILE_BUCKET = 'clear-booking-309320.appspot.com'
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'www', 'static')
-# STATIC_URL = '/static/'
-STATIC_URL = f'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'www', 'media')
+
+if os.getenv('GAE_INSTANCE'):
+    # For Google Cloud App Engine
+    GS_STATIC_FILE_BUCKET = 'clear-booking-309320.appspot.com'
+    
+    STATIC_URL = f'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
+
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    GS_BUCKET_NAME = 'images-user-upload'
+    MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/media'
+
+    from google.oauth2 import service_account
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file('image-upload-credentials.json')
+
+else:
+    # For Local Development
+    STATIC_URL = '/static/'
+    MEDIA_URL = '/media/'
+
 
 # Where to send user after successful login, and logout, if no other page is provided.
 LOGIN_REDIRECT_URL = 'my_user_profile'
