@@ -1,6 +1,5 @@
 import requests
-from .models import *
-from .forms import *
+import os
 import json
 from django.http import HttpResponse
 
@@ -12,23 +11,27 @@ def cat_facts(request):
 
 def find_shows(request):
     # Search Parameters
-    root_url = 'https://app.ticketmaster.com/discovery/v2/'
+    root_url = 'https://app.ticketmaster.com/discovery/v2/events.json'
+    ticketmaster_key = os.environ.get('TicketMasterKey')
     # show_url = f'/{show_id}' # add this to get details on a specific show
     city = 'Minneapolis'
     state = 'mn'
     country = 'US'
     search_radius = '50'
     segment_name = 'music'
-    page_size = '99'
+    page_size = '20'
+    locale = '*'
 
-    query = {'apikey' : os.environ.get('TicketMasterKey'), 'city': city, 'state': state, 'country': country, 'radius':search_radius, 'segment': segment_name, 'size': page_size}
-    response = requests.get(root_url, params=query)
-    response.raise_for_status()
-    data = response.json()
+    
+
+    query = {'apikey' : ticketmaster_key , 'locale' : locale ,'city': city, 'state': state, 'countryCode': country, 'radius': search_radius, 'segmentName': segment_name, 'size': page_size}
+    data = requests.get(root_url, params=query).json()
     # TODO If pages > 1 Loop over pages
     if is_valid_json(data):
         propogate_db(data)
         return HttpResponse(f'Data recieved:\n{data}')
+    else:
+        return HttpResponse(f'Error. Response recieved:\n{data}')
 
 
 # get details on each show
