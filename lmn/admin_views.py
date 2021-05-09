@@ -4,16 +4,12 @@ import json
 from django.http import HttpResponse
 
 
-
-def cat_facts(request):
-    return HttpResponse(f'Cats are animals')
-
-
 def find_shows(request):
     # Search Parameters
-    root_url = 'https://app.ticketmaster.com/discovery/v2/events.json'
+    root_url = 'https://app.ticketmaster.com/discovery/v2/events'
     ticketmaster_key = os.environ.get('TicketMasterKey')
-    # show_url = f'/{show_id}' # add this to get details on a specific show
+    show_id = ''
+    show_url = f'/{show_id}' # add this to the url to get details on a specific show
     city = 'Minneapolis'
     state = 'mn'
     country = 'US'
@@ -21,8 +17,6 @@ def find_shows(request):
     segment_name = 'music'
     page_size = '20'
     locale = '*'
-
-    
 
     query = {'apikey' : ticketmaster_key , 'locale' : locale ,'city': city, 'state': state, 'countryCode': country, 'radius': search_radius, 'segmentName': segment_name, 'size': page_size}
     data = requests.get(root_url, params=query).json()
@@ -35,11 +29,11 @@ def find_shows(request):
 
 
 # get details on each show
-def find_show_details(self):
+def find_show_details(show_id):
     # TODO Refresh specific show details using show id
     pass
 
-def propogate_db(self, data):
+def propogate_db(data):
     # TODO Check if unique id exists for all of these
     # TODO Add shows
     # TODO Add Venues
