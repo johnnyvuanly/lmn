@@ -1,7 +1,8 @@
+from lmn import admin_views
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
-from . import views
+from . import views, admin_views
 from .views import views_main, views_artists, views_venues, views_notes, views_users
 
 
@@ -36,5 +37,9 @@ urlpatterns = [
     path('accounts/logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
     path('accounts/goodbye/', views_users.goodbye_message, name='goodbye'),
     path('register/', views_users.register, name='register'),
+
+    # Cron Job
+    #path('tiecketmaster_api/', admin_views.TicketMasterForm, name = 'ticketmaster_api'),
+    path('ticketmaster_get_shows/', admin_views.find_shows, name='ticketmaster_get_shows'),
 
 ]
