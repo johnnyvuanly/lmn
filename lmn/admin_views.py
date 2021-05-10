@@ -52,13 +52,13 @@ def propogate_db(data):
 
     for show in data['_embedded']['events']:
         # TODO Check Event ID ['id'] doesn't exist in db
-        add_artist( ['name'] )
-        add_venue( ['_embedded']['venues'][0]['id'] , ['_embedded']['venues'][0]['name'] , ['_embedded']['city']['name'] , ['_embedded']['state']['stateCode'])
-        add_show( ['id'] , ['dates']['start']['dateTime'] , ['name'] , ['_embedded']['venues'][0]['name'] )
+        add_artist( show['name'] )
+        add_venue( show['_embedded']['venues'][0]['id'] , show['_embedded']['venues'][0]['name'] , show['_embedded']['venues'][0]['city']['name'] , show['_embedded']['venues'][0]['state']['stateCode'])
+        add_show( show['id'] , show['dates']['start']['dateTime'] , show['name'] , show['_embedded']['venues'][0]['name'] )
 
-def add_venue(id, venue_name, venue_city, venue_state):
+def add_venue(venue_id, venue_name, venue_city, venue_state):
     # TODO Check venue doesn't exist in db using all three attributes
-    Venue(name = venue_name,  city = venue_city, state = venue_state).save()
+    Venue(id = venue_id, name = venue_name,  city = venue_city, state = venue_state).save()
     
 
 def add_artist(artist_name):
@@ -66,11 +66,11 @@ def add_artist(artist_name):
     Artist(name = artist_name).save()
     
 
-def add_show(id,show_date, show_artist, show_venue):
+def add_show(show_id, show_date, show_artist, show_venue):
     # TODO get venue & artist pk
     venue_pk = ''
     artist_pk = ''
-    Show(date = show_date, artist = artist_pk, venue = venue_pk).save()
+    Show(id = show_id, date = show_date, artist = artist_pk, venue = venue_pk).save()
 
 
 def is_valid_json(jsonData): 

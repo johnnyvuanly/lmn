@@ -31,6 +31,7 @@ class Venue(models.Model):
     name = models.CharField(max_length=200, blank=False, unique=True)
     city = models.CharField(max_length=200, blank=False)
     state = models.CharField(max_length=2, blank=False)
+    api_id = models.CharField(max_length=20, unique=True)
     
     def __str__(self):
         return f'Name: {self.name} Location: {self.city}, {self.state}'
@@ -41,7 +42,7 @@ class Show(models.Model):
     show_date = models.DateTimeField(blank=False)
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
-    # api_id = models.CharField(max_length=20, unique=True)
+    api_id = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return f'Artist: {self.artist} At: {self.venue} On: {self.show_date}'
