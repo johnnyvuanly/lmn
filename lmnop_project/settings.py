@@ -76,7 +76,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_social_share',
     'lmn'
+    'django.template.context_processors.request',
 ]
 
 MIDDLEWARE = [
