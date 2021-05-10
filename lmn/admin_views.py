@@ -32,7 +32,7 @@ def find_shows(request):
         with open(file_path) as test_json:
             data = json.load(test_json)
         
-        # TODO If pages > 1 Loop over pages
+        # Sets page_count to number of pages listed in api response
         page_count = data['page']['totalPages']
 
         if is_valid_json(data):
@@ -50,28 +50,28 @@ def find_show_details(show_id):
 def propogate_db(data):
     # TODO Check if unique id exists for all of these
 
-
     for show in data['_embedded']['events']:
-        add_venue(['_embedded']['venues']['name'])
-        add_artist(['_embedded']['venues']['name'])
-        add_show(['id'],['date']['start']['dateTime'],[])
-    # TODO Add Venues
-    # TODO Add Artists    
-    pass
+        # TODO Check Event ID ['id'] doesn't exist in db
+        add_artist( ['name'] )
+        add_venue( ['_embedded']['venues'][0]['id'] , ['_embedded']['venues'][0]['name'] , ['_embedded']['city']['name'] , ['_embedded']['state']['stateCode'])
+        add_show( ['id'] , ['dates']['start']['dateTime'] , ['name'] , ['_embedded']['venues'][0]['name'] )
 
 def add_venue(id, venue_name, venue_city, venue_state):
+    # TODO Check venue doesn't exist in db using all three attributes
     Venue(name = venue_name,  city = venue_city, state = venue_state).save()
-    pass
+    
 
-def add_artist(id, artist_name):
+def add_artist(artist_name):
+    # TODO Check artist doesn't exist in db using name
     Artist(name = artist_name).save()
-    pass
-
+    
 
 def add_show(id,show_date, show_artist, show_venue):
-    Show(date = show_date, artist =show_artist, venue = show_venue).save()
-    
-    pass
+    # TODO get venue & artist pk
+    venue_pk = ''
+    artist_pk = ''
+    Show(date = show_date, artist = artist_pk, venue = venue_pk).save()
+
 
 def is_valid_json(jsonData): 
 #Returns a value error if the json is invalid and returns false, otherwise returns true.
