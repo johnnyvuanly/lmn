@@ -5,6 +5,7 @@
 
 {% if show %}
   <h2 id="show-title">Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
+  <a href="{% url 'new_note' show_pk=show.pk %}" class="button">Add Your Own Notes For The Show</a>
 {% else %}
   <h2>Latest Notes</h2>
 {% endif %}
@@ -78,8 +79,8 @@ display link to add new note for that show. -->
   <hr>
 
 {% empty %}
- <a href="{% url 'new_note' show_pk=show.pk %}" class="button">Add Your Own Notes For The Show</a>
   <p>No notes.</p>
 {% endfor %}
+
 
 {% endblock %}
