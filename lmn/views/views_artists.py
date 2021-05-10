@@ -31,7 +31,7 @@ def artist_list(request):
     else:
         artists = Artist.objects.all().order_by('name')  # get all artist from database
 
-    artist_paginator = Paginator(artists, 2) # 2 per page as of right now
+    artist_paginator = Paginator(artists, 3) # 2 per page as of right now
 
     page_num = request.GET.get('page') # Get page number from URL
 

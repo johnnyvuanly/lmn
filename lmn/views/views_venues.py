@@ -20,7 +20,7 @@ def venue_list(request):
     else :
         venues = Venue.objects.all().order_by('name') # Get all the venues from database
 
-    venue_paginator = Paginator(venues, 2) # 2 Per page as of right now
+    venue_paginator = Paginator(venues, 3) # 2 Per page as of right now
 
     page_num = request.GET.get('page') # Get the page number based on where you are in the list fromt the URL
 

@@ -539,6 +539,9 @@ class TestPagination(TestCase):
     def test_on_last_page_no_next_page_link(self):
         pass
         
+    def test_page_out_of_range(self):
+        pass
+    
 class TestGoodbyePage(TestCase):
 
     fixtures = [ 'testing_users']
