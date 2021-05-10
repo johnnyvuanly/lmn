@@ -1,0 +1,26 @@
+[
+  {"model" : "lmn.artist", "pk" : 1 , "fields" :
+    { "name" : "AAAAA"}
+  },
+  {"model" : "lmn.artist", "pk" : 2 , "fields" :
+    { "name" : "BBBBB"}
+  },
+  {"model" : "lmn.artist", "pk" : 3 , "fields" :
+    { "name" : "CCCCC"}
+  },
+  {"model" : "lmn.artist", "pk" : 4 , "fields" :
+    { "name" : "DDDDD"}
+  },
+  {"model" : "lmn.artist", "pk" : 5 , "fields" :
+    { "name" : "EEEEEA"}
+  },
+  {"model" : "lmn.artist", "pk" : 6 , "fields" :
+    { "name" : "FFFFFA"}
+  },
+  {"model" : "lmn.artist", "pk" : 7 , "fields" :
+    { "name" : "GGGGGA"}
+  },
+  {"model" : "lmn.artist", "pk" : 8 , "fields" :
+    { "name" : "HHHHHA"}
+  }
+]
