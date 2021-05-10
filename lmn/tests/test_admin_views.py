@@ -12,22 +12,35 @@ import os
 import json
 from django.http import HttpResponse
 
-import mock
+from unittest import TestCase, mock
+from unittest.mock import patch
 from ..admin_views import *
 
 def mock_tickmaster_json():
-    mock_response = open('test.json')
-    mock_data = json.load(mock_response)
+    module_dir = os.path.dirname(__file__)  # get current directory
+    file_path = os.path.join(module_dir, 'test.json')
+    with open(file_path) as test_json:
+        mock_data = json.load(test_json)
     return mock_data
 
-
-
 class FindShowsTest(TestCase):
-    def setUp(self):
 
-        return super().setUp()
+    def test_find_shows(self):
 
-    root_url = 'https://catfact.ninja/fact'
+        #self.assertRaises
+        pass
+
+    def test_add_show(self):
+        pass
+
+    def test_add_artist(self):
+        pass
+
+    def test_add_venue(self):
+        pass
+
+
+
 
 class ValidJsonTest(TestCase):
 
@@ -42,7 +55,9 @@ class ValidJsonTest(TestCase):
             response = is_valid_json(test_json)
             self.assertTrue(response)
 
-            with open('test.json') as test_json:
+            module_dir = os.path.dirname(__file__)  # get current directory
+            file_path = os.path.join(module_dir, 'test.json')
+            with open(file_path) as test_json:
                 test_data = json.load(test_json)
             response = is_valid_json(test_data)
             self.assertTrue(response)
