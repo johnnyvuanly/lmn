@@ -561,7 +561,6 @@ class TestImageUpload(TestCase):
                 self.assertTrue(os.path.exists(first_path))
 
     def test_edit_note_for_own_note_expect_old_changed(self):
-
         response = self.client.post(reverse('edit_note', kwargs={'note_pk': 1}), {'title': 'lame','text':'awesome'}, follow=True)
         updated_note_1 = Note.objects.get(pk=1)
         self.assertEqual(response.context['note'], updated_note_1)
@@ -572,7 +571,7 @@ class TestImageUpload(TestCase):
         self.assertEqual(403, response.status_code)   # 403 Forbidden 
     
        
-    def test_edit_image_for_own_note_expect_old_deleted(self):
+    def test_edit_image_for_own_note_expect_old_deleted_and_new_to_exist(self):
         
         first_img_file_path = self.create_temp_image_file()
         second_img_file_path = self.create_temp_image_file()
@@ -670,41 +669,23 @@ class TestSocialMedia(TestCase):
         self.client.force_login(user)
         self.MEDIA_ROOT = tempfile.mkdtemp()
 
-    def test_clicking_facebook_on_note_details_redirects_to_facebook(self):
+    def test_clicking_facebook_on_note_details_has_option_to_send_to_facebook(self):
         self.client.force_login(User.objects.first())
         response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
+        self.assertContains(response, 'Send Note To Facebook')
 
     def test_click_twitter_on_note_details_redirects_to_twitter(self):
         self.client.force_login(User.objects.first())
         response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
-
-
-    def test_click_linkedin_on_note_details_redirects_to_linkedin(self):
-        self.client.force_login(User.objects.first())
-        response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
-
-    def test_click_pintrist_on_note_details_redirects_to_pintrist(self):
-        self.client.force_login(User.objects.first())
-        response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
+        self.assertContains(response, 'Send Note To Twitter')
 
 
     def test_click_facebook_on_note_list_redirects_to_facebook(self):
         self.client.force_login(User.objects.first())
         response = self.client.get(reverse('latest_notes'))
+        self.assertContains(response, 'Share Show To Facebook')
 
     def test_click_twitter_on_note_list_redirects_to_twitter(self):
         self.client.force_login(User.objects.first())
         response = self.client.get(reverse('latest_notes'))
-
-    def test_click_linkedin_on_note_list_redirects_to_linkedin(self):
-        self.client.force_login(User.objects.first())
-        response = self.client.get(reverse('latest_notes'))
-
-    def test_click_pintrist_on_note_list_redirects_to_pintrist(self):
-        self.client.force_login(User.objects.first())
-        response = self.client.get(reverse('latest_notes'))
-
-
-
-
-    
+        self.assertContains(response, 'Share Show To Twitter')

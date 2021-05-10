@@ -36,24 +36,23 @@
 <head>
 <style>
 .btn-group .button {
-  background-color: #4CAF50; /* Green */
-  border: 1px solid green;
-  color: white;
-  padding: 10px 25px;
+  background-color: #f2f8f3; /* Green */
+  border: 1px solid rgb(19, 16, 233);
+  color: rgb(20, 170, 240);
+  padding: 1px 25px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
   font-size: 16px;
   cursor: pointer;
-  display: block;
+  float: inline-start;
 }
 
 .btn-group .button:not(:last-child) {
-  border-bottom: none; /* Prevent double borders */
+  border-right: none; /* Prevent double borders */
 }
 
 .btn-group .button:hover {
-  background-color: #3e8e41;
+  background-color: #2420ec;
 }
 </style>
 </head>
@@ -61,28 +60,19 @@
     <div class="btn-group">
         {% if note.photo %}
             <button class="button">
-                {% post_to_twitter "{{ note.text }} {{ note.photo.url }}" object_or_url "Send To Twitter" %}
+                {% post_to_twitter "{{ note.text }} {{ note.photo.url }}" object_or_url "Send Note To Twitter" %}
             </button>
         {% else %}
             <button class="button">
-                {% post_to_twitter "{{ note.text }}" object_or_url "Send To Twitter" %}
+                {% post_to_twitter "{{ note.text }}" object_or_url "Send Note To Twitter" %}
             </button>
         {% endif %}
 
         <button class="button">
-            {% post_to_facebook object_or_url "Send To Facebook" %}
+            {% post_to_facebook object_or_url "Send Note To Facebook" %}
         </button>
-
-        <button class="button">
-            {% post_to_linkedin object_or_url "Send To LinkedIn" %}
-        </button>
-
-        <button class="button">
-            {% save_to_pinterest object_or_url %}
-        </button>
-
     <button>
-        <a href="{% url 'edit_note' note_pk=note.pk %}" class="button">Edit Your Note </a>
+        <a href="{% url 'edit_note' note_pk=note.pk %}" class="button">Edit Your Note</a>
     </button>
 
     <form action="{% url 'delete_note' note.pk %}" method="POST">
@@ -92,7 +82,6 @@
     <script src="{% static 'js/confirm_delete.js' %}"></script>
     </div>
 </body>
-{% add_pinterest_script %} 
 
 {% endif %}
 

@@ -37,9 +37,9 @@
 <style>
 
 .btn-group .button {
-  background-color: #4CAF50; /* Green */
-  border: 1px solid green;
-  color: white;
+  background-color: #f2f8f3; /* Green */
+  border: 1px solid rgb(19, 16, 233);
+  color: rgb(20, 170, 240);
   padding: 1px 25px;
   text-align: center;
   text-decoration: none;
@@ -53,7 +53,7 @@
 }
 
 .btn-group .button:hover {
-  background-color: #3e8e41;
+  background-color: #2420ec;
 }
 </style>
 </head>
@@ -66,29 +66,15 @@ display link to add new note for that show. -->
 {% if show %}
   <a href="{% url 'new_note' show_pk=show.pk %}" class="button">Add Your Own Notes For The Show</a>
 {% endif %}
-        {% if note.photo %}
-            <button class="button">
-                {% post_to_twitter "{{ note.text }} {{ note.photo.url }}" object_or_url "Send To Twitter" %}
-            </button>
-        {% else %}
-            <button class="button">
-                {% post_to_twitter "{{ note.text }}" object_or_url "Send To Twitter" %}
-            </button>
-        {% endif %}
-
+        <!-- Single quotes represent &#x27;t instead of ''  -->
         <button class="button">
-            {% post_to_facebook object_or_url "Send To Facebook" %}
+        {% post_to_twitter "Checkout the notes for this show {{ note.show.artist.name }} at {{ note.show.venue.name }}" object_or_url "Share Show To Twitter" %}
         </button>
 
         <button class="button">
-            {% post_to_linkedin object_or_url "Send To LinkedIn" %}
-        </button>
-
-        <button class="button">
-            {% save_to_pinterest object_or_url %}
+            {% post_to_facebook  object_or_url "Share Show To Facebook" %}
         </button>
 </body>
-{% add_pinterest_script %} 
   <hr>
 
 {% empty %}
