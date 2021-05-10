@@ -78,6 +78,8 @@ display link to add new note for that show. -->
   <hr>
 
 {% empty %}
+ <a href="{% url 'new_note' show_pk=show.pk %}" class="button">Add Your Own Notes For The Show</a>
+
   <p>No notes.</p>
 {% endfor %}
 
