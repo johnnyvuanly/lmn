@@ -39,14 +39,28 @@
 {% endfor %}
 
 <div>
-  {% if artists.has_previous %}
-  <!-- URL tag with the name of view. After is a url query string arguement -->
-  <a href="{% url 'artist_list' %}?page={{ artists.previous_page_number }}">Previous Page</a>
+  {% if search_term %}
+    {% if artists.has_previous %}
+    <!-- URL tag with the name of view. After is a url query string arguement -->
+    <a href="{% url 'artist_list' %}?page={{ artists.previous_page_number }}&search_name={{ search_term }}">Previous Page</a>
+    {% endif %}
+
+    {% if artists.has_next %}
+    <!-- search_name variable comes from view -->
+    <a href="{% url 'artist_list' %}?page={{ artists.next_page_number }}&search_name={{ search_term }}">Next Page</a>
+    {% endif %}
+  {% else %}
+    {% if artists.has_previous %}
+    <!-- URL tag with the name of view. After is a url query string arguement -->
+    <a href="{% url 'artist_list' %}?page={{ artists.previous_page_number }}">Previous Page</a>
+    {% endif %}
+
+    {% if artists.has_next %}
+    <!-- search_name variable comes from view -->
+    <a href="{% url 'artist_list' %}?page={{ artists.next_page_number }}">Next Page</a>
+    {% endif %}
   {% endif %}
 
-  {% if artists.has_next %}
-  <a href="{% url 'artist_list' %}?page={{ artists.next_page_number }}">Next Page</a>
-  {% endif %}
 </div>
 
 {% endblock %}
