@@ -51,9 +51,7 @@ The result is a random and safely hidden `SECRET_KEY`.
 #             to generate your secret key!' % SECRET_FILE)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ['Secret_Key']
-SECRET_KEY = 'o+do-*x%zn!43h+unn!46(xp$e6&)=y63v#lj3ywjuy8cihz9f'
-
+SECRET_KEY = os.environ['Secret_Key']
 # SECURITY WARNING: don't run with debug turned on in production!
 
 # Enable this once branch is tested with photo upload.
@@ -79,7 +77,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_social_share',
     'lmn',
-    'django.template.context_processors.request',
 ]
 
 MIDDLEWARE = [
