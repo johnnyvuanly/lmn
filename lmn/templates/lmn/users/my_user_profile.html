@@ -1,0 +1,26 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+
+
+<h2 id='username_profile'>{{ user_profile.username }}'s Profile</h2>
+<p>edit profile here</p>
+
+<form method="POST" action="{% url 'my_user_profile' %}">
+    <div>
+      {% csrf_token %}
+      {{ form.as_p }}
+    </div>
+    <input type='submit' value='Add Bio'>
+  </form>
+
+<h2 id='username_notes'>{{ user_profile.username }}'s Notes</h2>
+{% for note in notes %}
+
+    {% include '../notes/_note.html' %}
+
+{% empty %}
+
+    <p id='no_records'>No notes.</p>
+
+{% endfor %}
+{% endblock %}

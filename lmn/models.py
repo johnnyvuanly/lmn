@@ -18,6 +18,10 @@ User._meta.get_field('email')._blank = False
 User._meta.get_field('last_name')._blank = False
 User._meta.get_field('first_name')._blank = False
 
+class Profile(models.Model):
+    bio = models.TextField(max_length=500, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
 
 """ A music artist """
 class Artist(models.Model):
