@@ -755,12 +755,11 @@ class TestPagination(TestCase):
 
 
     def test_correct_artists_on_page_in_the_middle(self):
-        pass 
+        response = self.client.get(reverse('artist_list'))
         
     
     def test_correct_artists_on_last_page(self):
-        pass 
-
+        response = self.client.get(reverse('artist_list'))
 
     # todo better test name 
     def test_request_weird_pages(self):

@@ -47,12 +47,22 @@
     </div>
 
     <div>
-      {% if venues.has_previous %}
-      <a href="{% url 'venue_list' %}?page={{ venues.previous_page_number }}">Previous Page</a>
-      {% endif %}
+      {% if search_term %}
+        {% if venues.has_previous %}
+        <a href="{% url 'venue_list' %}?page={{ venues.previous_page_number }}&search_name={{search_term }}">Previous Page</a>
+        {% endif %}
 
-      {% if venues.has_next %}
-      <a href="{% url 'venue_list' %}?page={{ venues.next_page_number }}">Next Page</a>
+        {% if venues.has_next %}
+        <a href="{% url 'venue_list' %}?page={{ venues.next_page_number }}&search_name={{ search_term }}">Next Page</a>
+        {% endif %}
+      {% else %}
+        {% if venues.has_previous %}
+        <a href="{% url 'venue_list' %}?page={{ venues.previous_page_number }}">Previous Page</a>
+        {% endif %}
+
+        {% if venues.has_next %}
+        <a href="{% url 'venue_list' %}?page={{ venues.next_page_number }}">Next Page</a>
+        {% endif %}
       {% endif %}
     </div>
 
