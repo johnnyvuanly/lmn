@@ -26,20 +26,17 @@ def find_shows(request):
 
     for page in iterative_range:
         query = {'apikey' : ticketmaster_key , 'locale' : locale ,'city': city, 'state': state, 'countryCode': country, 'radius': search_radius, 'segmentName': segment_name, 'size': page_size, 'page' : str(page)}
-        # data = requests.get(root_url, params=query).json()
-        module_dir = os.path.dirname(__file__)  # get current directory
-        file_path = os.path.join(module_dir, './tests/test.json')
-        with open(file_path) as test_json:
-            data = json.load(test_json)
+        data = requests.get(root_url, params=query).json()
+        # module_dir = os.path.dirname(__file__)  # get current directory
+        # file_path = os.path.join(module_dir, './tests/test.json')
+        # with open(file_path) as test_json:
+        #     data = json.load(test_json)
         
         # Sets page_count to number of pages listed in api response
         page_count = data['page']['totalPages']
-
-        if is_valid_json(data):
-            propogate_db(data)
-            return HttpResponse(f'Data recieved.')
-        else:
-            return HttpResponse(f'Error. Response recieved:\n{data}')
+        propogate_db(data)
+        return HttpResponse(f'Data recieved.')
+            # return HttpResponse(f'Error. Response recieved:\n{data}')
 
 
 # get details on each show
@@ -52,25 +49,27 @@ def propogate_db(data):
 
     for show in data['_embedded']['events']:
         # TODO Check Event ID ['id'] doesn't exist in db
-        add_artist( show['name'] )
-        add_venue( show['_embedded']['venues'][0]['id'] , show['_embedded']['venues'][0]['name'] , show['_embedded']['venues'][0]['city']['name'] , show['_embedded']['venues'][0]['state']['stateCode'])
-        add_show( show['id'] , show['dates']['start']['dateTime'] , show['name'] , show['_embedded']['venues'][0]['name'] )
+        artist = add_artist( show['id'], show['name'] )
+        venue = add_venue( show['_embedded']['venues'][0]['id'] , show['_embedded']['venues'][0]['name'] , show['_embedded']['venues'][0]['city']['name'] , show['_embedded']['venues'][0]['state']['stateCode'])
+        add_show( show['id'] , show['dates']['start']['dateTime'] , artist , venue )
 
 def add_venue(venue_id, venue_name, venue_city, venue_state):
     # TODO Check venue doesn't exist in db using all three attributes
-    Venue(id = venue_id, name = venue_name,  city = venue_city, state = venue_state).save()
+    created_venue, created = Venue.objects.get_or_create(name = venue_name,  city = venue_city, state = venue_state, api_id=venue_id)
+
+    return created_venue
     
 
-def add_artist(artist_name):
+def add_artist(artist_id, artist_name):
     # TODO Check artist doesn't exist in db using name
-    Artist(name = artist_name).save()
+    created_artist, created = Artist.objects.get_or_create(api_id = artist_id, name = artist_name)
+    return created_artist
     
 
 def add_show(show_id, show_date, show_artist, show_venue):
     # TODO get venue & artist pk
-    venue_pk = ''
-    artist_pk = ''
-    Show(id = show_id, date = show_date, artist = artist_pk, venue = venue_pk).save()
+    created_show, created = Show.objects.get_or_create(api_id = show_id, show_date = show_date, artist = show_artist, venue = show_venue)
+    return created_show
 
 
 def is_valid_json(jsonData): 
