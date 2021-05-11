@@ -1,4 +1,0 @@
-cron:
-    description: "update show data"
-    url: /ticketmaster_api/
-    schedule: every monday 2:00 
