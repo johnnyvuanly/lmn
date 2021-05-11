@@ -16,3 +16,4 @@ app.yaml
 cloud_sql_proxy_x64.exe
 .env
 lmn/image-upload-credentials.json
+image-upload-credentials.json
