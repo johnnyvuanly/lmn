@@ -197,6 +197,7 @@ else:
     # For Local Development
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
+    MEDIA_URL = os.path.join(BASE_DIR, MEDIA_URL)
 
 
 # Where to send user after successful login, and logout, if no other page is provided.
