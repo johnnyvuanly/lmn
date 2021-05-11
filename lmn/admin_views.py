@@ -24,23 +24,25 @@ def find_shows(request):
     page_size = '20'
     page_count = 10
     locale = '*'
-    iterative_range = range(1,page_count,1)
+    iterative_range = range(1,(page_count),1)
 
 
     for page in iterative_range:
-        query = {'apikey' : ticketmaster_key , 'locale' : locale ,'city': city, 'state': state, 'countryCode': country, 'radius': search_radius, 'segmentName': segment_name, 'size': page_size, 'page' : str(page)}
-        data = requests.get(root_url, params=query).json()
-        # module_dir = os.path.dirname(__file__)  # get current directory
-        # file_path = os.path.join(module_dir, './tests/test.json')
-        # with open(file_path) as test_json:
-        #     data = json.load(test_json)
-        
-        # Sets page_count to number of pages listed in api response
-        page_count = data['page']['totalPages']
-        logger.debug('Query page: '+ str(page) + ' of '+ str(page_count))
-        propogate_db(data)
-        return HttpResponse(f'Data recieved. Total pages {str(page_count)}')
-            # return HttpResponse(f'Error. Response recieved:\n{data}')
+        try:
+            query = {'apikey' : ticketmaster_key , 'locale' : locale ,'city': city, 'state': state, 'countryCode': country, 'radius': search_radius, 'segmentName': segment_name, 'size': page_size, 'page' : str(page)}
+            data = requests.get(root_url, params=query).json()
+            # module_dir = os.path.dirname(__file__)  # get current directory
+            # file_path = os.path.join(module_dir, './tests/test.json')
+            # with open(file_path) as test_json:
+            #     data = json.load(test_json)
+            
+            # Sets page_count to number of pages listed in api response
+            page_count = (data['page']['totalPages'] - 1)
+            logger.debug('Query page: '+ str(page) + ' of '+ str(page_count))
+            propogate_db(data)
+        except: 
+            return HttpResponse(f'Error. Response recieved:\n{data}')
+    return HttpResponse(f'Data recieved. Total pages {str(page_count)}')
 
 
 # get details on each show
