@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib import auth
 from django.contrib.auth import authenticate
 
-from lmn.models import Venue, Artist, Note, Show
+from lmn.models import Venue, Artist, Note, Show, Profile
 from django.contrib.auth.models import User
 
 import re, datetime
@@ -504,11 +504,15 @@ class TestMyUserProfile(TestCase):
 
     def test_user_bio_is_displayed_on_public_profile_page(self):
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':1}))
+        print(response.content)
+        print(Profile.objects.all())
         self.assertContains(response, 'This bio should be available on the page for user 1')
         self.assertTemplateUsed(response, 'lmn/users/user_profile.html')
 
+    def user_one_can_edit_thier_own_profile(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.post(reverse('my_user_profile'), {'bio': 'This is my new bio'})
+        user_profile_one = Profile.objects.first(user=User.objects.first())
+        self.assertEqual('This is my new bio', user_profile_one.bio)
   
-  # add one more user to your fixture and make sure user 2 can see user 1 profile
-  
-  # make sure user 1 can edit their own profile
-  # Make sure user 1 cant edit user 2 profile
+

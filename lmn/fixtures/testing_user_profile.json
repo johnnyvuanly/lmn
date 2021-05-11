@@ -8,7 +8,7 @@
 },
 {
     "model": "lmn.profile",
-    "pk": 1,
+    "pk": 2,
     "fields": {
         "bio": "User 2 should this bio",
         "user": 2
