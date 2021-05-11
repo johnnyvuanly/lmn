@@ -77,7 +77,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_social_share',
-    'lmn'
+    'lmn',
     'django.template.context_processors.request',
 ]
 
