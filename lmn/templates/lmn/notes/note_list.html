@@ -13,7 +13,6 @@
 <h2>Page Number: {{ notes.number }}</h2>
 
 {% for note in notes.object_list %}
-{% for note in notes %}
 
   <div id="note_{{ note.pk }}">
     <h3 class="note-title">{{ note.title }}</h3>
