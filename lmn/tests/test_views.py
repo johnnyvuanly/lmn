@@ -497,7 +497,7 @@ class TestMyUserProfile(TestCase):
         response = self.client.get(reverse('my_user_profile'))
         self.assertRedirects(response, '/accounts/login/?next=/user/profile/')
 
-    def test_user_logged_in(self):
+    def test_user_logged_in_can_view_private_profile(self):
         self.client.force_login(User.objects.first())
         response = self.client.get(reverse('my_user_profile'))
         self.assertTemplateUsed(response, 'lmn/users/my_user_profile.html')
@@ -507,3 +507,8 @@ class TestMyUserProfile(TestCase):
         self.assertContains(response, 'This bio should be available on the page for user 1')
         self.assertTemplateUsed(response, 'lmn/users/user_profile.html')
 
+  
+  # add one more user to your fixture and make sure user 2 can see user 1 profile
+  
+  # make sure user 1 can edit their own profile
+  # Make sure user 1 cant edit user 2 profile

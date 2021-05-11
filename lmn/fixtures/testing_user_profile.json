@@ -5,5 +5,15 @@
         "bio": "This bio should be available on the page for user 1",
         "user": 1
     }
+},
+{
+    "model": "lmn.profile",
+    "pk": 1,
+    "fields": {
+        "bio": "User 2 should this bio",
+        "user": 2
+    }
 }
 ]
+
+
