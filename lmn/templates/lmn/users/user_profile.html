@@ -1,19 +1,15 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
 
+<h2 id='username_profile'>{{ user_profile.username }}'s Profile</h2>
 
-<!-- A user's profile page.
+<h2 id='username_notes'>{{ user_profile.username }}'s Notes</h2>
 
-Includes list of user's notes with title and preview of text.
-Text truncated to 200 characters. 
-
-user_profile is the user that this profile is about 
-user is a variable provided to the template and is the current logged-in user 
-
--->
-
-<h2 id='username_notes'>{{ user_profile.username }}'s notes</h2>
-
+{% if user_profile.profile.bio %}
+<div>
+  <p>{{ user_profile.profile.bio }}</p>
+</div>
+{% endif %}
 {% for note in notes %}
 
 <div class='note' id="note_{{ note.pk }}">
@@ -31,14 +27,5 @@ user is a variable provided to the template and is the current logged-in user
     <p id='no_records'>No notes.</p>
 
 {% endfor %}
-
-{% if messages %}
-<div class="messages">
-    {% for message in messages %}
-        <p class="{{message.tags}}">{{ message }}</p>
-    {% endfor %}
-    </div>
-{% endif %}
-
-
 {% endblock %}
+
