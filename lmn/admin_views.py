@@ -3,6 +3,9 @@ import os
 import json
 from django.http import HttpResponse
 from .models import *
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def find_shows(request):
@@ -34,8 +37,9 @@ def find_shows(request):
         
         # Sets page_count to number of pages listed in api response
         page_count = data['page']['totalPages']
+        logger.debug('Query page: '+ str(page) + ' of '+ str(page_count))
         propogate_db(data)
-        return HttpResponse(f'Data recieved.')
+        return HttpResponse(f'Data recieved. Total pages {str(page_count)}')
             # return HttpResponse(f'Error. Response recieved:\n{data}')
 
 
