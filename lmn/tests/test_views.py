@@ -504,8 +504,6 @@ class TestMyUserProfile(TestCase):
 
     def test_user_bio_is_displayed_on_public_profile_page(self):
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':1}))
-        print(response.content)
-        print(Profile.objects.all())
         self.assertContains(response, 'This bio should be available on the page for user 1')
         self.assertTemplateUsed(response, 'lmn/users/user_profile.html')
 
