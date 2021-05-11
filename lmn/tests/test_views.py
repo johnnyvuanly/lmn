@@ -501,46 +501,106 @@ class TestUserAuthentication(TestCase):
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
 
+
+class TestPaginationNoArtists(TestCase):
+
+    # dont load fixtures 
+    def test_pagination_when_no_artists_in_db(self):
+        pass 
+
+
 class TestPagination(TestCase):
 
     """ Test ideas come from https://github.com/encode/django-rest-framework/blob/master/tests/test_pagination.py """
 
     # Load this data into the database for all of the tests in this class
-    fixtures = ['testing_artists', 'testing_notes', 'testing_venues', 'testing_shows', 'testing_users']
+    # use fixture with more artists in 
+    fixtures = ['testing_artists_lots', 'testing_notes', 'testing_venues', 'testing_shows', 'testing_users']
 
     def setUp(self):
-        user = User.objects.get(pk=1)
-        self.client.force_login(user)
+        pass
 
     def test_artist_page_one_status_code(self):
-        response = self.client.get('/artists/list/')
+        # 'artist_list' is a name from urls.py
+        response = self.client.get(reverse('artist_list'))
         self.assertEquals(response.status_code, 200)
 
-    def test_page_number_artists_pagination(self):
-        artist_1 = Artist.objects.get(pk=1)
 
+    def test_three_artists_on_first_page(self):
+        # response is what the view sends in response to a request. What a view function returns 
         response = self.client.get(reverse('artist_list'))
+        page_of_artists_in_template = response.context['artists']
+        # what do you expect artists_in_template to be? 
+        # from the docs https://docs.djangoproject.com/en/3.2/ref/paginator/#id2
+        # print(page_of_artists_in_template.object_list)
 
-        self.assertTemplateUsed(response, 'lmn/artists/artist_list.html')
-        # response.context dictionary 
+        # the current page - 1 of however many
+        # print(page_of_artists_in_template.number)
 
-    def test_correct_page_number_in_url(self):
-        pass
+        # Are we on page 1? 
+        self.assertEqual(1, page_of_artists_in_template.number)
 
-    def test_correct_amount_of_artist_displayed_per_page(self):
-        pass
+        self.assertContains(response, 'AAAAA')
+        self.assertContains(response, 'BBBBB')
+        self.assertContains(response, 'CCCCC')
 
-    def test_artist_query_to_the_database(self):
-        pass
+        # list of the artist objects from the paginator, the artists shown on the page
+        artists = page_of_artists_in_template.object_list 
 
-    def test_on_first_page_no_previous_page_link(self):
-        pass
+        self.assertEqual(1, artists[0].pk)  # does the first artist have pk = 1 ? 
+        self.assertEqual(2, artists[1].pk)  # does the second artist have pk = 2 ? 
+        self.assertEqual(3, artists[2].pk)  # does the third artist have pk = 3 ? 
 
-    def test_on_last_page_no_next_page_link(self):
-        pass
+        # how can we check we DON'T have DDD and EEE and FFF ? 
+        self.assertNotContains(response, 'DDDDD')
+        self.assertNotContains(response, 'EEEEE')
+        self.assertNotContains(response, 'FFFFF')
+        self.assertNotContains(response, 'GGGGG')
+
+        # has a Next Page link
+        self.assertContains(response, 'Next Page')
+        # but no previous link 
+        self.assertNotContains(response, 'Previous Page')
+
+        # exactly three artists 
+        self.assertEqual(3, len(artists))
+
+
+
+    def test_correct_artists_on_page_in_the_middle(self):
+        pass 
         
-    def test_page_out_of_range(self):
-        pass
+    
+    def test_correct_artists_on_last_page(self):
+        pass 
+
+
+    # todo better test name 
+    def test_request_weird_pages(self):
+        response = self.client.get('/artists/list/?page=10000000')
+        # TODO ensure things don't break
+        response = self.client.get('/artists/list/?page=abcde')
+
+        response = self.client.get('/artists/list/?pizza=cat')
+        
+
+    def test_pagination_when_searching(self):
+        # search - make sure pagination sticks when searching. 
+        # search for 'a' which should return several artists - more than fit on a page
+        response = self.client.get('/artists/list/?search_name=a')
+        # find the link to the next page 
+        
+        # does it contain the page number and the search term?
+        expected_link = '<a href="/artists/list/?page=2&search_term=a">'
+        self.assertContains(response, expected_link)
+
+        # request second page - does it contain
+        response = self.client.get('/artists/list/?page=2&search_term=a')
+
+        # TODO check the correct artists are on the page 
+        second_page_artists = response.context['artists'].object_list 
+
+
     
 class TestGoodbyePage(TestCase):
 
