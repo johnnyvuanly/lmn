@@ -1,4 +1,6 @@
 {% extends 'lmn/base.html' %}
+{% load static %}
+{% load social_share %}
 {% block content %}
 
 
@@ -6,7 +8,81 @@
     <a href="{% url 'user_profile' user_pk=note.user.pk %}">{{ user.username }}</a>
 </h2>
 
-<p id="note-title"><b>{{ note.title}}</b></p>
-<p id="note-text">{{ note.text }}</b>
+<p id="note-title"><b>{{ note.title }}</b></p>
+<p id="note-text"><b>{{ note.text }}</b></p>
+
+    <h3>Photo</h3>
+    {% if note.photo %}
+        <img src="{{ note.photo.url }}">
+    {% else %}
+        <P>No photo uploaded</p>
+    {% endif %}
+
+
+
+<!-- Messages, updates, errors from form -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <p class="{{message.tags}}">{{ message }}</p>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+{% if note.user.pk == user.pk %}
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.btn-group .button {
+  background-color: #f2f8f3; /* Green */
+  border: 1px solid rgb(19, 16, 233);
+  color: rgb(20, 170, 240);
+  padding: 1px 25px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  float: inline-start;
+}
+
+.btn-group .button:not(:last-child) {
+  border-right: none; /* Prevent double borders */
+}
+
+.btn-group .button:hover {
+  background-color: #2420ec;
+}
+</style>
+</head>
+<body>
+    <div class="btn-group">
+        {% if note.photo %}
+            <button class="button">
+                {% post_to_twitter "{{ note.text }} {{ note.photo.url }}" object_or_url "Send Note To Twitter" %}
+            </button>
+        {% else %}
+            <button class="button">
+                {% post_to_twitter "{{ note.text }}" object_or_url "Send Note To Twitter" %}
+            </button>
+        {% endif %}
+
+        <button class="button">
+            {% post_to_facebook object_or_url "Send Note To Facebook" %}
+        </button>
+    <button>
+        <a href="{% url 'edit_note' note_pk=note.pk %}" class="button">Edit Your Note</a>
+    </button>
+
+    <form action="{% url 'delete_note' note.pk %}" method="POST">
+        {% csrf_token %}
+        <button type=submit class="button">Delete</button>
+    </form>
+    <script src="{% static 'js/confirm_delete.js' %}"></script>
+    </div>
+</body>
+
+{% endif %}
 
 {% endblock %}
