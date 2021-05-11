@@ -1,0 +1,15 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+
+<h2>Edit</h2>
+
+<form method="POST" action="{% url 'edit_note' note_pk=note.pk %}" enctype="multipart/form-data">
+  
+  <div>
+    {% csrf_token %}
+    {{ review_form.as_p }}
+  </div>
+  <input type='submit' value='Update Note'>
+</form>
+
+{% endblock %}

@@ -1,3 +1,7 @@
+import tempfile
+import os
+
+from django.http import response
 from django.test import TestCase, Client
 
 from django.urls import reverse
@@ -11,6 +15,9 @@ import re, datetime
 from datetime import timezone
 
 from django.core.paginator import Paginator
+from PIL import Image
+
+
 
 # TODO verify correct templates are rendered.
 
@@ -474,7 +481,6 @@ class TestNotes(TestCase):
         self.assertTemplateUsed(response, 'lmn/notes/new_note.html')
 
 
-
 class TestUserAuthentication(TestCase):
 
     ''' Some aspects of registration (e.g. missing data, duplicate username) covered in test_forms '''
@@ -501,50 +507,140 @@ class TestUserAuthentication(TestCase):
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
 
-class TestPagination(TestCase):
+class TestDeleteNotes(TestCase):
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
+    def setUp(self):
+        user = User.objects.first()
+        self.client.force_login(user)
+    
+    def test_delete_note(self):
+        response = self.client.post(reverse('delete_note', args=(1,)), follow=True)
+        place_2 = Note.objects.filter(pk=1).first()
+        self.assertIsNone(place_2)
 
-    """ Test ideas come from https://github.com/encode/django-rest-framework/blob/master/tests/test_pagination.py """
+    def test_deleting_somebodys_note_that_is_not_yours_doesnt_work(self):
+        response = self.client.post(reverse('delete_note', args=(2,)), follow=True)
+        self.assertEqual(403, response.status_code)
+        place_5 = Note.objects.get(pk=2)
+        self.assertIsNotNone(place_5)
+    
 
-    # Load this data into the database for all of the tests in this class
-    fixtures = ['testing_artists', 'testing_notes', 'testing_venues', 'testing_shows', 'testing_users']
+class TestImageUpload(TestCase):
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
 
     def setUp(self):
         user = User.objects.get(pk=1)
         self.client.force_login(user)
+        self.MEDIA_ROOT = tempfile.mkdtemp()
 
-    def test_artist_page_one_status_code(self):
-        response = self.client.get('/artists/list/')
-        self.assertEquals(response.status_code, 200)
-
-    def test_page_number_artists_pagination(self):
-        artist_1 = Artist.objects.get(pk=1)
-
-        response = self.client.get(reverse('artist_list'))
-
-        self.assertTemplateUsed(response, 'lmn/artists/artist_list.html')
-        # response.context dictionary 
-
-    def test_correct_page_number_in_url(self):
-        pass
-
-    def test_correct_amount_of_artist_displayed_per_page(self):
-        pass
-
-    def test_artist_query_to_the_database(self):
-        pass
-
-    def test_on_first_page_no_previous_page_link(self):
-        pass
-
-    def test_on_last_page_no_next_page_link(self):
-        pass
-        
-    def test_page_out_of_range(self):
-        pass
+    def tearDown(self):
+        print('todo delete temp directory, temp image')
     
+    def create_temp_image_file(self):
+        handle, tmp_image_file = tempfile.mkstemp(suffix='.jpg')
+        img = Image.new('RGB', (10, 10) )
+        img.save(tmp_image_file, format='JPEG')
+        return tmp_image_file
+
+    def test_upload_new_image_for_own_note(self):
+        
+        img_file_path = self.create_temp_image_file()
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(img_file_path, 'rb') as first_img_file:
+
+                resp = self.client.post(reverse('edit_note', kwargs={'note_pk': 1} ), {'photo': first_img_file }, follow=True)
+
+                place_1 = Note.objects.get(pk=1)
+
+                first_uploaded_image = place_1.photo.name
+
+
+                first_path = os.path.join(self.MEDIA_ROOT, first_uploaded_image)
+
+                self.assertTrue(os.path.exists(first_path))
+
+    def test_edit_note_for_own_note_expect_old_changed(self):
+        response = self.client.post(reverse('edit_note', kwargs={'note_pk': 1}), {'title': 'lame','text':'awesome'}, follow=True)
+        updated_note_1 = Note.objects.get(pk=1)
+        self.assertEqual(response.context['note'], updated_note_1)
+        self.assertContains(response, 'awesome')  # new text shown
+    
+    def test_modify_someone_else_notes_not_authorized(self):
+        response = self.client.post(reverse('edit_note', kwargs={'note_pk':3}), {'notes':'awesome'}, follow=True)
+        self.assertEqual(403, response.status_code)   # 403 Forbidden 
+    
+       
+    def test_edit_image_for_own_note_expect_old_deleted_and_new_to_exist(self):
+        
+        first_img_file_path = self.create_temp_image_file()
+        second_img_file_path = self.create_temp_image_file()
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(first_img_file_path, 'rb') as first_img_file:
+
+                resp = self.client.post(reverse('edit_note', kwargs={'note_pk': 1} ), {'photo': first_img_file }, follow=True)
+
+                place_1 = Note.objects.get(pk=1)
+
+                first_uploaded_image = place_1.photo.name
+
+                with open(second_img_file_path, 'rb') as second_img_file:
+                    resp = self.client.post(reverse('edit_note', kwargs={'note_pk': 1}), {'photo': second_img_file}, follow=True)
+
+                    # first file should not exist 
+                    # second file should exist 
+
+                    place_1 = Note.objects.get(pk=1)
+
+                    second_uploaded_image = place_1.photo.name
+
+                    first_path = os.path.join(self.MEDIA_ROOT, first_uploaded_image)
+                    second_path = os.path.join(self.MEDIA_ROOT, second_uploaded_image)
+
+                    self.assertTrue(os.path.exists(second_path))
+
+
+    def test_edit_image_for_someone_else_note_doesnt_work(self):
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+  
+            img_file = self.create_temp_image_file()
+            with open(img_file, 'rb') as image:
+                resp = self.client.post(reverse('edit_note', kwargs={'note_pk': 2} ), {'photo': image }, follow=True)
+                self.assertEqual(403, resp.status_code)
+
+                place_5 = Note.objects.get(pk=2)
+                self.assertFalse(place_5.photo)   # no photo set
+
+
+    def test_delete_note_with_image_image_deleted(self): 
+        
+        img_file_path = self.create_temp_image_file()
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(img_file_path, 'rb') as img_file:
+                resp = self.client.post(reverse('edit_note', kwargs={'note_pk': 1} ), {'photo': img_file }, follow=True)
+                
+                self.assertEqual(200, resp.status_code)
+
+                place_1 = Note.objects.get(pk=1)
+                img_file_name = os.path.basename(img_file_path)
+                
+                uploaded_file_path = os.path.join(self.MEDIA_ROOT, 'user_images', img_file_name)
+
+                # delete place 1 
+                place_1 = Note.objects.get(pk=1)
+                place_1.delete()
+                self.assertFalse(os.path.exists(uploaded_file_path))
+
+
 class TestGoodbyePage(TestCase):
 
-    fixtures = [ 'testing_users']
+    fixtures = [ 'testing_users' ]
 
     def test_logout_redirects_to_goodbye_page(self):
         # Log in
@@ -566,4 +662,31 @@ class TestGoodbyePage(TestCase):
         # Check redirect
         self.assertRedirects(response, reverse('goodbye'))
 
-    
+class TestSocialMedia(TestCase):
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
+
+    def setUp(self):
+        user = User.objects.get(pk=1)
+        self.client.force_login(user)
+        self.MEDIA_ROOT = tempfile.mkdtemp()
+
+    def test_clicking_facebook_on_note_details_has_option_to_send_to_facebook(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
+        self.assertContains(response, 'Send Note To Facebook')
+
+    def test_click_twitter_on_note_details_redirects_to_twitter(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
+        self.assertContains(response, 'Send Note To Twitter')
+
+
+    def test_click_facebook_on_note_list_redirects_to_facebook(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('latest_notes'))
+        self.assertContains(response, 'Share Show To Facebook')
+
+    def test_click_twitter_on_note_list_redirects_to_twitter(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('latest_notes'))
+        self.assertContains(response, 'Share Show To Twitter')

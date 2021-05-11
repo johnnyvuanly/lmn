@@ -1,4 +1,5 @@
 {% load static %}
+
 <html>
 <head>
   <title>LMNOP</title>
@@ -19,8 +20,6 @@
 {% else %}
 
   <span id='login-or-sign-up'><a href="{% url 'login' %}?next={{ request.path }}">Login or sign up</a></span>
-
-
 
 {% endif %}
 
