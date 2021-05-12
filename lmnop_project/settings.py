@@ -51,7 +51,7 @@ The result is a random and safely hidden `SECRET_KEY`.
 #             to generate your secret key!' % SECRET_FILE)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['Secret_Key']
+SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 
 # Enable this once branch is tested with photo upload.
@@ -120,7 +120,7 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lmnop-postgres',
+        'NAME': 'lmnop-testdb',
         'USER' : 'livemusicafficiendo',
         'PASSWORD' : os.environ['LMNOP_PW'],
         'HOST' : '/cloudsql/clear-booking-309320:us-central1:lmnop-db',
