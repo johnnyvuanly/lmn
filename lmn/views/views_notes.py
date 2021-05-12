@@ -28,7 +28,7 @@ def new_note(request, show_pk):
                 note.user = request.user
                 note.show = show
                 note.save()
-                return redirect('note_detail', note_pk=note.pk), user_note_count
+                return redirect('note_detail', note_pk=note.pk), count
         else:
             messages.warning(request, 'You already created a note for this show')
             form = NewNoteForm()
