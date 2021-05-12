@@ -14,3 +14,12 @@ env
 .gcloudignore
 app.yaml
 cloud_sql_proxy_x64.exe
+
+#Google Cloud Files
+app.yaml
+.gcloudignore
+cloud_sql_proxy_x64.exe
+.env
+image-upload-credentials.json
+
+requirements.txt
