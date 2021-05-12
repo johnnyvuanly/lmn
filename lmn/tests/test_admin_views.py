@@ -41,34 +41,38 @@ def mocked_requests_get(*args, **kwargs):
     return MockResponse(None, 404)
 
 # Our test case class
-class MyGreatClassTestCase(TestCase):
+# class MyGreatClassTestCase(TestCase):
 
-    # We patch 'requests.get' with our own method. The mock object is passed in to our test case method.
-    @mock.patch('requests.get', side_effect=mocked_requests_get)
-    def test_fetch(self, mock_get):
+#     # We patch 'requests.get' with our own method. The mock object is passed in to our test case method.
+#     @mock.patch('requests.get', side_effect=mocked_requests_get)
+#     def test_fetch(self, mock_get):
 
-        file_path = os.path.join(module_dir, 'test.json')
-        with open(file_path) as test_json:
-            test_data = json.load(test_json)
+#         file_path = os.path.join(module_dir, 'test.json')
+#         with open(file_path) as test_json:
+#             test_data = json.load(test_json)
 
-        # Assert requests.get calls
-        fshows = find_shows()
-        json_data = fshows.fetch_json('test.json')
-        self.assertEqual(json_data, {"key1": "value1"})
-        json_data = fshows.fetch_json('http://someotherurl.com/anothertest.json')
-        self.assertEqual(json_data, {"key2": "value2"})
-        json_data = fshows.fetch_json('http://nonexistenturl.com/cantfindme.json')
-        self.assertIsNone(json_data)
+#         # Assert requests.get calls
+#         fshows = find_shows()
+#         json_data = fshows.fetch_json('test.json')
+#         self.assertEqual(json_data, {"key1": "value1"})
+#         json_data = fshows.fetch_json('http://someotherurl.com/anothertest.json')
+#         self.assertEqual(json_data, {"key2": "value2"})
+#         json_data = fshows.fetch_json('http://nonexistenturl.com/cantfindme.json')
+#         self.assertIsNone(json_data)
 
-        # We can even assert that our mocked method was called with the right parameters
-        self.assertIn(mock.call('http://someurl.com/test.json'), mock_get.call_args_list)
-        self.assertIn(mock.call('http://someotherurl.com/anothertest.json'), mock_get.call_args_list)
+#         # We can even assert that our mocked method was called with the right parameters
+#         self.assertIn(mock.call('http://someurl.com/test.json'), mock_get.call_args_list)
+#         self.assertIn(mock.call('http://someotherurl.com/anothertest.json'), mock_get.call_args_list)
 
-        self.assertEqual(len(mock_get.call_args_list), 3)
+#         self.assertEqual(len(mock_get.call_args_list), 3)
 class FindShowsTest(TestCase):
 
-    
-    def test_find_shows(self):
+    @mock.patch('requests.get', side_effect=mocked_requests_get)
+    def test_find_shows(self, mock_get):
+        module_dir = os.path.dirname(__file__)  # get current directory
+        file_path = os.path.join(module_dir, 'test.json')
+        with open(file_path) as test_json:
+            mock_data = json.load(test_json)
 
         #self.assertRaises
         pass
@@ -80,28 +84,8 @@ class FindShowsTest(TestCase):
         pass
 
     def test_add_venue(self):
+        # Test creation of new venue
         test_venue = ['U.S. Bank Stadium', 'Minneapolis', 'MN', 'KovZpZAF6ttA']
-        pass
-
-
-
-
-class ValidJsonTest(TestCase):
-
-        def test_is_valid_json(self):
-            #Check invalid json - https://pynative.com/python-json-validation/
-            test_json = """{"name": "jane doe", "salary": 9000, "email": "jane.doe@pynative.com",}"""
-            response = is_valid_json(test_json)
-            self.assertFalse(response)
-
-            #Check valid json - https://pynative.com/python-json-validation/
-            test_json = """{"name": "jane doe", "salary": 9000, "email": "jane.doe@pynative.com"}"""
-            response = is_valid_json(test_json)
-            self.assertTrue(response)
-
-            module_dir = os.path.dirname(__file__)  # get current directory
-            file_path = os.path.join(module_dir, 'test.json')
-            with open(file_path) as test_json:
-                test_data = json.load(test_json)
-            response = is_valid_json(test_data)
-            self.assertTrue(response)
+        expected_response = 'U.S. Bank Stadium'
+        response = add_venue( test_venue[3], test_venue[0], test_venue[1], test_venue[2], )
+        self.assertEqual(expected_response,response.name,f"This test was expecting {expected_response} but recieved {response}")
