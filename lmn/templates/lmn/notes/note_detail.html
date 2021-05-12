@@ -31,35 +31,10 @@
 
 {% if note.user.pk == user.pk %}
 
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-.btn-group .button {
-  background-color: #f2f8f3; /* Green */
-  border: 1px solid rgb(19, 16, 233);
-  color: rgb(20, 170, 240);
-  padding: 1px 25px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 16px;
-  cursor: pointer;
-  float: inline-start;
-}
 
-.btn-group .button:not(:last-child) {
-  border-right: none; /* Prevent double borders */
-}
-
-.btn-group .button:hover {
-  background-color: #2420ec;
-}
-</style>
-</head>
-<body>
     <div class="btn-group">
         {% if note.photo %}
-            <button class="button">
+            <button class="button" style="padding:0px;">
                 {% post_to_twitter "{{ note.text }} {{ note.photo.url }}" object_or_url "Send Note To Twitter" %}
             </button>
         {% else %}
@@ -81,7 +56,6 @@
     </form>
     <script src="{% static 'js/confirm_delete.js' %}"></script>
     </div>
-</body>
 
 {% endif %}
 

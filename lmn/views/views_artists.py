@@ -11,6 +11,7 @@ from django.utils import timezone
 
 from django.core.paginator import Paginator
 
+""" All of the view actions from the artist section """
 
 def venues_for_artist(request, artist_pk):   # pk = artist_pk
 
@@ -23,6 +24,7 @@ def venues_for_artist(request, artist_pk):   # pk = artist_pk
 
 
 def artist_list(request):
+    """ Get all the artsist and put them in order """
     form = ArtistSearchForm()
     search_name = request.GET.get('search_name')
 
@@ -41,5 +43,6 @@ def artist_list(request):
     
 
 def artist_detail(request, artist_pk):
+    """ Get all the details on the artists """
     artist = get_object_or_404(Artist, pk=artist_pk)
     return render(request, 'lmn/artists/artist_detail.html' , { 'artist': artist })

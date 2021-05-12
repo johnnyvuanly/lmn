@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.contrib import auth
 from django.contrib.auth import authenticate
 
-from lmn.models import Venue, Artist, Note, Show
+from lmn.models import Venue, Artist, Note, Show, Profile
 from django.contrib.auth.models import User
 
 import re, datetime
@@ -17,6 +17,7 @@ from datetime import timezone
 from django.core.paginator import Paginator
 from PIL import Image
 
+""" All the tests having todo with notes, artists, venues """
 
 
 # TODO verify correct templates are rendered.
@@ -420,25 +421,19 @@ class TestUserProfile(TestCase):
         self.assertFalse(response.context['notes'])
 
 
-    def test_username_shown_on_profile_page(self):
-        # A string "username's notes" is visible
-        response = self.client.get(reverse('user_profile', kwargs={'user_pk':1}))
-        self.assertContains(response, 'alice\'s notes')
-        
-        response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'bob\'s notes')
+
 
 
     def test_correct_user_name_shown_different_profiles(self):
         logged_in_user = User.objects.get(pk=2)
         self.client.force_login(logged_in_user)  # bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>.')
+        self.assertContains(response, 'You are logged in, <a href="/user/profile/">bob</a>.')
         
         # Same message on another user's profile. Should still see logged in message 
         # for currently logged in user, in this case, bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':3}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>.')
+        self.assertContains(response, 'You are logged in, <a href="/user/profile/">bob</a>.')
         
 
 class TestNotes(TestCase):
@@ -506,6 +501,31 @@ class TestUserAuthentication(TestCase):
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
+
+
+class TestMyUserProfile(TestCase):
+    fixtures = ['testing_users', 'testing_user_profile']
+
+    def test_user_is_not_logged_in_should_get_sent_to_main_login_page(self):
+        response = self.client.get(reverse('my_user_profile'))
+        self.assertRedirects(response, '/accounts/login/?next=/user/profile/')
+
+    def test_user_logged_in_can_view_private_profile(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('my_user_profile'))
+        self.assertTemplateUsed(response, 'lmn/users/my_user_profile.html')
+
+    def test_user_bio_is_displayed_on_public_profile_page(self):
+        response = self.client.get(reverse('user_profile', kwargs={'user_pk':1}))
+        self.assertContains(response, 'This bio should be available on the page for user 1')
+        self.assertTemplateUsed(response, 'lmn/users/user_profile.html')
+
+    def user_one_can_edit_thier_own_profile(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.post(reverse('my_user_profile'), {'bio': 'This is my new bio'})
+        user_profile_one = Profile.objects.first(user=User.objects.first())
+        self.assertEqual('This is my new bio', user_profile_one.bio)
+  
 
 class TestDeleteNotes(TestCase):
     fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show

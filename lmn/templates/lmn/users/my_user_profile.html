@@ -1,0 +1,44 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+
+
+<h2 id='username_profile'>{{ user_profile.username }}'s Profile</h2>
+<p>edit profile here</p>
+
+<form method="POST" action="{% url 'my_user_profile' %}">
+    <div>
+      {% csrf_token %}
+      {{ form.as_p }}
+    </div>
+    <input type='submit' value='Add Bio'>
+  </form>
+
+<h2 id='username_notes'>{{ user_profile.username }}'s Notes</h2>
+{% for note in notes %}
+
+  <div id="note_{{ note.pk }}">
+    <h3 class="note-title">{{ note.title }}</h3>
+
+    <p class="show-info">
+      <a href="{% url 'notes_for_show' show_pk=note.show.pk %}">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</a>
+    </p>
+
+    <p class="note-info">Posted on {{ note.posted_date }} by 
+      <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
+    </p>
+
+    <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
+
+    <h3>Photo</h3>
+    {% if note.photo %}
+        <img src="{{ note.photo.url }}">
+    {% else %}
+        <P>No photo uploaded</p>
+    {% endif %}  
+
+{% empty %}
+
+    <p id='no_records'>No notes.</p>
+
+{% endfor %}
+{% endblock %}

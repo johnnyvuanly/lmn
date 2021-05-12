@@ -9,8 +9,10 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.core.paginator import Paginator
 
+""" All the information about venues """
 
 def venue_list(request):
+    """ Get all the Venues in a list """
     form = VenueSearchForm()
     search_name = request.GET.get('search_name')
 
@@ -39,5 +41,6 @@ def artists_at_venue(request, venue_pk):   # pk = venue_pk
 
 
 def venue_detail(request, venue_pk):
+    """ Get all the information on a venue """
     venue = get_object_or_404(Venue, pk=venue_pk)
     return render(request, 'lmn/venues/venue_detail.html' , { 'venue': venue })

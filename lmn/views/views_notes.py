@@ -13,8 +13,11 @@ from django.contrib import messages
 
 from django.core.paginator import Paginator
 
+""" Gather all information on notes  """
+
 @login_required
 def new_note(request, show_pk):
+    """ Method to make a new note """
 
     show = get_object_or_404(Show, pk=show_pk)
 
@@ -34,6 +37,8 @@ def new_note(request, show_pk):
 
 
 def latest_notes(request):
+    """ Gather the latest notes  """
+
     notes = Note.objects.all().order_by('-posted_date')[:20]   # the 20 most recent notes
 
     note_paginator = Paginator(notes, 3) # Right now 3 per page
@@ -44,7 +49,7 @@ def latest_notes(request):
 
 
 def notes_for_show(request, show_pk): 
-    # Notes for show, most recent first
+    """ Gather the notes for a specific show """
     notes = Note.objects.filter(show=show_pk).order_by('-posted_date')
     show = Show.objects.get(pk=show_pk)  
     return render(request, 'lmn/notes/note_list.html', { 'show': show, 'notes': notes })
@@ -52,6 +57,7 @@ def notes_for_show(request, show_pk):
 
 @login_required
 def change_notes(request, note_pk):
+    """ Change notes method """
     notes = get_object_or_404(Note, pk=note_pk)
 
     # Find out if this note belongs to the current user
@@ -75,6 +81,7 @@ def change_notes(request, note_pk):
 
 @login_required
 def delete_note(request, note_pk):
+    """ Method to delete notes """
     note = get_object_or_404(Note, pk=note_pk)
     if note.user == request.user:
         note.delete()
@@ -89,6 +96,7 @@ def delete_note(request, note_pk):
 
 
 def note_detail(request, note_pk):
+    """ Gather information on the notes """
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
 

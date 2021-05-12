@@ -1,16 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from ..models import Venue, Artist, Note, Show
-from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
+from ..models import Venue, Artist, Note, Show, Profile
+from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, ProfileForm
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
+""" All of the users information """
+
 
 def user_profile(request, user_pk):
-    # Get user profile for any user on the site
+    """ Get the user profile for any user on the site """
     user = User.objects.get(pk=user_pk)
     usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
     return render(request, 'lmn/users/user_profile.html', { 'user_profile': user , 'notes': usernotes })
@@ -18,11 +20,28 @@ def user_profile(request, user_pk):
 
 @login_required
 def my_user_profile(request):
-    # TODO - editable version for logged-in user to edit their own profile
-    return redirect('user_profile', user_pk=request.user.pk)
+    """ Gather information on the user that is signed in """
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=request.user.profile) if hasattr(request.user, 'profile') else  ProfileForm(request.POST)
+        if form.is_valid():
+            profile_form = form.save(commit=False)
+            profile_form.user = request.user
+            profile_form.save()
+
+    user = request.user
+    usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
+    form = ProfileForm(instance=user.profile) if hasattr(user, 'profile') else ProfileForm()
+    data = {
+        'user_profile': user,
+        'notes': usernotes,
+        'form': form,
+    }
+
+    return render(request, 'lmn/users/my_user_profile.html', data)
 
 
 def register(request):
+    """ Method based on registring the users """
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -48,6 +67,7 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form} )
 
 def goodbye_message(request):
+        """ Send the user to the goodbye message page after signing out """
         return render(request, 'registration/goodbye.html')
 
 
