@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from lmn.forms import NewNoteForm, UserRegistrationForm, ProfileForm
 import string
 
-# Test that forms are validating correctly, and don't accept invalid data
+"""Test that forms are validating correctly, and don't accept invalid data"""
+
 
 class NewNoteFormTests(TestCase):
 
