@@ -16,6 +16,7 @@ from datetime import timezone
 
 from PIL import Image
 
+""" All the tests having todo with notes, artists, venues """
 
 
 # TODO verify correct templates are rendered.

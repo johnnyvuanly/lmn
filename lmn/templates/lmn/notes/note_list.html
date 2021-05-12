@@ -3,9 +3,11 @@
 {% load social_share %}
 {% block content %}
 
+
+
 {% if show %}
   <h2 id="show-title">Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
-  <a href="{% url 'new_note' show_pk=show.pk %}" class="button">Add Your Own Notes For The Show</a>
+  <a href="{% url 'new_note' show_pk=show.pk %}" class="">Add Your Own Notes For The Show</a>
 {% else %}
   <h2>Latest Notes</h2>
 {% endif %}

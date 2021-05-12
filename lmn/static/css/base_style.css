@@ -23,9 +23,9 @@ a {
 }
 
 .button {
-  background-color: #080a0a; /* Green */
+  background-color: #f2f7f7; /* Green */
   border: none;
-  color: rgb(250, 6, 6);
+  color: rgb(17, 16, 16);
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
