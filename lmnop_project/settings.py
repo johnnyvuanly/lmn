@@ -133,21 +133,6 @@ else: # GCP needs LMNOP_PW variable
         }
     }
 
-# if not os.getenv('GAE_INSTANCE'): 
-#     # DATABASES['default']['HOST'] = '127.0.0.1'
-#     DATABASES = {
-#     # And when you use Postgres, comment out or remove this DB config. 
-#     # Using environment variables to detect where this app is running, and automatically use 
-#     # an appropriate DB configuration, is a good idea.
-
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-#     }
-
-
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
