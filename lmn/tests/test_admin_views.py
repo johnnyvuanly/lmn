@@ -81,14 +81,11 @@ class FindShowsTest(TestCase):
         self.assertEqual(expected_response,response.status_code)
 
         # Test  
-
-
         # self.assertEqual(json_data, {"key1": "value1"})
         # json_data = fshows.data('https://jsonplaceholder.typicode.com/posts/1') # https://jsonplaceholder.typicode.com/ Test API provided by typicode.
         # self.assertEqual(json_data, {"key2": "value2"})
         # json_data = fshows.data('http://nonexistenturl.com/cantfindme.json')
         # self.assertIsNone(json_data)
-        pass
 
     def test_add_show(self):
         test_artist = ['JSIFSnfiasd', 'Beck']
@@ -102,15 +99,11 @@ class FindShowsTest(TestCase):
         self.assertEqual(test_artist[1],response.artist.name,f"This test was expecting {test_artist[1]} and recieved {response}")
         self.assertEqual(test_venue[3],response.venue.api_id,f"This test was expecting {test_venue[3]} and recieved {response}")
 
-
-        pass
-
     def test_add_artist(self):
         test_artist = ['JSIFSnfiasd', 'Beck']
         expected_response = 'Beck'
         response = add_artist(test_artist[0], test_artist[1])
         self.assertEqual(expected_response,response.name,f"This test was expecting {expected_response} and recieved {response}")
-        pass
 
     def test_add_venue(self):
         # Test creation of new venue
