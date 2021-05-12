@@ -22,7 +22,7 @@ def find_shows(request):
 
     # Controls looping over json pagination 
     page_size = '20'
-    page_count = 10
+    page_count = 3
     locale = '*'
     iterative_range = range(1,(page_count),1)
 
@@ -37,7 +37,7 @@ def find_shows(request):
             #     data = json.load(test_json)
             
             # Sets page_count to number of pages listed in api response
-            page_count = (data['page']['totalPages'] - 1)
+            page_count = (data['page']['totalPages'])
             logger.debug('Query page: '+ str(page) + ' of '+ str(page_count))
             propogate_db(data)
         except: 
