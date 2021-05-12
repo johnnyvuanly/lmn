@@ -114,32 +114,37 @@ WSGI_APPLICATION = 'lmnop_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-
-    # Uncomment this when you are ready to use Postgres.
-
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lmnop-testdb',
-        'USER' : 'livemusicafficiendo',
-        'PASSWORD' : os.environ['LMNOP_PW'],
-        'HOST' : '/cloudsql/clear-booking-309320:us-central1:lmnop-db',
-        'PORT' : '5432'
-    }
-}
-
 if not os.getenv('GAE_INSTANCE'): 
-    # DATABASES['default']['HOST'] = '127.0.0.1'
     DATABASES = {
-    # And when you use Postgres, comment out or remove this DB config. 
-    # Using environment variables to detect where this app is running, and automatically use 
-    # an appropriate DB configuration, is a good idea.
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            }
+    }
+else: # GCP needs LMNOP_PW variable
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'lmnop-testdb',
+            'USER' : 'livemusicafficiendo',
+            'PASSWORD' : os.environ['LMNOP_PW'],
+            'HOST' : '/cloudsql/clear-booking-309320:us-central1:lmnop-db',
+            'PORT' : '5432'
+        }
+    }
 
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-    }
+# if not os.getenv('GAE_INSTANCE'): 
+#     # DATABASES['default']['HOST'] = '127.0.0.1'
+#     DATABASES = {
+#     # And when you use Postgres, comment out or remove this DB config. 
+#     # Using environment variables to detect where this app is running, and automatically use 
+#     # an appropriate DB configuration, is a good idea.
+
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+#     }
 
 
 
