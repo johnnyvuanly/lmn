@@ -2,7 +2,7 @@ body {
   margin: 1em;
   font-family: Georgia, 'Times New Roman', Times, serif;
   background: #444d4d;
-  background: linear-gradient(90deg,rgb(27, 1, 56) 35%, rgb(211, 162, 250) 100%);
+  background: linear-gradient(90deg,rgb(27, 1, 56) 35%, rgb(238, 218, 255) 100%);
   color: antiquewhite;
 }
 
@@ -29,8 +29,9 @@ div {
 }
 
 a {
-  color: rgb(165, 170, 247);
+  color: darkorange;
   font-size: large;
+  text-decoration: underline rgb(136, 75, 0);
 }
 
 #welcome-user-msg, #login-or-sign-up {
@@ -38,7 +39,10 @@ a {
   right: 0px;
   padding-right: 10px;
   font-size: large;
-  background:rgba(87, 51, 5, .25) 
+  background:rgba(27, 1, 56, .25);
+  border-radius: 5px;
+  padding: 3px;
+  padding-left: 15px;
 }
 
 .error {
