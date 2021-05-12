@@ -91,9 +91,25 @@ class FindShowsTest(TestCase):
         pass
 
     def test_add_show(self):
+        test_artist = ['JSIFSnfiasd', 'Beck']
+        test_venue = ['U.S. Bank Stadium', 'Minneapolis', 'MN', 'KovZpZAF6ttA']
+        artist = add_artist(test_artist[0], test_artist[1])
+        venue = add_venue( test_venue[3], test_venue[0], test_venue[1], test_venue[2], )
+        show_date = datetime.datetime.now()
+        response = add_show('blablabla',show_date,artist,venue)
+        self.assertEqual('blablabla',response.api_id)
+        self.assertEqual(show_date,response.date,f"This test was expecting {show_date} and recieved {response}")
+        self.assertEqual(test_artist[1],response.artist.name,f"This test was expecting {test_artist[1]} and recieved {response}")
+        self.assertEqual(test_venue[3],response.venue.api_id,f"This test was expecting {test_venue[3]} and recieved {response}")
+
+
         pass
 
     def test_add_artist(self):
+        test_artist = ['JSIFSnfiasd', 'Beck']
+        expected_response = 'Beck'
+        response = add_artist(test_artist[0], test_artist[1])
+        self.assertEqual(expected_response,response.name,f"This test was expecting {expected_response} and recieved {response}")
         pass
 
     def test_add_venue(self):
