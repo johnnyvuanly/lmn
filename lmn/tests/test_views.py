@@ -693,7 +693,8 @@ class TestPaginationNoArtists(TestCase):
 
     # dont load fixtures 
     def test_pagination_when_no_artists_in_db(self):
-        pass 
+        response = self.client.get(reverse('artist_list'))
+        self.assertEquals(response.status_code, 200)
 
 
 class TestPagination(TestCase):
@@ -755,19 +756,33 @@ class TestPagination(TestCase):
 
 
     def test_correct_artists_on_page_in_the_middle(self):
-        response = self.client.get(reverse('artist_list'))
+        response = self.client.get('/artists/list/?page=2')
         
+        self.assertContains(response, 'DDDDD')
+        self.assertContains(response, 'EEEEEA')
+        self.assertContains(response, 'FFFFFA')
+
+        self.assertContains(response, 'Next Page')
+        self.assertContains(response, 'Previous Page')
     
     def test_correct_artists_on_last_page(self):
-        response = self.client.get(reverse('artist_list'))
+        response = self.client.get('/artists/list/?page=3')
+
+        self.assertContains(response, 'GGGGGA')
+        self.assertContains(response, 'HHHHHA')
+
+        self.assertContains(response, 'Previous Page')
+        self.assertNotContains(response, 'Next Page')
+
 
     # todo better test name 
     def test_request_weird_pages(self):
         response = self.client.get('/artists/list/?page=10000000')
-        # TODO ensure things don't break
+        self.assertEquals(response.status_code, 200)
         response = self.client.get('/artists/list/?page=abcde')
-
+        self.assertEquals(response.status_code, 200)
         response = self.client.get('/artists/list/?pizza=cat')
+        self.assertEquals(response.status_code, 200)
         
 
     def test_pagination_when_searching(self):
@@ -777,14 +792,18 @@ class TestPagination(TestCase):
         # find the link to the next page 
         
         # does it contain the page number and the search term?
-        expected_link = '<a href="/artists/list/?page=2&search_term=a">'
+        expected_link = '<a href="/artists/list/?page=2&search_name=a">'
         self.assertContains(response, expected_link)
 
         # request second page - does it contain
-        response = self.client.get('/artists/list/?page=2&search_term=a')
+        response = self.client.get('/artists/list/?page=2&search_name=a')
 
         # TODO check the correct artists are on the page 
         second_page_artists = response.context['artists'].object_list 
+
+        self.assertContains(response, 'GGGGGA')
+        self.assertContains(response, 'HHHHHA')
+        
 
 
     
