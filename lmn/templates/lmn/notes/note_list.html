@@ -13,7 +13,7 @@
 {% endif %}
 
 {% for note in notes %}
-
+  <div>
   <div id="note_{{ note.pk }}">
     <h3 class="note-title">{{ note.title }}</h3>
 
@@ -33,7 +33,8 @@
     {% else %}
         <P>No photo uploaded</p>
     {% endif %}  
-  </div> 
+  </div>
+  </div>
   {% comment %} <!DOCTYPE html>
 <html>
 <head>
@@ -60,29 +61,28 @@
 }
 </style>
 </head> {% endcomment %}
-<body>
+{% comment %} <body> {% endcomment %}
 
-    <div class="btn-group">
-<!-- If this is a list of notes for one show,
-display link to add new note for that show. -->
+    <div class="btn-group" role="group" aria-label="Basic example" style="layout">
+    <!-- If this is a list of notes for one show,
+    display link to add new note for that show. -->
 
-{% if show %}
-  <a href="{% url 'new_note' show_pk=show.pk %}" class="button">Add Your Own Notes For The Show</a>
-{% endif %}
-        <!-- Single quotes represent &#x27;t instead of ''  -->
-        <button class="button">
-        {% post_to_twitter "Checkout the notes for this show {{ note.show.artist.name }} at {{ note.show.venue.name }}" object_or_url "Share Show To Twitter" %}
-        </button>
+    {% if show %}
+      <a href="{% url 'new_note' show_pk=show.pk %}" class="button">Add Your Own Notes For The Show</a>
+    {% endif %}
+            <!-- Single quotes represent &#x27;t instead of ''  -->
+            <button class="btn btn-secondary">
+            {% post_to_twitter "Checkout the notes for this show {{ note.show.artist.name }} at {{ note.show.venue.name }}" object_or_url "Share Show To Twitter" %}
+            </button>
 
-        <button class="button">
-            {% post_to_facebook  object_or_url "Share Show To Facebook" %}
-        </button>
-</body>
-  <hr>
+            <button class="btn btn-secondary">
+                {% post_to_facebook  object_or_url "Share Show To Facebook" %}
+            </button>
 
-{% empty %}
-  <p>No notes.</p>
-{% endfor %}
-
+    {% empty %}
+      <p>No notes.</p>
+    {% endfor %}
+    </div>
+    </br>
 
 {% endblock %}
