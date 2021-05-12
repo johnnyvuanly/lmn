@@ -74,7 +74,20 @@ class FindShowsTest(TestCase):
         with open(file_path) as test_json:
             mock_data = json.load(test_json)
 
-        #self.assertRaises
+        # Test HTTPSResponse
+        mock_get.return_value.status_code = 200
+        response = find_shows()
+        expected_response = 200        
+        self.assertEqual(expected_response,response.status_code)
+
+        # Test  
+
+
+        # self.assertEqual(json_data, {"key1": "value1"})
+        # json_data = fshows.data('https://jsonplaceholder.typicode.com/posts/1') # https://jsonplaceholder.typicode.com/ Test API provided by typicode.
+        # self.assertEqual(json_data, {"key2": "value2"})
+        # json_data = fshows.data('http://nonexistenturl.com/cantfindme.json')
+        # self.assertIsNone(json_data)
         pass
 
     def test_add_show(self):
@@ -88,4 +101,17 @@ class FindShowsTest(TestCase):
         test_venue = ['U.S. Bank Stadium', 'Minneapolis', 'MN', 'KovZpZAF6ttA']
         expected_response = 'U.S. Bank Stadium'
         response = add_venue( test_venue[3], test_venue[0], test_venue[1], test_venue[2], )
-        self.assertEqual(expected_response,response.name,f"This test was expecting {expected_response} but recieved {response}")
+        self.assertEqual(expected_response,response.name,f"This test was expecting {expected_response} and recieved {response}")
+
+        # Test creation of new venue
+        add_venue('KovZpZAF6ttA', 'U.S. Bank Stadium', 'Minneapolis', 'MN')
+        test_venue = ['Armory', 'Minneapolis', 'MN', 'KovZpZAF6ttA']
+        expected_response = 'U.S. Bank Stadium'
+        response = add_venue( test_venue[3], test_venue[0], test_venue[1], test_venue[2], )
+        self.assertNotEqual(expected_response,response.name,f"This test was expecting {expected_response} and recieved {response}")
+
+        # Test handling of incorrect input
+        test_venue = ['Armory', 'Minneapolis', 'Minnesota', 'KovZpZAF6ttA']
+        response = add_venue( test_venue[3], test_venue[0], test_venue[1], test_venue[2], )
+        self.assertRaises(expected_response,response.name,f"This test was expecting {expected_response} and recieved {response}")
+
