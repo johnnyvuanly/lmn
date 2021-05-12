@@ -29,16 +29,6 @@
 
     <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
 
-    <div>
-      {% if notes.has_previous %}
-      <a href="{% url 'latest_notes' %}?page={{ notes.previous_page_number }}">Previous Page</a>
-      {% endif %}
-
-      {% if notes.has_next %}
-      <a href="{% url 'latest_notes' %}?page={{ notes.next_page_number }}">Next Page</a>
-      {% endif %}
-    </div>
-
     <h3>Photo</h3>
     {% if note.photo %}
         <img src="{{ note.photo.url }}">
@@ -46,59 +36,38 @@
         <P>No photo uploaded</p>
     {% endif %}  
 
+    {% if show %}
+      <a href="{% url 'new_note' show_pk=show.pk %}" class="btn btn-primary">Add Your Own Notes For The Show</a>
+    {% endif %}
+
+    <br>
+    <!-- Single quotes represent &#x27;t instead of ''  -->
+    <button class="btn btn-light">
+      {% post_to_twitter "Checkout the notes for this show {{ note.show.artist.name }} at {{ note.show.venue.name }}" object_or_url "Share Show To Twitter" %}
+    </button>
+
+    <button class="btn btn-primary">
+      {% post_to_facebook  object_or_url "Share Show To Facebook" %}
+    </button>
   </div> <!-- End of note_{{ note.pk }} div  -->
 
-  {% comment %} 
-
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-
-.btn-group .button {
-  background-color: #f2f8f3; /* Green */
-  border: 1px solid rgb(19, 16, 233);
-  color: rgb(20, 170, 240);
-  padding: 1px 25px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 16px;
-  cursor: pointer;
-  float: inline-start;
-}
-
-.btn-group .button:not(:last-child) {
-  border-right: none; /* Prevent double borders */
-}
-
-.btn-group .button:hover {
-  background-color: #2420ec;
-}
-</style>
-</head> {% endcomment %}
-<body>
-
-    <div class="btn-group">
 <!-- If this is a list of notes for one show,
 display link to add new note for that show. -->
 
-{% if show %}
-  <a href="{% url 'new_note' show_pk=show.pk %}" class="button">Add Your Own Notes For The Show</a>
-{% endif %}
-        <!-- Single quotes represent &#x27;t instead of ''  -->
-        <button class="button">
-        {% post_to_twitter "Checkout the notes for this show {{ note.show.artist.name }} at {{ note.show.venue.name }}" object_or_url "Share Show To Twitter" %}
-        </button>
 
-        <button class="button">
-            {% post_to_facebook  object_or_url "Share Show To Facebook" %}
-        </button>
-</body>
-  <hr>
 
 {% empty %}
   <p>No notes.</p>
 {% endfor %}
 
+<div>
+  {% if notes.has_previous %}
+  <a href="{% url 'latest_notes' %}?page={{ notes.previous_page_number }}">Previous Page</a>
+  {% endif %}
+
+  {% if notes.has_next %}
+  <a href="{% url 'latest_notes' %}?page={{ notes.next_page_number }}">Next Page</a>
+  {% endif %}
+</div>
 
 {% endblock %}

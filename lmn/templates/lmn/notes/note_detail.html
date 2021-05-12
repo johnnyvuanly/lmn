@@ -31,28 +31,28 @@
 
 {% if note.user.pk == user.pk %}
 
-
+<br>
     <div class="btn-group">
         {% if note.photo %}
             <button class="button" style="padding:0px;">
                 {% post_to_twitter "{{ note.text }} {{ note.photo.url }}" object_or_url "Send Note To Twitter" %}
             </button>
         {% else %}
-            <button class="button">
+            <button class="btn btn-light">
                 {% post_to_twitter "{{ note.text }}" object_or_url "Send Note To Twitter" %}
             </button>
         {% endif %}
 
-        <button class="button">
+        <button class="btn btn-primary">
             {% post_to_facebook object_or_url "Send Note To Facebook" %}
         </button>
     <button>
-        <a href="{% url 'edit_note' note_pk=note.pk %}" class="button">Edit Your Note</a>
+        <a href="{% url 'edit_note' note_pk=note.pk %}" class="btn btn-light">Edit Your Note</a>
     </button>
 
     <form action="{% url 'delete_note' note.pk %}" method="POST">
         {% csrf_token %}
-        <button type=submit class="button">Delete</button>
+        <button type=submit class="btn btn-danger">Delete</button>
     </form>
     <script src="{% static 'js/confirm_delete.js' %}"></script>
     </div>
