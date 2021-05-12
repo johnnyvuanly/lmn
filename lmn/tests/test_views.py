@@ -14,6 +14,7 @@ from django.contrib.auth.models import User
 import re, datetime
 from datetime import timezone
 
+from django.core.paginator import Paginator
 from PIL import Image
 
 """ All the tests having todo with notes, artists, venues """
@@ -589,8 +590,7 @@ class TestImageUpload(TestCase):
     def test_modify_someone_else_notes_not_authorized(self):
         response = self.client.post(reverse('edit_note', kwargs={'note_pk':3}), {'notes':'awesome'}, follow=True)
         self.assertEqual(403, response.status_code)   # 403 Forbidden 
-    
-       
+
     def test_edit_image_for_own_note_expect_old_deleted_and_new_to_exist(self):
         
         first_img_file_path = self.create_temp_image_file()
@@ -621,7 +621,6 @@ class TestImageUpload(TestCase):
 
                     self.assertTrue(os.path.exists(second_path))
 
-
     def test_edit_image_for_someone_else_note_doesnt_work(self):
 
         with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
@@ -633,7 +632,6 @@ class TestImageUpload(TestCase):
 
                 place_5 = Note.objects.get(pk=2)
                 self.assertFalse(place_5.photo)   # no photo set
-
 
     def test_delete_note_with_image_image_deleted(self): 
         
@@ -709,3 +707,123 @@ class TestSocialMedia(TestCase):
         self.client.force_login(User.objects.first())
         response = self.client.get(reverse('latest_notes'))
         self.assertContains(response, 'Share Show To Twitter')
+
+
+class TestPaginationNoArtists(TestCase):
+
+    # dont load fixtures 
+    def test_pagination_when_no_artists_in_db(self):
+        response = self.client.get(reverse('artist_list'))
+        self.assertEquals(response.status_code, 200)
+
+
+class TestPagination(TestCase):
+
+    """ Test ideas come from https://github.com/encode/django-rest-framework/blob/master/tests/test_pagination.py """
+
+    # Load this data into the database for all of the tests in this class
+    # use fixture with more artists in 
+    fixtures = ['testing_artists_lots', 'testing_notes', 'testing_venues', 'testing_shows', 'testing_users']
+
+    def setUp(self):
+        pass
+
+    def test_artist_page_one_status_code(self):
+        # 'artist_list' is a name from urls.py
+        response = self.client.get(reverse('artist_list'))
+        self.assertEquals(response.status_code, 200)
+
+
+    def test_three_artists_on_first_page(self):
+        # response is what the view sends in response to a request. What a view function returns 
+        response = self.client.get(reverse('artist_list'))
+        page_of_artists_in_template = response.context['artists']
+        # what do you expect artists_in_template to be? 
+        # from the docs https://docs.djangoproject.com/en/3.2/ref/paginator/#id2
+        # print(page_of_artists_in_template.object_list)
+
+        # the current page - 1 of however many
+        # print(page_of_artists_in_template.number)
+
+        # Are we on page 1? 
+        self.assertEqual(1, page_of_artists_in_template.number)
+
+        self.assertContains(response, 'AAAAA')
+        self.assertContains(response, 'BBBBB')
+        self.assertContains(response, 'CCCCC')
+
+        # list of the artist objects from the paginator, the artists shown on the page
+        artists = page_of_artists_in_template.object_list 
+
+        self.assertEqual(1, artists[0].pk)  # does the first artist have pk = 1 ? 
+        self.assertEqual(2, artists[1].pk)  # does the second artist have pk = 2 ? 
+        self.assertEqual(3, artists[2].pk)  # does the third artist have pk = 3 ? 
+
+        # how can we check we DON'T have DDD and EEE and FFF ? 
+        self.assertNotContains(response, 'DDDDD')
+        self.assertNotContains(response, 'EEEEE')
+        self.assertNotContains(response, 'FFFFF')
+        self.assertNotContains(response, 'GGGGG')
+
+        # has a Next Page link
+        self.assertContains(response, 'Next Page')
+        # but no previous link 
+        self.assertNotContains(response, 'Previous Page')
+
+        # exactly three artists 
+        self.assertEqual(3, len(artists))
+
+
+
+    def test_correct_artists_on_page_in_the_middle(self):
+        response = self.client.get('/artists/list/?page=2')
+        
+        self.assertContains(response, 'DDDDD')
+        self.assertContains(response, 'EEEEEA')
+        self.assertContains(response, 'FFFFFA')
+
+        self.assertContains(response, 'Next Page')
+        self.assertContains(response, 'Previous Page')
+    
+    def test_correct_artists_on_last_page(self):
+        response = self.client.get('/artists/list/?page=3')
+
+        self.assertContains(response, 'GGGGGA')
+        self.assertContains(response, 'HHHHHA')
+
+        self.assertContains(response, 'Previous Page')
+        self.assertNotContains(response, 'Next Page')
+
+
+    # todo better test name 
+    def test_request_weird_pages(self):
+        response = self.client.get('/artists/list/?page=10000000')
+        self.assertEquals(response.status_code, 200)
+        response = self.client.get('/artists/list/?page=abcde')
+        self.assertEquals(response.status_code, 200)
+        response = self.client.get('/artists/list/?pizza=cat')
+        self.assertEquals(response.status_code, 200)
+        
+
+    def test_pagination_when_searching(self):
+        # search - make sure pagination sticks when searching. 
+        # search for 'a' which should return several artists - more than fit on a page
+        response = self.client.get('/artists/list/?search_name=a')
+        # find the link to the next page 
+        
+        # does it contain the page number and the search term?
+        expected_link = '<a href="/artists/list/?page=2&search_name=a">'
+        self.assertContains(response, expected_link)
+
+        # request second page - does it contain
+        response = self.client.get('/artists/list/?page=2&search_name=a')
+
+        # TODO check the correct artists are on the page 
+        second_page_artists = response.context['artists'].object_list 
+
+        self.assertContains(response, 'GGGGGA')
+        self.assertContains(response, 'HHHHHA')
+        
+
+
+    

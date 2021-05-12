@@ -12,7 +12,9 @@
   <h2>Latest Notes</h2>
 {% endif %}
 
-{% for note in notes %}
+<h2>Page Number: {{ notes.number }}</h2>
+
+{% for note in notes.object_list %}
 
   <div id="note_{{ note.pk }}">
     <h3 class="note-title">{{ note.title }}</h3>
@@ -27,17 +29,31 @@
 
     <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
 
+    <div>
+      {% if notes.has_previous %}
+      <a href="{% url 'latest_notes' %}?page={{ notes.previous_page_number }}">Previous Page</a>
+      {% endif %}
+
+      {% if notes.has_next %}
+      <a href="{% url 'latest_notes' %}?page={{ notes.next_page_number }}">Next Page</a>
+      {% endif %}
+    </div>
+
     <h3>Photo</h3>
     {% if note.photo %}
         <img src="{{ note.photo.url }}">
     {% else %}
         <P>No photo uploaded</p>
     {% endif %}  
-  </div> 
-  {% comment %} <!DOCTYPE html>
+
+  </div> <!-- End of note_{{ note.pk }} div  -->
+
+  {% comment %} 
+
+<!DOCTYPE html>
 <html>
 <head>
- <style>
+<style>
 
 .btn-group .button {
   background-color: #f2f8f3; /* Green */

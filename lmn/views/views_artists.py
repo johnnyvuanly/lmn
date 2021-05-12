@@ -9,8 +9,9 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.utils import timezone
 
-""" All of the view actions from the artist section """
+from django.core.paginator import Paginator
 
+""" All of the view actions from the artist section """
 
 def venues_for_artist(request, artist_pk):   # pk = artist_pk
 
@@ -26,13 +27,20 @@ def artist_list(request):
     """ Get all the artsist and put them in order """
     form = ArtistSearchForm()
     search_name = request.GET.get('search_name')
+
     if search_name:
         artists = Artist.objects.filter(name__icontains=search_name).order_by('name')
     else:
-        artists = Artist.objects.all().order_by('name')
+        artists = Artist.objects.all().order_by('name')  # get all artist from database
 
-    return render(request, 'lmn/artists/artist_list.html', { 'artists': artists, 'form': form, 'search_term': search_name })
+    artist_paginator = Paginator(artists, 3) # 2 per page as of right now
 
+    page_num = request.GET.get('page') # Get page number from URL
+
+    page_of_artist = artist_paginator.get_page(page_num)
+
+    return render(request, 'lmn/artists/artist_list.html', { 'form': form, 'search_term': search_name, 'artists': page_of_artist })
+    
 
 def artist_detail(request, artist_pk):
     """ Get all the details on the artists """

@@ -7,8 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
-""" All the information about venues """
+from django.core.paginator import Paginator
 
+""" All the information about venues """
 
 def venue_list(request):
     """ Get all the Venues in a list """
@@ -19,9 +20,15 @@ def venue_list(request):
         #search for this venue, display results
         venues = Venue.objects.filter(name__icontains=search_name).order_by('name')
     else :
-        venues = Venue.objects.all().order_by('name')   # Todo paginate
+        venues = Venue.objects.all().order_by('name') # Get all the venues from database
 
-    return render(request, 'lmn/venues/venue_list.html', { 'venues': venues, 'form': form, 'search_term': search_name })
+    venue_paginator = Paginator(venues, 3) # 2 Per page as of right now
+
+    page_num = request.GET.get('page') # Get the page number based on where you are in the list fromt the URL
+
+    page_of_venues = venue_paginator.get_page(page_num) 
+
+    return render(request, 'lmn/venues/venue_list.html', { 'venues': page_of_venues, 'form': form, 'search_term': search_name })
 
 
 def artists_at_venue(request, venue_pk):   # pk = venue_pk
