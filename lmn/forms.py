@@ -22,7 +22,7 @@ class NewNoteForm(forms.ModelForm):
     """ Form allowing users to create new notes """
     class Meta:
         model = Note
-        fields = ('title', 'text', 'photo')
+        fields = ('title', 'text', 'photo', 'rating')
 
 
 class ProfileForm(forms.ModelForm):

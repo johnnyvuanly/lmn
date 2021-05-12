@@ -20,6 +20,9 @@ User._meta.get_field('email')._blank = False
 User._meta.get_field('last_name')._blank = False
 User._meta.get_field('first_name')._blank = False
 
+rating_list = (('', ''), ('Horrible', "Horrible"), ('Average', 'Average'), ('Good', 'Good'), ('Amazing', 'Amazing'))
+
+
 class Profile(models.Model):
     """ Information for users adding a bio to their profile """
     bio = models.TextField(max_length=500, blank=True)
@@ -62,6 +65,7 @@ class Note(models.Model):
     text = models.TextField(max_length=1000, blank=False)
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
     photo = models.ImageField(upload_to='lmn/media/user_images/', blank=True, null=True)
+    rating = models.CharField(max_length=8, choices=rating_list, default='0')
 
     def save(self, *args, **kwargs):
         """ Save the note """
