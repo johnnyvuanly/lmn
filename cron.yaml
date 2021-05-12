@@ -1,4 +1,5 @@
 cron:
-    description: "update show data"
-    url: /ticketmaster_api/
+-   description: "update show data"
+    url: /ticketmaster_get_shows
+    timezone: America/Chicago
     schedule: every day 2:00 
