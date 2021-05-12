@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 # Create your tests here.
 
+""" All the tests having todo with models """
 
 class TestUser(TestCase):
 

@@ -1,0 +1,68 @@
+# PynSource Version 1.2
+{'type':'meta', 'info1':'Lorem ipsum dolor sit amet, consectetur adipiscing elit is latin. Comments are saved.'}
+{'type':'umlshape', 'id':'LmnConfig', 'x':37, 'y':157, 'width':100, 'height':64, 'attrs': 'name', 'meths': ''}
+{'type':'umlshape', 'id':'AppConfig', 'x':110, 'y':10, 'width':100, 'height':28, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'VenueSearchForm', 'x':10, 'y':534, 'width':160, 'height':64, 'attrs': 'search_name', 'meths': ''}
+{'type':'umlshape', 'id':'ArtistSearchForm', 'x':385, 'y':295, 'width':170, 'height':64, 'attrs': 'search_name', 'meths': ''}
+{'type':'umlshape', 'id':'NewNoteForm', 'x':61, 'y':605, 'width':120, 'height':28, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'Meta', 'x':440, 'y':409, 'width':58, 'height':80, 'attrs': 'fields|model', 'meths': ''}
+{'type':'umlshape', 'id':'ProfileForm', 'x':548, 'y':409, 'width':120, 'height':28, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'UserRegistrationForm', 'x':718, 'y':295, 'width':210, 'height':128, 'attrs': '', 'meths': 'clean_email|clean_first_name|clean_last_name|clean_username|save'}
+{'type':'umlshape', 'id':'forms.ModelForm', 'x':10, 'y':671, 'width':160, 'height':28, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'forms.Form', 'x':84, 'y':827, 'width':110, 'height':28, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'UserCreationForm', 'x':548, 'y':487, 'width':170, 'height':28, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'Profile', 'x':605, 'y':749, 'width':80, 'height':80, 'attrs': 'bio|user', 'meths': ''}
+{'type':'umlshape', 'id':'Artist', 'x':799, 'y':565, 'width':70, 'height':90, 'attrs': 'name', 'meths': '__str__'}
+{'type':'umlshape', 'id':'Venue', 'x':735, 'y':749, 'width':66, 'height':122, 'attrs': 'city|name|state', 'meths': '__str__'}
+{'type':'umlshape', 'id':'Show', 'x':919, 'y':473, 'width':82, 'height':122, 'attrs': 'artist|show_date|venue', 'meths': '__str__'}
+{'type':'umlshape', 'id':'Note', 'x':961, 'y':749, 'width':106, 'height':218, 'attrs': 'photo|posted_date|show|text|title|user', 'meths': '__str__|delete|delete_photo|save'}
+{'type':'umlshape', 'id':'models.Model', 'x':919, 'y':645, 'width':131, 'height':28, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'NewNoteFormTests', 'x':61, 'y':356, 'width':274, 'height':128, 'attrs': '', 'meths': 'test_missing_text_is_invalid|test_missing_title_is_invalid|test_ok_title_and_length_is_valid|test_text_too_long_is_invalid|test_title_too_long_is_invalid'}
+{'type':'umlshape', 'id':'RegistrationFormTests', 'x':187, 'y':539, 'width':562, 'height':160, 'attrs': '', 'meths': 'test_register_user_with_email_already_in_db_case_insensitive_fails|test_register_user_with_email_already_in_db_fails|test_register_user_with_missing_data_fails|test_register_user_with_password_mismatch_fails|test_register_user_with_username_already_in_db_case_insensitive_fails|test_register_user_with_username_already_in_db_fails|test_register_user_with_valid_data_is_valid'}
+{'type':'umlshape', 'id':'LoginFormTests', 'x':18, 'y':88, 'width':150, 'height':28, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'TestCase', 'x':13, 'y':10, 'width':90, 'height':28, 'attrs': '', 'meths': ''}
+{'type':'umlshape', 'id':'TestUser', 'x':67, 'y':905, 'width':338, 'height':80, 'attrs': '', 'meths': 'test_create_user_duplicate_email_fails|test_create_user_duplicate_username_fails'}
+{'type':'umlshape', 'id':'TestEmptyViews', 'x':244, 'y':759, 'width':322, 'height':96, 'attrs': '', 'meths': 'test_with_no_artists_returns_empty_list|test_with_no_notes_returns_empty_list|test_with_no_venues_returns_empty_list'}
+{'type':'umlshape', 'id':'TestArtistViews', 'x':525, 'y':879, 'width':386, 'height':218, 'attrs': 'fixtures', 'meths': 'test_all_artists_displays_all_alphabetically|test_artist_detail|test_artist_search_no_search_results|test_artist_search_one_search_result|test_artist_search_partial_match_search_results|test_artists_search_clear_link|test_correct_template_used_for_artists|test_get_artist_that_does_not_exist_returns_404|test_venues_played_at_most_recent_shows_first'}
+{'type':'umlshape', 'id':'TestVenues', 'x':1456, 'y':527, 'width':378, 'height':218, 'attrs': 'fixtures', 'meths': 'test_artists_played_at_venue_most_recent_first|test_correct_template_used_for_venues|test_get_venue_that_does_not_exist_returns_404|test_venue_detail|test_venue_search_clear_link|test_venue_search_no_search_results|test_venue_search_one_search_result|test_venue_search_partial_match_search_results|test_with_venues_displays_all_alphabetically'}
+{'type':'umlshape', 'id':'TestAddNoteUnauthentictedUser', 'x':41, 'y':1035, 'width':434, 'height':90, 'attrs': 'fixtures', 'meths': 'test_add_note_unauthenticated_user_redirects_to_login'}
+{'type':'umlshape', 'id':'TestAddNotesWhenUserLoggedIn', 'x':978, 'y':284, 'width':418, 'height':154, 'attrs': 'fixtures', 'meths': 'setUp|test_add_note_database_updated_correctly|test_can_save_new_note_for_show_blank_data_is_error|test_redirect_to_note_detail_after_save|test_save_note_for_non_existent_show_is_error'}
+{'type':'umlshape', 'id':'TestUserProfile', 'x':799, 'y':61, 'width':386, 'height':122, 'attrs': 'fixtures', 'meths': 'test_correct_user_name_shown_different_profiles|test_user_profile_show_list_of_their_notes|test_user_with_no_notes'}
+{'type':'umlshape', 'id':'TestNotes', 'x':1080, 'y':517, 'width':306, 'height':122, 'attrs': 'fixtures', 'meths': 'test_correct_templates_uses_for_notes|test_latest_notes|test_notes_for_show_view'}
+{'type':'umlshape', 'id':'TestUserAuthentication', 'x':407, 'y':1145, 'width':394, 'height':80, 'attrs': '', 'meths': 'test_user_registration_logs_user_in|test_user_registration_redirects_to_correct_page'}
+{'type':'umlshape', 'id':'TestMyUserProfile', 'x':816, 'y':1160, 'width':498, 'height':138, 'attrs': 'fixtures', 'meths': 'test_user_bio_is_displayed_on_public_profile_page|test_user_is_not_logged_in_should_get_sent_to_main_login_page|test_user_logged_in_can_view_private_profile|user_one_can_edit_thier_own_profile'}
+{'type':'umlshape', 'id':'TestDeleteNotes', 'x':1350, 'y':1025, 'width':474, 'height':122, 'attrs': 'fixtures', 'meths': 'setUp|test_delete_note|test_deleting_somebodys_note_that_is_not_yours_doesnt_work'}
+{'type':'umlshape', 'id':'TestImageUpload', 'x':227, 'y':11, 'width':522, 'height':234, 'attrs': 'MEDIA_ROOT|fixtures', 'meths': 'create_temp_image_file|setUp|tearDown|test_delete_note_with_image_image_deleted|test_edit_image_for_own_note_expect_old_deleted_and_new_to_exist|test_edit_image_for_someone_else_note_doesnt_work|test_edit_note_for_own_note_expect_old_changed|test_modify_someone_else_notes_not_authorized|test_upload_new_image_for_own_note'}
+{'type':'umlshape', 'id':'TestGoodbyePage', 'x':1323, 'y':864, 'width':450, 'height':122, 'attrs': 'fixtures', 'meths': 'test_goodbye_message_displays_when_user_logs_out|test_logout_redirects_to_goodbye_page|test_redirects_to_goodbye_page_if_user_is_not_logged_in'}
+{'type':'umlshape', 'id':'TestSocialMedia', 'x':1267, 'y':64, 'width':562, 'height':170, 'attrs': 'MEDIA_ROOT|fixtures', 'meths': 'setUp|test_click_facebook_on_note_list_redirects_to_facebook|test_click_twitter_on_note_details_redirects_to_twitter|test_click_twitter_on_note_list_redirects_to_twitter|test_clicking_facebook_on_note_details_has_option_to_send_to_facebook'}
+{'type':'umlshape', 'id':'tempfile.mkdtemp', 'x':36, 'y':749, 'width':170, 'height':28, 'attrs': '', 'meths': ''}
+{'type':'edge', 'id':'LmnConfig_to_AppConfig', 'source':'LmnConfig', 'target':'AppConfig', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'ProfileForm_to_forms.ModelForm', 'source':'ProfileForm', 'target':'forms.ModelForm', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'NewNoteForm_to_forms.ModelForm', 'source':'NewNoteForm', 'target':'forms.ModelForm', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'ArtistSearchForm_to_forms.Form', 'source':'ArtistSearchForm', 'target':'forms.Form', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'UserRegistrationForm_to_UserCreationForm', 'source':'UserRegistrationForm', 'target':'UserCreationForm', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'VenueSearchForm_to_forms.Form', 'source':'VenueSearchForm', 'target':'forms.Form', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'Venue_to_models.Model', 'source':'Venue', 'target':'models.Model', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'Note_to_models.Model', 'source':'Note', 'target':'models.Model', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'Artist_to_models.Model', 'source':'Artist', 'target':'models.Model', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'Profile_to_models.Model', 'source':'Profile', 'target':'models.Model', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'Show_to_models.Model', 'source':'Show', 'target':'models.Model', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'RegistrationFormTests_to_TestCase', 'source':'RegistrationFormTests', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'NewNoteFormTests_to_TestCase', 'source':'NewNoteFormTests', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'LoginFormTests_to_TestCase', 'source':'LoginFormTests', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestUser_to_TestCase', 'source':'TestUser', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestMyUserProfile_to_TestCase', 'source':'TestMyUserProfile', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestImageUpload_to_TestCase', 'source':'TestImageUpload', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestDeleteNotes_to_TestCase', 'source':'TestDeleteNotes', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestGoodbyePage_to_TestCase', 'source':'TestGoodbyePage', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestEmptyViews_to_TestCase', 'source':'TestEmptyViews', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestAddNoteUnauthentictedUser_to_TestCase', 'source':'TestAddNoteUnauthentictedUser', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestArtistViews_to_TestCase', 'source':'TestArtistViews', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestSocialMedia_to_TestCase', 'source':'TestSocialMedia', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestUserProfile_to_TestCase', 'source':'TestUserProfile', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestVenues_to_TestCase', 'source':'TestVenues', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestUserAuthentication_to_TestCase', 'source':'TestUserAuthentication', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestNotes_to_TestCase', 'source':'TestNotes', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'TestAddNotesWhenUserLoggedIn_to_TestCase', 'source':'TestAddNotesWhenUserLoggedIn', 'target':'TestCase', 'uml_edge_type': 'generalisation'}
+{'type':'edge', 'id':'tempfile.mkdtemp_to_TestImageUpload', 'source':'tempfile.mkdtemp', 'target':'TestImageUpload', 'uml_edge_type': 'composition'}
+{'type':'edge', 'id':'tempfile.mkdtemp_to_TestSocialMedia', 'source':'tempfile.mkdtemp', 'target':'TestSocialMedia', 'uml_edge_type': 'composition'}
