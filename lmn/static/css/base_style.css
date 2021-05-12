@@ -1,17 +1,44 @@
 body {
-  font-family: monospace;
+  margin: 1em;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   background: #444d4d;
+  background: linear-gradient(90deg,rgba(2,0,36,1) 35%, rgb(87, 51, 5) 100%);
+  background-image: url("https://www.goodfreephotos.com/albums/germany/other-germany/concert-in-grafenhainchen-germany.jpg");
+  background-blend-mode:multiply,50%;
+  background-position: center;
+  background-size: cover;
   color: antiquewhite;
 }
 
+
+h1 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 5em;
+  background:rgba(2,0,36,.25) ;
+  color: white;
+  border: 1px white solid;
+  border-radius: 15px;
+  position: relative;
+  text-align: center;
+}
+
+div {
+  background:rgba(87, 51, 5, .25) ;
+  padding: 1em;
+  margin: 0em;
+  border-bottom:1px #f2f7f7 solid;  
+}
+
 a {
-  color: rgb(70, 193, 197);
+  color: rgb(165, 170, 247);
+  font-size: large;
 }
 
 #welcome-user-msg, #login-or-sign-up {
   position: absolute;
   right: 0px;
   padding-right: 10px;
+  font-size: large;
 }
 
 .error {
@@ -22,8 +49,14 @@ a {
   /* font-weight: bold; */
 }
 
-.button {
-  background-color: #f2f7f7; /* Green */
+.button{
+  font-size: small;
+  margin: 2px;
+  padding: 2px;
+}
+
+/* .button {
+  background-color: #f2f7f7; 
   border: none;
   color: rgb(17, 16, 16);
   padding: 15px 32px;
@@ -31,4 +64,4 @@ a {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-}
+} */
