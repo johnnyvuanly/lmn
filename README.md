@@ -10,8 +10,8 @@ You can transfer between profiles and view all the local shows at all the local 
 All of the Artists and Notes are paginated in a great way!!!
 You can search all the artists and venues to find specific shows so cool!!
 
-To run locally 
-pip install -r requirements.txt
+To run locally <br>
+pip install -r requirements.txt <br>
 python manage.py runserver
 
 You can run the site directly from
